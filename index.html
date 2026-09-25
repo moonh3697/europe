@@ -1,4 +1,4 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="ko">
 <head>
 <meta charset="utf-8">
@@ -150,6 +150,21 @@
   .warn { background: var(--warn-bg); border: 1px solid var(--warn-line); border-radius: 8px; padding: 10px 12px; font-size: 14px; }
   .warn b { display: block; margin-bottom: 2px; }
 
+  .when { display: grid; gap: 2px; border-left: 3px solid var(--accent); padding: 2px 0 2px 12px; }
+  .when-label { font-size: 12px; color: var(--accent); font-weight: 700; }
+  .when b { font-size: 16px; font-variant-numeric: tabular-nums; }
+  .when-why { font-size: 13px; color: var(--muted); }
+  .compare { display: grid; gap: 8px; }
+  .compare-title { font-size: 14px; font-weight: 700; }
+  .compare-title span { font-weight: 400; font-size: 12px; color: var(--muted); }
+  .compare-scroll { overflow-x: auto; }
+  .compare table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .compare th, .compare td { text-align: left; vertical-align: top; padding: 6px 8px 6px 0; border-top: 1px solid var(--line); }
+  .compare thead th { border-top: 0; font-weight: 500; color: var(--muted); font-size: 12px; padding-top: 0; }
+  .compare td:last-child { font-variant-numeric: tabular-nums; }
+  .compare .tag { display: inline-block; white-space: nowrap; font-size: 11px; font-weight: 700; background: var(--sunk); border: 1px solid var(--line); border-radius: 999px; padding: 1px 8px; }
+  .verdict { font-size: 14px; background: var(--done-bg); color: var(--ink); border-radius: 8px; padding: 8px 12px; }
+  .verdict b { color: var(--done-ink); }
   .links { display: grid; gap: 8px; }
   .btn {
     display: grid; gap: 1px;
@@ -291,7 +306,8 @@
   <footer id="foot" hidden>
     <p>구간을 누르면 추천 수단, 예매 링크, 예매 정보 칸이 펼쳐집니다.</p>
     <p>예약번호를 적고 저장하면 그 구간이 '예매 완료'로 바뀌고, 일행 모두의 화면에 보입니다.</p>
-    <p>Omio 링크는 도시와 날짜가 채워진 검색 화면이 열립니다. '검색'을 누르면 기차·버스·비행기가 함께 나옵니다.</p>
+    <p>Trainline 링크는 그 날짜 검색 결과가 바로 열립니다. Omio 링크는 도시와 날짜가 채워진 검색 화면이 열리고, '검색'을 누르면 기차·버스·비행기가 함께 나옵니다.</p>
+    <p>'빠른 길 · 싼 길 비교'의 가격은 조사 시점(2026-09-26)의 대략적인 1인 편도 가격입니다. 실제 가격은 링크를 눌러 확인하세요.</p>
     <p>검색 결과가 비어 있거나 "Not available"이 보이면 아직 표 판매가 시작되지 않은 것입니다.</p>
     <p>추천 수단 조사일 2026-09-25. 시간과 운행 편수는 판매가 열리면 바뀔 수 있습니다.</p>
   </footer>
@@ -332,14 +348,19 @@
         time: "약 1시간 40분",
         stations: "로마 테르미니역 → 피렌체 산타 마리아 노벨라역",
         change: "없음 (직통)",
+        compare: [
+          ["빠름", "기차", "1시간 37분", "₩36,000~150,000"],
+          ["쌈", "버스 (FlixBus)", "3시간 15분", "₩24,000~60,000"],
+        ],
+        verdict: "기차. 일찍 사면 버스와 값이 비슷한데 2배 빠릅니다.",
         note: "두 회사 합쳐 하루 100편 가까이 다녀서 자리 걱정이 적은 구간입니다.",
         links: [
-          { label: "Omio에서 12/15 기차 검색", url: omio("388498", "388058", "2026-12-15"), how: OMIO },
-          { label: "비교용: Trainline에서 검색", url: trainline("8544", "8434", "2026-12-15"), how: FILLED, alt: true },
+          { label: "Trainline에서 12/15 기차 검색", url: trainline("8544", "8434", "2026-12-15"), how: FILLED },
+          { label: "Omio에서 12/15 검색", url: omio("388498", "388058", "2026-12-15"), how: OMIO, alt: true },
         ],
         sources: [
+          ["Rome2Rio — 로마→피렌체 수단별 가격·시간", "https://www.rome2rio.com/s/Rome/Florence"],
           ["Italo — 로마↔피렌체 노선 안내", "https://www.italotreno.com/en/destinations-timetable/rome-florence-tickets"],
-          ["Go Ask A Local — 로마→피렌체 기차", "https://goaskalocal.com/blog/rome-to-florence-by-train"],
         ],
       } },
     { date: "12/16", from: "피렌체", to: "베네치아", mode: "기차 · 약 2시간 15분",
@@ -348,14 +369,19 @@
         time: "약 2시간 15분",
         stations: "피렌체 산타 마리아 노벨라역 → 베네치아 산타 루치아역",
         change: "없음 (직통)",
+        compare: [
+          ["빠름", "기차", "2시간 16분", "₩49,000~110,000"],
+          ["쌈", "버스 (FlixBus)", "4시간 5분", "₩31,000~55,000"],
+        ],
+        verdict: "기차. 버스는 2시간 가까이 더 걸리고, 섬 밖(메스트레·트론케토)에 내립니다.",
         note: "'Venezia Mestre'가 아니라 섬 안의 'Venezia Santa Lucia'행인지 확인하세요.",
         links: [
-          { label: "Omio에서 12/16 기차 검색", url: omio("388058", "388743", "2026-12-16"), how: OMIO },
-          { label: "비교용: Trainline에서 검색", url: trainline("8434", "8574", "2026-12-16"), how: FILLED, alt: true },
+          { label: "Trainline에서 12/16 기차 검색", url: trainline("8434", "8574", "2026-12-16"), how: FILLED },
+          { label: "Omio에서 12/16 검색", url: omio("388058", "388743", "2026-12-16"), how: OMIO, alt: true },
         ],
         sources: [
+          ["Rome2Rio — 피렌체→베네치아 수단별 가격·시간", "https://www.rome2rio.com/s/Florence/Venice"],
           ["Trainline — 피렌체→베네치아 산타 루치아", "https://www.thetrainline.com/en-us/train-times/florence-to-venezia-santa-lucia"],
-          ["Italo — 베네치아 노선 안내", "https://www.italotreno.com/en/destinations-timetable/venice-tickets"],
         ],
       } },
     { date: "12/18", from: "베네치아", to: "루체른", mode: "기차 · 약 6~7시간 · 밀라노 환승",
@@ -364,66 +390,90 @@
         time: "약 6시간~7시간 (조회 결과 06:48 출발 → 13:41 도착, 6시간 53분)",
         stations: "베네치아 산타 루치아역 → 루체른역",
         change: "밀라노 중앙역(Milano Centrale)에서 1번. 밀라노→루체른 직통 EuroCity는 하루 1편뿐이라, 다른 열차는 아르트골다우(Arth-Goldau)에서 한 번 더 갈아탑니다.",
-        note: "하루 중 가장 긴 기차 구간입니다. 아침 일찍 출발하는 편이 좋습니다.",
+        compare: [
+          ["빠름", "기차 (밀라노 환승)", "약 6시간", "₩170,000~277,000 (일찍 사면 £83부터)"],
+          ["쌈", "버스 (FlixBus)", "8시간 45분", "₩62,000~113,000"],
+        ],
+        verdict: "기차. 버스가 1인당 10만 원 안팎 싸지만 3시간 가까이 더 걸립니다. 돈을 아끼고 싶으면 버스도 괜찮습니다.",
+        note: "하루 중 가장 긴 구간입니다. 아침 일찍 출발하는 편이 좋습니다.",
         links: [
-          { label: "Omio에서 12/18 기차 검색", url: omio("388743", "373152", "2026-12-18"), how: OMIO },
-          { label: "비교용: Trainline에서 검색", url: trainline("8574", "6353", "2026-12-18"), how: FILLED, alt: true },
+          { label: "Trainline에서 12/18 기차 검색", url: trainline("8574", "6353", "2026-12-18"), how: FILLED },
+          { label: "Omio에서 12/18 검색 (버스 포함)", url: omio("388743", "373152", "2026-12-18"), how: OMIO, alt: true },
         ],
         sources: [
+          ["Rome2Rio — 베네치아→루체른 수단별 가격·시간", "https://www.rome2rio.com/s/Venice/Lucerne"],
+          ["Trainline — 베네치아→루체른 (최저가·편수)", "https://www.thetrainline.com/en/train-times/venice-to-lucerne"],
           ["Seat61 — 스위스↔이탈리아 EuroCity", "https://www.seat61.com/trains-and-routes/switzerland-to-italy-by-train.htm"],
-          ["Trainline — 베네치아→루체른", "https://www.thetrainline.com/en/train-times/venice-to-lucerne"],
         ],
       } },
-    { date: "12/20", from: "루체른", to: "스트라스부르", mode: "기차 · 약 2시간 45분~3시간 20분 · 바젤 환승",
+    { date: "12/20", from: "루체른", to: "스트라스부르", mode: "버스 · 약 4시간 30분 · 직행 (기차는 약 3시간)",
       plan: {
-        pick: "기차 2개 이어 타기",
-        time: "약 2시간 45분~3시간 20분",
-        stations: "루체른역 → 바젤 SBB역 → 스트라스부르역",
-        change: "바젤 SBB역에서 1번 (루체른→바젤 약 1시간, 바젤→스트라스부르 약 1시간 15분)",
-        note: "좌석 지정 없이 타는 열차라 미리 끊지 않아도 됩니다. 당일 SBB 앱이나 역에서 사도 됩니다. Omio에 원하는 기차가 안 나오면 스위스 철도(SBB) 사이트에서 찾으세요.",
+        pick: "직행 버스 (FlixBus). 시간이 안 맞으면 기차 (바젤 환승)",
+        time: "버스 약 4시간 30분 (하루 2편) / 기차 약 2시간 45분~3시간 50분",
+        stations: "버스: 루체른 → 스트라스부르 버스 정류장 / 기차: 루체른역 → 바젤 SBB역 → 스트라스부르역",
+        change: "버스는 직행. 기차는 바젤 SBB역에서 1번 (루체른→바젤 약 1시간, 바젤→스트라스부르 약 1시간 15분)",
+        compare: [
+          ["빠름", "기차 (바젤 환승)", "약 2시간 45분~3시간 50분", "₩94,000~265,000"],
+          ["쌈", "버스 (FlixBus, 직행)", "4시간 30분", "₩35,000~60,000"],
+        ],
+        verdict: "버스. 1시간 정도 더 걸리지만 1인당 6만~20만 원 싸고, 갈아타지 않아도 됩니다. 스위스 기차는 비쌉니다.",
+        note: "버스는 하루 2편뿐이라 미리 끊는 것이 좋습니다. 기차로 가면 좌석 지정이 없어 당일 SBB 앱이나 역에서 사도 됩니다.",
         links: [
-          { label: "Omio에서 12/20 기차 검색", url: omio("373152", "379901", "2026-12-20"), how: OMIO },
-          { label: "스위스 철도 SBB 열기", url: "https://www.sbb.ch/en", how: SEARCH_ONLY, alt: true },
+          { label: "Trainline에서 12/20 검색 (버스 포함)", url: trainline("6353", "153", "2026-12-20"), how: FILLED },
+          { label: "Omio에서 12/20 검색", url: omio("373152", "379901", "2026-12-20"), how: OMIO, alt: true },
+          { label: "스위스 철도 SBB 열기 (기차)", url: "https://www.sbb.ch/en", how: SEARCH_ONLY, alt: true },
         ],
         sources: [
+          ["Rome2Rio — 루체른→스트라스부르 수단별 가격·시간", "https://www.rome2rio.com/s/Lucerne/Strasbourg"],
           ["Trainline — 루체른→스트라스부르", "https://www.thetrainline.com/en-us/train-times/lucerne-to-strasbourg"],
-          ["Rome2Rio — 루체른→스트라스부르 기차", "https://www.rome2rio.com/Train/Lucerne-Station/Strasbourg"],
         ],
       } },
     { date: "12/21", from: "스트라스부르", to: "파리", mode: "기차 · 약 1시간 45분",
       plan: {
-        pick: "TGV INOUI 또는 OUIGO 고속열차, 직통",
+        pick: "고속열차, 직통. 싸게 가려면 OUIGO, 편하게 가려면 TGV INOUI",
         time: "약 1시간 45분",
         stations: "스트라스부르역 → 파리 동역(Gare de l'Est)",
         change: "없음 (직통)",
-        note: "크리스마스 기간(12/13~1/6) 프랑스 기차표는 9/30부터 팝니다. 하루 14편 안팎으로 자주 있습니다.",
+        compare: [
+          ["빠름·쌈", "기차 (OUIGO·TGV, 일찍 산 경우)", "1시간 46분", "£14부터 (늦으면 ₩100,000 넘게)"],
+          ["버스", "BlaBlaCar Bus", "6시간", "₩55,000~100,000"],
+        ],
+        verdict: "기차. 일찍 사면 가장 빠르면서 가장 쌉니다. 버스는 4시간 넘게 더 걸려 이득이 없습니다.",
+        note: "크리스마스 기간(12/13~1/6) 프랑스 기차표는 9/30부터 팝니다. 판매가 열리면 바로 끊을수록 쌉니다. 하루 14~17편 있습니다.",
         links: [
-          { label: "Omio에서 12/21 기차 검색", url: omio("379901", "379727", "2026-12-21"), how: OMIO },
-          { label: "비교용: Trainline에서 검색", url: trainline("153", "4916", "2026-12-21"), how: FILLED, alt: true },
+          { label: "Trainline에서 12/21 기차 검색", url: trainline("153", "4916", "2026-12-21"), how: FILLED },
+          { label: "Omio에서 12/21 검색", url: omio("379901", "379727", "2026-12-21"), how: OMIO, alt: true },
         ],
         sources: [
-          ["Trainline — 스트라스부르→파리", "https://www.thetrainline.com/en/train-times/strasbourg-to-paris"],
+          ["Rome2Rio — 스트라스부르→파리 수단별 가격·시간", "https://www.rome2rio.com/s/Strasbourg/Paris"],
+          ["Trainline — 스트라스부르→파리 (최저가·편수)", "https://www.thetrainline.com/en/train-times/strasbourg-to-paris"],
           ["Voyagerentrain — 2026 크리스마스 기차표 판매 시작일", "https://www.voyagerentrain.fr/ouverture-billets-sncf-noel-2026/"],
         ],
       } },
     { date: "12/25", from: "파리", to: "바르셀로나", mode: "기차 · 약 6시간 50분 · 성탄절",
       plan: {
-        pick: "TGV INOUI 직통 고속열차",
-        time: "약 6시간 50분",
+        pick: "TGV INOUI 직통 고속열차. 기차표가 비싸거나 매진이면 비행기",
+        time: "기차 약 6시간 50분 / 비행기 약 5시간 (공항 이동 포함, 비행 약 1시간 50분)",
         stations: "파리 리옹역(Gare de Lyon) → 바르셀로나 산츠역",
         change: "없음 (직통)",
+        compare: [
+          ["빠름", "비행기 (오를리→엘프라트)", "약 5시간 (공항 이동 포함)", "₩85,000~350,000"],
+          ["쌈", "기차 (일찍 산 경우)", "6시간 50분", "€39부터 / 늦으면 ₩320,000~500,000"],
+          ["버스", "FlixBus 등", "14시간 20분", "₩85,000~230,000"],
+        ],
+        verdict: "기차를 먼저 알아보세요. 9/30 판매 시작 직후 €39 근처 표가 있으면 기차가 가장 쌉니다. 기차가 비싸거나 매진이면 비행기가 더 빠르고 쌀 수 있습니다. 버스는 14시간이라 권하지 않습니다.",
         warn: {
           title: "성탄절 운행: 하루 2편뿐",
-          text: "12/25에도 직통 기차가 다닙니다. 조회해 보면 06:56→13:49, 14:42→21:35 두 편이 있습니다. 다만 평소에도 하루 2~3편인 노선이고, 휴일이라 붐빌 수 있습니다. 9/30에 판매가 시작되면 바로 끊는 것이 좋습니다. 매진되면 비행기(약 1시간 50분)로 갈 수 있습니다.",
+          text: "12/25에도 직통 기차가 다닙니다. 조회해 보면 06:56→13:49, 14:42→21:35 두 편이 있습니다. 다만 평소에도 하루 2~3편인 노선이고, 휴일이라 붐빌 수 있습니다. 9/30에 판매가 시작되면 바로 끊는 것이 좋습니다.",
         },
         links: [
-          { label: "Omio에서 12/25 기차 검색", url: omio("379727", "378468", "2026-12-25"), how: OMIO },
-          { label: "비교용: Trainline에서 검색", url: trainline("4924", "6625", "2026-12-25"), how: FILLED, alt: true },
-          { label: "대안: Google 항공편에서 12/25 비행기 검색", url: "https://www.google.com/travel/flights?q=Flights%20from%20Paris%20to%20Barcelona%20on%202026-12-25%20one%20way&hl=ko", how: FILLED, alt: true },
+          { label: "Trainline에서 12/25 기차 검색", url: trainline("4924", "6625", "2026-12-25"), how: FILLED },
+          { label: "Google 항공편에서 12/25 비행기 검색", url: "https://www.google.com/travel/flights?q=Flights%20from%20Paris%20to%20Barcelona%20on%202026-12-25%20one%20way&hl=ko", how: FILLED, alt: true },
+          { label: "Omio에서 12/25 검색 (기차·비행기 함께)", url: omio("379727", "378468", "2026-12-25"), how: OMIO, alt: true },
         ],
         sources: [
-          ["Seat61 — 파리→바르셀로나 기차", "https://www.seat61.com/trains-and-routes/paris-to-barcelona-by-train.htm"],
-          ["SNCF Connect — 파리→바르셀로나 노선", "https://www.sncf-connect.com/en-en/train/route/paris/barcelona"],
+          ["Rome2Rio — 파리→바르셀로나 수단별 가격·시간", "https://www.rome2rio.com/s/Paris/Barcelona"],
+          ["Seat61 — 파리→바르셀로나 기차 (€39부터)", "https://www.seat61.com/trains-and-routes/paris-to-barcelona-by-train.htm"],
           ["Seat61 — 유럽 크리스마스 기간 기차 운행", "https://www.seat61.com/european-train-travel.htm"],
           ["Voyagerentrain — 2026 크리스마스 판매 시작일", "https://www.voyagerentrain.fr/ouverture-billets-sncf-noel-2026/"],
         ],
@@ -431,78 +481,127 @@
     { date: "12/28", from: "바르셀로나", to: "포르투", mode: "비행기", booked: true },
     { date: "12/31", from: "포르투", to: "리스본", mode: "기차 · 약 2시간 50분 · 새해 전날",
       plan: {
-        pick: "Alfa Pendular 특급열차, 직통 (포르투갈 철도 CP)",
-        time: "약 2시간 50분 (Intercidades는 약 3시간 15분)",
+        pick: "Alfa Pendular 특급열차, 직통 (포르투갈 철도 CP). 더 싸게 가려면 FlixBus",
+        time: "기차 약 2시간 40분~3시간 / 버스 약 3시간 15분",
         stations: "포르투 캄파냥역(Campanhã) → 리스본 오리엔트역 / 산타 아폴로니아역",
         change: "없음 (직통)",
+        compare: [
+          ["빠름", "기차 (Alfa Pendular)", "2시간 42분", "₩50,000~100,000"],
+          ["쌈", "버스 (FlixBus)", "3시간 15분", "₩31,000~70,000"],
+        ],
+        verdict: "기차. 30분 정도 빠르고 편합니다. 버스도 30분 차이라 값을 아끼고 싶으면 버스도 좋습니다. 버스는 20분마다 있습니다.",
         warn: {
           title: "12/31 저녁 열차는 운행하지 않음",
           text: "포르투갈 철도는 12/24와 12/31에 저녁 열차를 멈춥니다. 작년 공지를 보면 포르투에서 14:40, 19:45에 떠나는 리스본행이 운행하지 않았습니다. 오전이나 이른 오후 기차로 끊으세요. 올해 공지는 12월에 CP 사이트에 올라옵니다.",
         },
         links: [
-          { label: "Omio에서 12/31 기차 검색", url: omio("398868", "398773", "2026-12-31"), how: OMIO },
+          { label: "Trainline에서 12/31 검색 (기차·버스)", url: trainline("8697", "8721", "2026-12-31"), how: FILLED },
+          { label: "Omio에서 12/31 검색", url: omio("398868", "398773", "2026-12-31"), how: OMIO, alt: true },
           { label: "포르투갈 철도 CP 열기", url: "https://www.cp.pt/", how: SEARCH_ONLY, alt: true },
         ],
         sources: [
+          ["Rome2Rio — 포르투→리스본 수단별 가격·시간", "https://www.rome2rio.com/s/Porto/Lisbon"],
           ["CP 공지 — 성탄·새해 운행 중단 열차 (PDF)", "https://www.cp.pt/info/documents/d/cp/supressoes_natal_ano_novo_alfa_intercidades"],
-          ["Porto guide — 포르투→리스본 기차", "https://porto-north-portugal.com/porto-guide/porto-to-lisbon-train.html"],
         ],
       } },
-    { date: "1/2", from: "리스본", to: "세비야", mode: "버스 · 약 7시간 · 직행",
+    { date: "1/2", from: "리스본", to: "세비야", mode: "버스 · 약 6~7시간 · 직행",
       plan: {
         pick: "직행 고속버스 (FlixBus, ALSA, Rede Expressos 등)",
-        time: "약 7시간 (스페인이 1시간 빨라 시계로는 약 8시간)",
+        time: "약 6~7시간 (스페인이 1시간 빨라 시계로는 7~8시간)",
         stations: "리스본 (오리엔트 등) → 세비야 플라사 데 아르마스 버스터미널",
         change: "버스는 직행. 기차 직통은 없습니다. 기차로 가려면 리스본→파로(포르투갈 남쪽) 기차 후 파로에서 세비야행 버스(약 2시간 30분~3시간 15분)로 갈아탑니다.",
+        compare: [
+          ["빠름", "비행기 (리스본→세비야)", "약 3시간 40분 (공항 이동 포함)", "₩72,000~271,000"],
+          ["쌈", "버스 (직행)", "약 6시간", "₩49,000~110,000"],
+          ["기차", "기차+버스 (파로 환승)", "6시간 39분", "₩71,000~134,000"],
+        ],
+        verdict: "버스. 가장 싸고, 갈아타지 않아도 됩니다. 싼 항공권이 보이면 비행기가 2~3시간 빠릅니다.",
         note: "하루 17편 안팎의 직행 버스가 있습니다. 조회해 보면 11:10, 15:45 출발 버스가 있고 22:25 출발 야간 버스도 있습니다.",
         links: [
-          { label: "Omio에서 1/2 버스 검색", url: omio("398773", "378797", "2027-01-02"), how: OMIO },
-          { label: "비교용: Trainline에서 검색", url: trainline("8721", "6683", "2027-01-02"), how: FILLED, alt: true },
+          { label: "Trainline에서 1/2 버스 검색", url: trainline("8721", "6683", "2027-01-02"), how: FILLED },
+          { label: "Omio에서 1/2 검색 (버스·비행기 함께)", url: omio("398773", "378797", "2027-01-02"), how: OMIO, alt: true },
         ],
         sources: [
+          ["Rome2Rio — 리스본→세비야 수단별 가격·시간", "https://www.rome2rio.com/s/Lisbon/Seville"],
           ["Trainline — 리스본→세비야 버스", "https://www.thetrainline.com/buses/lisbon-to-seville"],
-          ["Omio — 리스본→세비야 버스", "https://www.omio.com/buses/lisbon/seville"],
           ["Seat61 — 리스본 출발 국제 기차 (파로 경유 방법)", "https://www.seat61.com/international-trains/trains-from-Lisbon.htm"],
         ],
       } },
-    { date: "1/4", from: "세비야", to: "그라나다", mode: "기차 · 약 2시간 35분 (버스 약 3시간)",
+    { date: "1/4", from: "세비야", to: "그라나다", mode: "버스 · 약 3시간 (기차는 약 2시간 40분)",
       plan: {
-        pick: "스페인 철도 Renfe 직통 기차. 시간이 안 맞으면 ALSA 버스",
-        time: "기차 약 2시간 35분 (하루 4편 안팎) / 버스 약 3시간 (자주 있음, 더 저렴)",
-        stations: "세비야 산타 후스타역 → 그라나다역",
-        change: "없음 (직통)",
-        note: "기차는 편수가 적으니 시간이 맞는 편이 있으면 그 기차로, 없으면 버스로 가면 됩니다. 1월 표는 아직 판매 전일 수 있습니다.",
+        pick: "ALSA 직행 버스. 시간이 딱 맞으면 Renfe 직통 기차",
+        time: "버스 약 3시간 (자주 있음) / 기차 약 2시간 35분~2시간 40분 (하루 4편 안팎)",
+        stations: "버스: 세비야 플라사 데 아르마스 터미널 → 그라나다 버스터미널 / 기차: 세비야 산타 후스타역 → 그라나다역",
+        change: "없음 (둘 다 직통)",
+        compare: [
+          ["빠름", "기차 (Renfe 직통)", "2시간 38분", "₩65,000~110,000"],
+          ["쌈", "버스 (ALSA)", "3시간", "₩32,000~85,000"],
+        ],
+        verdict: "버스. 20분 정도만 더 걸리는데 값은 절반 가까이이고, 자주 있습니다.",
+        note: "1월 표는 아직 판매 전일 수 있습니다.",
         links: [
-          { label: "Omio에서 1/4 기차·버스 검색", url: omio("378797", "378585", "2027-01-04"), how: OMIO },
-          { label: "비교용: Trainline에서 검색", url: trainline("6683", "6656", "2027-01-04"), how: FILLED, alt: true },
+          { label: "Trainline에서 1/4 버스·기차 검색", url: trainline("6683", "6656", "2027-01-04"), how: FILLED },
+          { label: "Omio에서 1/4 검색", url: omio("378797", "378585", "2027-01-04"), how: OMIO, alt: true },
           { label: "ALSA 버스 노선 페이지", url: "https://www.alsa.com/en/coach/granada-seville", how: SEARCH_ONLY, alt: true },
         ],
         sources: [
-          ["Rome2Rio — 세비야→그라나다", "https://www.rome2rio.com/s/Seville/Granada"],
+          ["Rome2Rio — 세비야→그라나다 수단별 가격·시간", "https://www.rome2rio.com/s/Seville/Granada"],
           ["ALSA — 그라나다↔세비야 버스", "https://www.alsa.com/en/coach/granada-seville"],
         ],
       } },
-    { date: "1/6", from: "그라나다", to: "마드리드", mode: "기차 · 약 3시간 15분~3시간 25분 · 공휴일",
+    { date: "1/6", from: "그라나다", to: "마드리드", mode: "기차 · 약 3시간 20분~3시간 40분 · 공휴일",
       plan: {
-        pick: "고속열차 (Renfe AVE/Avlo, 날짜에 따라 iryo·OUIGO), 직통",
-        time: "빠른 열차 약 3시간 15분~3시간 25분",
+        pick: "고속열차 (Renfe AVE/Avlo, iryo, OUIGO), 직통. 싼 회사(Avlo·iryo·OUIGO)부터 보세요",
+        time: "빠른 열차 약 3시간 20분, 보통 3시간 40분",
         stations: "그라나다역 → 마드리드 아토차역",
         change: "없음 (직통)",
+        compare: [
+          ["빠름·쌈", "기차 (직통, 일찍 산 경우)", "3시간 22분~3시간 40분", "£24부터 (늦으면 ₩110,000~230,000)"],
+          ["버스", "ALSA", "5시간", "₩50,000~85,000"],
+        ],
+        verdict: "기차. 일찍 사면 가장 빠르면서 가장 쌉니다. 기차가 매진이거나 비싸면 버스를 보세요.",
         warn: {
           title: "1/6은 스페인 공휴일(동방박사의 날)",
           text: "연휴 마지막 날이라 이동하는 사람이 많습니다. Renfe는 작년에 12/18~1/11 동안 특별 증편을 했습니다. 판매가 열리면 바로 끊으세요. 다음 날(1/7) 귀국 비행기가 있으니 너무 늦은 기차는 피하는 것이 좋습니다.",
         },
         links: [
-          { label: "Omio에서 1/6 기차 검색", url: omio("378585", "378655", "2027-01-06"), how: OMIO },
-          { label: "비교용: Trainline에서 검색", url: trainline("6656", "6663", "2027-01-06"), how: FILLED, alt: true },
+          { label: "Trainline에서 1/6 기차 검색", url: trainline("6656", "6663", "2027-01-06"), how: FILLED },
+          { label: "Omio에서 1/6 검색", url: omio("378585", "378655", "2027-01-06"), how: OMIO, alt: true },
         ],
         sources: [
-          ["Trainline — 그라나다→마드리드", "https://www.thetrainline.com/en-us/train-times/granada-to-madrid"],
+          ["Rome2Rio — 그라나다→마드리드 수단별 가격·시간", "https://www.rome2rio.com/s/Granada/Madrid"],
+          ["Trainline — 그라나다→마드리드 (최저가·편수)", "https://www.thetrainline.com/en/train-times/granada-to-madrid"],
           ["Renfe — 크리스마스 기간 좌석 증편 안내", "https://www.renfe.com/es/es/grupo-renfe/comunicacion/renfe-al-dia/sala-de-prensa/renfe-ofrece-mas-de-2-millones-de-plazas-en-navidad-2025"],
         ],
       } },
     { date: "1/7", from: "마드리드", to: "인천", mode: "비행기", booked: true },
   ];
+
+  // 구간별 추천 출발 시간. 도착 도시에 머무는 날이 짧을수록 일찍 떠나고,
+  // 떠나는 도시에 머문 날이 짧으면 그 도시에서 오전을 쓰고 떠난다. (12월 해 지는 시각 16:30~17:30)
+  const WHEN = {
+    "12/15": { time: "오전 8~9시 출발 → 10~11시 도착",
+      why: "로마는 3박을 채웠고 피렌체는 1박뿐이라, 일찍 가서 피렌체 오후를 통째로 쓰는 편이 좋습니다." },
+    "12/16": { time: "낮 12~2시 출발 → 오후 2~4시 도착",
+      why: "피렌체가 1박이라 오전은 피렌체에서 쓰고, 해 지기(약 16:30) 전에 베네치아 숙소를 찾아가도록 잡았습니다." },
+    "12/18": { time: "아침 7시 전후 출발 → 오후 2시 전후 도착",
+      why: "6~7시간 걸리는 가장 긴 구간입니다. 조회해 보면 06:48 출발 → 13:41 도착 열차가 있습니다. 늦게 떠나면 루체른에 어두울 때 도착합니다." },
+    "12/20": { time: "오전 9~10시 출발 → 오후 1~2시 도착",
+      why: "스트라스부르가 1박뿐이라 오후를 확보하는 편이 좋습니다. 버스는 하루 2편뿐이니 시간표를 보고, 오전 버스가 없으면 오전 9시 전후 기차를 타세요." },
+    "12/21": { time: "오후 1~3시 출발 → 오후 3~5시 도착",
+      why: "스트라스부르가 1박이라 오전을 쓰고 떠나도 됩니다. 파리는 4박이라 급하지 않고, 1시간 45분이면 도착합니다." },
+    "12/25": { time: "아침 06:56 출발 → 13:49 도착 (하루 2편 중 첫 차)",
+      why: "다른 편(14:42 출발)은 성탄절 밤 21:35에 도착합니다. 파리는 4박을 채웠으니 첫 차로 가서 바르셀로나 오후를 쓰는 편이 좋습니다." },
+    "12/31": { time: "오전 10시~정오 출발 → 오후 1~3시 도착",
+      why: "12/31은 저녁 열차가 운행하지 않습니다. 이른 오후까지 도착해 새해 전날 저녁을 여유 있게 보내도록 잡았습니다." },
+    "1/2": { time: "오전 9~11시 출발 → 저녁 6~7시 도착 (스페인 시간)",
+      why: "6~7시간 걸리고 스페인이 1시간 빠릅니다. 조회해 보면 11:10 출발 버스가 있습니다. 22:25 야간 버스도 있지만 잠을 설치게 됩니다." },
+    "1/4": { time: "오전 9~10시 출발 → 낮 12시~1시 도착",
+      why: "3시간 정도라 오전에 떠나면 그라나다 오후를 온전히 쓸 수 있습니다." },
+    "1/6": { time: "오전 9~11시 출발 → 오후 1~3시 도착",
+      why: "마드리드가 1박이고 다음 날 귀국 비행기가 있습니다. 공휴일이라 붐비니 늦은 기차는 피하세요." },
+  };
+  legs.forEach(l => { if (l.plan && WHEN[l.date]) l.plan.when = WHEN[l.date]; });
 
   const FIELDS = [
     { key: "time", label: "출발 시간", ph: "예: 08:20" },
@@ -544,17 +643,29 @@
   function planHtml(p) {
     const warn = p.warn ? `<div class="warn"><b>${p.warn.title}</b>${p.warn.text}</div>` : "";
     const note = p.note ? `<p>${p.note}</p>` : "";
+    const compare = p.compare ? `
+      <div class="compare">
+        <p class="compare-title">빠른 길 · 싼 길 비교 <span>(1인 편도, 조사 시점 대략 가격)</span></p>
+        <div class="compare-scroll"><table>
+          <thead><tr><th></th><th>수단</th><th>시간</th><th>가격</th></tr></thead>
+          <tbody>${p.compare.map(([tag, how, time, price]) => `
+            <tr><th scope="row"><span class="tag">${tag}</span></th><td>${how}</td><td>${time}</td><td>${price}</td></tr>`).join("")}
+          </tbody>
+        </table></div>
+        <p class="verdict"><b>추천:</b> ${p.verdict}</p>
+      </div>` : "";
     const links = p.links.map(l => `
       <a class="btn${l.alt ? " alt" : ""}" href="${l.url}" target="_blank" rel="noopener">
         ${l.label}<small>${l.how}</small></a>`).join("");
     return `
       <p class="pick">추천: ${p.pick}</p>
+      ${p.when ? `<div class="when"><span class="when-label">추천 출발</span><b>${p.when.time}</b><span class="when-why">${p.when.why}</span></div>` : ""}
       <dl class="facts">
         <dt>걸리는 시간</dt><dd>${p.time}</dd>
         <dt>타는 곳</dt><dd>${p.stations}</dd>
         <dt>갈아타기</dt><dd>${p.change}</dd>
       </dl>
-      ${warn}${note}
+      ${compare}${warn}${note}
       <div class="links">${links}</div>`;
   }
 
@@ -731,7 +842,9 @@
       <p class="today-route">${esc(leg.from)} <span class="arrow">→</span> ${esc(leg.to)}</p>
       <p class="today-mode">${esc(leg.mode)}</p>
       <div class="today-grid">
-        ${tile("출발 시간", b.time, "big")}
+        ${b.time || !(leg.plan && leg.plan.when)
+          ? tile("출발 시간", b.time, "big")
+          : `<div class="tile"><span class="tile-label">출발 시간 (아직 안 적음)</span><span class="tile-value empty">추천: ${esc(leg.plan.when.time)}</span></div>`}
         ${tile("출발 역·공항", b.station)}
         <div class="tile wide">
           <div class="tile-row"><span class="tile-label">예약번호</span>${copyBtn}</div>
