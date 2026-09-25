@@ -85,7 +85,12 @@
   .lock p { margin: 0; color: var(--muted); font-size: 14px; }
   .lock form { display: flex; gap: 8px; flex-wrap: wrap; }
   .lock input { flex: 1 1 180px; }
+  .pwchange { margin-bottom: 20px; }
+  .pwchange form { display: grid; grid-template-columns: 1fr 1fr; }
+  .pwchange form .primary, .pwchange form .ghost { justify-self: start; }
+  @media (max-width: 420px) { .pwchange form { grid-template-columns: 1fr; } }
   .msg { font-size: 14px; }
+  .msg.ok { color: var(--done-ink); }
   .msg.err { color: var(--err); }
 
   input[type="text"], input[type="password"] {
@@ -240,8 +245,21 @@
       <span id="synced">불러오는 중…</span>
       <button type="button" class="linkbtn" id="refresh">새로고침</button>
       <button type="button" class="linkbtn" id="forget">이 기기에서 비밀번호 지우기</button>
+      <button type="button" class="linkbtn" id="pwchange-open">비밀번호 바꾸기</button>
     </div>
   </header>
+
+  <section class="lock pwchange" id="pwchange" hidden>
+    <h2>비밀번호 바꾸기</h2>
+    <p>바꾸면 일행 모두 새 비밀번호를 다시 넣어야 합니다. 바꾼 뒤 카톡으로 새 비밀번호를 알려 주세요.</p>
+    <form id="pwchange-form" autocomplete="off">
+      <input type="password" id="pw-new" placeholder="새 비밀번호 (4자 이상)" aria-label="새 비밀번호" minlength="4" maxlength="50" required>
+      <input type="password" id="pw-new2" placeholder="새 비밀번호 한 번 더" aria-label="새 비밀번호 확인" minlength="4" maxlength="50" required>
+      <button type="submit" class="primary" id="pwchange-btn">바꾸기</button>
+      <button type="button" class="ghost" id="pwchange-cancel">닫기</button>
+    </form>
+    <p class="msg" id="pwchange-msg" aria-live="polite"></p>
+  </section>
 
   <section class="lock" id="lock">
     <h2>비밀번호를 넣어 주세요</h2>
@@ -270,7 +288,8 @@
   <footer id="foot" hidden>
     <p>구간을 누르면 추천 수단, 예매 링크, 예매 정보 칸이 펼쳐집니다.</p>
     <p>예약번호를 적고 저장하면 그 구간이 '예매 완료'로 바뀌고, 일행 모두의 화면에 보입니다.</p>
-    <p>Trainline 링크에서 "Not available"이 보이면 아직 표 판매가 시작되지 않은 것입니다.</p>
+    <p>Omio 링크는 도시와 날짜가 채워진 검색 화면이 열립니다. '검색'을 누르면 기차·버스·비행기가 함께 나옵니다.</p>
+    <p>검색 결과가 비어 있거나 "Not available"이 보이면 아직 표 판매가 시작되지 않은 것입니다.</p>
     <p>추천 수단 조사일 2026-09-25. 시간과 운행 편수는 판매가 열리면 바뀔 수 있습니다.</p>
   </footer>
 </div>
@@ -288,6 +307,13 @@
       + "&outwardDate=" + date + "T08%3A00%3A00"
       + "&outwardDateType=departAfter&passengers%5B%5D=1996-01-01&directSearch=false&lang=en";
   }
+  // Omio(한국어) 검색 화면 링크 (출발 도시 번호, 도착 도시 번호, 날짜 YYYY-MM-DD)
+  function omio(from, to, iso) {
+    const [y, m, d] = iso.split("-");
+    return "https://www.omio.co.kr/?departure_fk=" + from + "&arrival_fk=" + to
+      + "&departure_date=" + d + "%2F" + m + "%2F" + y;
+  }
+  const OMIO = "출발·도착 도시와 날짜가 채워진 채로 열림 → '검색'만 누르면 됨";
   const FILLED = "출발·도착 도시와 날짜가 들어간 채로 열림";
   const SEARCH_ONLY = "검색 화면까지 열림 (도시·날짜 직접 입력)";
 
@@ -301,7 +327,10 @@
         stations: "로마 테르미니역 → 피렌체 산타 마리아 노벨라역",
         change: "없음 (직통)",
         note: "두 회사 합쳐 하루 100편 가까이 다녀서 자리 걱정이 적은 구간입니다.",
-        links: [{ label: "Trainline에서 12/15 기차 검색", url: trainline("8544", "8434", "2026-12-15"), how: FILLED }],
+        links: [
+          { label: "Omio에서 12/15 기차 검색", url: omio("388498", "388058", "2026-12-15"), how: OMIO },
+          { label: "비교용: Trainline에서 검색", url: trainline("8544", "8434", "2026-12-15"), how: FILLED, alt: true },
+        ],
         sources: [
           ["Italo — 로마↔피렌체 노선 안내", "https://www.italotreno.com/en/destinations-timetable/rome-florence-tickets"],
           ["Go Ask A Local — 로마→피렌체 기차", "https://goaskalocal.com/blog/rome-to-florence-by-train"],
@@ -314,7 +343,10 @@
         stations: "피렌체 산타 마리아 노벨라역 → 베네치아 산타 루치아역",
         change: "없음 (직통)",
         note: "'Venezia Mestre'가 아니라 섬 안의 'Venezia Santa Lucia'행인지 확인하세요.",
-        links: [{ label: "Trainline에서 12/16 기차 검색", url: trainline("8434", "8574", "2026-12-16"), how: FILLED }],
+        links: [
+          { label: "Omio에서 12/16 기차 검색", url: omio("388058", "388743", "2026-12-16"), how: OMIO },
+          { label: "비교용: Trainline에서 검색", url: trainline("8434", "8574", "2026-12-16"), how: FILLED, alt: true },
+        ],
         sources: [
           ["Trainline — 피렌체→베네치아 산타 루치아", "https://www.thetrainline.com/en-us/train-times/florence-to-venezia-santa-lucia"],
           ["Italo — 베네치아 노선 안내", "https://www.italotreno.com/en/destinations-timetable/venice-tickets"],
@@ -327,7 +359,10 @@
         stations: "베네치아 산타 루치아역 → 루체른역",
         change: "밀라노 중앙역(Milano Centrale)에서 1번. 밀라노→루체른 직통 EuroCity는 하루 1편뿐이라, 다른 열차는 아르트골다우(Arth-Goldau)에서 한 번 더 갈아탑니다.",
         note: "하루 중 가장 긴 기차 구간입니다. 아침 일찍 출발하는 편이 좋습니다.",
-        links: [{ label: "Trainline에서 12/18 기차 검색", url: trainline("8574", "6353", "2026-12-18"), how: FILLED }],
+        links: [
+          { label: "Omio에서 12/18 기차 검색", url: omio("388743", "373152", "2026-12-18"), how: OMIO },
+          { label: "비교용: Trainline에서 검색", url: trainline("8574", "6353", "2026-12-18"), how: FILLED, alt: true },
+        ],
         sources: [
           ["Seat61 — 스위스↔이탈리아 EuroCity", "https://www.seat61.com/trains-and-routes/switzerland-to-italy-by-train.htm"],
           ["Trainline — 베네치아→루체른", "https://www.thetrainline.com/en/train-times/venice-to-lucerne"],
@@ -339,8 +374,11 @@
         time: "약 2시간 45분~3시간 20분",
         stations: "루체른역 → 바젤 SBB역 → 스트라스부르역",
         change: "바젤 SBB역에서 1번 (루체른→바젤 약 1시간, 바젤→스트라스부르 약 1시간 15분)",
-        note: "좌석 지정 없이 타는 열차라 미리 끊지 않아도 됩니다. 당일 SBB 앱이나 역에서 사도 됩니다. Trainline에는 이 구간 기차가 나오지 않아 스위스 철도(SBB) 사이트를 붙였습니다.",
-        links: [{ label: "스위스 철도 SBB 열기", url: "https://www.sbb.ch/en", how: SEARCH_ONLY }],
+        note: "좌석 지정 없이 타는 열차라 미리 끊지 않아도 됩니다. 당일 SBB 앱이나 역에서 사도 됩니다. Omio에 원하는 기차가 안 나오면 스위스 철도(SBB) 사이트에서 찾으세요.",
+        links: [
+          { label: "Omio에서 12/20 기차 검색", url: omio("373152", "379901", "2026-12-20"), how: OMIO },
+          { label: "스위스 철도 SBB 열기", url: "https://www.sbb.ch/en", how: SEARCH_ONLY, alt: true },
+        ],
         sources: [
           ["Trainline — 루체른→스트라스부르", "https://www.thetrainline.com/en-us/train-times/lucerne-to-strasbourg"],
           ["Rome2Rio — 루체른→스트라스부르 기차", "https://www.rome2rio.com/Train/Lucerne-Station/Strasbourg"],
@@ -353,7 +391,10 @@
         stations: "스트라스부르역 → 파리 동역(Gare de l'Est)",
         change: "없음 (직통)",
         note: "크리스마스 기간(12/13~1/6) 프랑스 기차표는 9/30부터 팝니다. 하루 14편 안팎으로 자주 있습니다.",
-        links: [{ label: "Trainline에서 12/21 기차 검색", url: trainline("153", "4916", "2026-12-21"), how: FILLED }],
+        links: [
+          { label: "Omio에서 12/21 기차 검색", url: omio("379901", "379727", "2026-12-21"), how: OMIO },
+          { label: "비교용: Trainline에서 검색", url: trainline("153", "4916", "2026-12-21"), how: FILLED, alt: true },
+        ],
         sources: [
           ["Trainline — 스트라스부르→파리", "https://www.thetrainline.com/en/train-times/strasbourg-to-paris"],
           ["Voyagerentrain — 2026 크리스마스 기차표 판매 시작일", "https://www.voyagerentrain.fr/ouverture-billets-sncf-noel-2026/"],
@@ -370,7 +411,8 @@
           text: "12/25에도 직통 기차가 다닙니다. 조회해 보면 06:56→13:49, 14:42→21:35 두 편이 있습니다. 다만 평소에도 하루 2~3편인 노선이고, 휴일이라 붐빌 수 있습니다. 9/30에 판매가 시작되면 바로 끊는 것이 좋습니다. 매진되면 비행기(약 1시간 50분)로 갈 수 있습니다.",
         },
         links: [
-          { label: "Trainline에서 12/25 기차 검색", url: trainline("4924", "6625", "2026-12-25"), how: FILLED },
+          { label: "Omio에서 12/25 기차 검색", url: omio("379727", "378468", "2026-12-25"), how: OMIO },
+          { label: "비교용: Trainline에서 검색", url: trainline("4924", "6625", "2026-12-25"), how: FILLED, alt: true },
           { label: "대안: Google 항공편에서 12/25 비행기 검색", url: "https://www.google.com/travel/flights?q=Flights%20from%20Paris%20to%20Barcelona%20on%202026-12-25%20one%20way&hl=ko", how: FILLED, alt: true },
         ],
         sources: [
@@ -392,8 +434,8 @@
           text: "포르투갈 철도는 12/24와 12/31에 저녁 열차를 멈춥니다. 작년 공지를 보면 포르투에서 14:40, 19:45에 떠나는 리스본행이 운행하지 않았습니다. 오전이나 이른 오후 기차로 끊으세요. 올해 공지는 12월에 CP 사이트에 올라옵니다.",
         },
         links: [
-          { label: "포르투갈 철도 CP 열기", url: "https://www.cp.pt/", how: SEARCH_ONLY },
-          { label: "Trainline에서 12/31 검색 (버스 포함)", url: trainline("8697", "8721", "2026-12-31"), how: FILLED, alt: true },
+          { label: "Omio에서 12/31 기차 검색", url: omio("398868", "398773", "2026-12-31"), how: OMIO },
+          { label: "포르투갈 철도 CP 열기", url: "https://www.cp.pt/", how: SEARCH_ONLY, alt: true },
         ],
         sources: [
           ["CP 공지 — 성탄·새해 운행 중단 열차 (PDF)", "https://www.cp.pt/info/documents/d/cp/supressoes_natal_ano_novo_alfa_intercidades"],
@@ -407,7 +449,10 @@
         stations: "리스본 (오리엔트 등) → 세비야 플라사 데 아르마스 버스터미널",
         change: "버스는 직행. 기차 직통은 없습니다. 기차로 가려면 리스본→파로(포르투갈 남쪽) 기차 후 파로에서 세비야행 버스(약 2시간 30분~3시간 15분)로 갈아탑니다.",
         note: "하루 17편 안팎의 직행 버스가 있습니다. 조회해 보면 11:10, 15:45 출발 버스가 있고 22:25 출발 야간 버스도 있습니다.",
-        links: [{ label: "Trainline에서 1/2 버스 검색", url: trainline("8721", "6683", "2027-01-02"), how: FILLED }],
+        links: [
+          { label: "Omio에서 1/2 버스 검색", url: omio("398773", "378797", "2027-01-02"), how: OMIO },
+          { label: "비교용: Trainline에서 검색", url: trainline("8721", "6683", "2027-01-02"), how: FILLED, alt: true },
+        ],
         sources: [
           ["Trainline — 리스본→세비야 버스", "https://www.thetrainline.com/buses/lisbon-to-seville"],
           ["Omio — 리스본→세비야 버스", "https://www.omio.com/buses/lisbon/seville"],
@@ -422,7 +467,8 @@
         change: "없음 (직통)",
         note: "기차는 편수가 적으니 시간이 맞는 편이 있으면 그 기차로, 없으면 버스로 가면 됩니다. 1월 표는 아직 판매 전일 수 있습니다.",
         links: [
-          { label: "Trainline에서 1/4 기차·버스 검색", url: trainline("6683", "6656", "2027-01-04"), how: FILLED },
+          { label: "Omio에서 1/4 기차·버스 검색", url: omio("378797", "378585", "2027-01-04"), how: OMIO },
+          { label: "비교용: Trainline에서 검색", url: trainline("6683", "6656", "2027-01-04"), how: FILLED, alt: true },
           { label: "ALSA 버스 노선 페이지", url: "https://www.alsa.com/en/coach/granada-seville", how: SEARCH_ONLY, alt: true },
         ],
         sources: [
@@ -440,7 +486,10 @@
           title: "1/6은 스페인 공휴일(동방박사의 날)",
           text: "연휴 마지막 날이라 이동하는 사람이 많습니다. Renfe는 작년에 12/18~1/11 동안 특별 증편을 했습니다. 판매가 열리면 바로 끊으세요. 다음 날(1/7) 귀국 비행기가 있으니 너무 늦은 기차는 피하는 것이 좋습니다.",
         },
-        links: [{ label: "Trainline에서 1/6 기차 검색", url: trainline("6656", "6663", "2027-01-06"), how: FILLED }],
+        links: [
+          { label: "Omio에서 1/6 기차 검색", url: omio("378585", "378655", "2027-01-06"), how: OMIO },
+          { label: "비교용: Trainline에서 검색", url: trainline("6656", "6663", "2027-01-06"), how: FILLED, alt: true },
+        ],
         sources: [
           ["Trainline — 그라나다→마드리드", "https://www.thetrainline.com/en-us/train-times/granada-to-madrid"],
           ["Renfe — 크리스마스 기간 좌석 증편 안내", "https://www.renfe.com/es/es/grupo-renfe/comunicacion/renfe-al-dia/sala-de-prensa/renfe-ofrece-mas-de-2-millones-de-plazas-en-navidad-2025"],
@@ -774,15 +823,50 @@
   }
 
   function lockAgain(reason) {
+    // 전에 들어와 있던 기기라면 누군가 비밀번호를 바꾼 것일 수 있다
+    const wasIn = password !== null || storeGet() !== null;
     password = null;
     storeDel();
-    ["today", "legs", "summary", "toolbar", "foot"].forEach(id => document.getElementById(id).hidden = true);
+    ["today", "legs", "summary", "toolbar", "foot", "pwchange"].forEach(id => document.getElementById(id).hidden = true);
     document.getElementById("lock").hidden = false;
     const m = document.getElementById("lock-msg");
     m.className = "msg err";
     m.textContent = reason === "setup"
       ? "저장소에 아직 비밀번호가 정해지지 않았습니다. 만든 사람에게 알려 주세요."
-      : "비밀번호가 맞지 않습니다. 다시 넣어 주세요.";
+      : wasIn
+        ? "비밀번호가 바뀌었을 수 있습니다. 일행에게 새 비밀번호를 물어보고 넣어 주세요."
+        : "비밀번호가 맞지 않습니다. 다시 넣어 주세요.";
+  }
+
+  async function changePassword() {
+    const m = document.getElementById("pwchange-msg");
+    const btn = document.getElementById("pwchange-btn");
+    const a = document.getElementById("pw-new").value.trim();
+    const b = document.getElementById("pw-new2").value.trim();
+    m.className = "msg err";
+    if (a.length < 4) { m.textContent = "새 비밀번호는 4자 이상으로 넣어 주세요."; return; }
+    if (a !== b) { m.textContent = "두 칸에 넣은 새 비밀번호가 서로 다릅니다. 똑같이 넣어 주세요."; return; }
+    if (a === password) { m.textContent = "지금 비밀번호와 같습니다. 다른 비밀번호를 넣어 주세요."; return; }
+    btn.disabled = true;
+    m.className = "msg";
+    m.textContent = "바꾸는 중…";
+    try {
+      const r = await api({ action: "changePw", pw: password, newPw: a });
+      if (!r.ok && r.reason === "bad_password") { m.className = "msg err"; m.textContent = "새 비밀번호는 4~50자로 넣어 주세요."; return; }
+      if (!r.ok && r.reason === "bad_request") { m.className = "msg err"; m.textContent = "저장소가 아직 비밀번호 바꾸기를 지원하지 않습니다. 만든 사람에게 알려 주세요."; return; }
+      if (!r.ok) { lockAgain(r.reason); return; }
+      password = a;
+      storeSet(a);
+      document.getElementById("pw-new").value = "";
+      document.getElementById("pw-new2").value = "";
+      m.className = "msg ok";
+      m.textContent = "비밀번호를 바꿨습니다. 일행에게 새 비밀번호를 알려 주세요. 이 기기는 그대로 쓸 수 있습니다.";
+    } catch (e) {
+      m.className = "msg err";
+      m.textContent = "바꾸지 못했습니다. 인터넷 연결을 확인하고 다시 눌러 주세요.";
+    } finally {
+      btn.disabled = false;
+    }
   }
 
   async function unlock(pw) {
@@ -816,6 +900,19 @@
     unlock(document.getElementById("pw").value);
   });
   document.getElementById("refresh").addEventListener("click", load);
+  document.getElementById("pwchange-open").addEventListener("click", () => {
+    const s = document.getElementById("pwchange");
+    s.hidden = false;
+    document.getElementById("pwchange-msg").textContent = "";
+    document.getElementById("pw-new").focus();
+  });
+  document.getElementById("pwchange-cancel").addEventListener("click", () => {
+    document.getElementById("pwchange").hidden = true;
+  });
+  document.getElementById("pwchange-form").addEventListener("submit", e => {
+    e.preventDefault();
+    changePassword();
+  });
   document.getElementById("forget").addEventListener("click", () => {
     storeDel();
     location.reload();
