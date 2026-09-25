@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="ko">
 <head>
 <meta charset="utf-8">
@@ -175,7 +175,55 @@
   footer { margin-top: 24px; font-size: 13px; color: var(--muted); display: grid; gap: 6px; }
   footer p { margin: 0; }
 
+  /* 오늘의 이동 */
+  .today {
+    background: var(--card);
+    border: 2px solid var(--accent);
+    border-radius: 14px;
+    padding: 16px;
+    margin-bottom: 20px;
+    display: grid; gap: 12px;
+  }
+  .today-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 4px 12px; }
+  .today-label { font-size: 14px; font-weight: 700; color: var(--accent); letter-spacing: 0.02em; }
+  .today-date { font-size: 13px; color: var(--muted); font-variant-numeric: tabular-nums; }
+  .today-route { margin: 0; font-size: 24px; line-height: 1.25; font-weight: 700; text-wrap: balance; }
+  .today-route .arrow { color: var(--accent); font-weight: 500; }
+  .today-mode { margin: -6px 0 0; font-size: 14px; color: var(--muted); }
+  .today-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .tile { background: var(--sunk); border-radius: 10px; padding: 10px 12px; min-width: 0; }
+  .tile.wide { grid-column: 1 / -1; }
+  .tile-label { display: block; font-size: 12px; color: var(--muted); margin-bottom: 2px; }
+  .tile-value { font-size: 18px; font-weight: 700; line-height: 1.3; overflow-wrap: anywhere; }
+  .tile-value.big {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-variant-numeric: tabular-nums; font-size: 32px; line-height: 1.1;
+  }
+  .tile-value.code { font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: 26px; letter-spacing: 0.04em; }
+  .tile-value.empty { font-size: 15px; font-weight: 400; color: var(--muted); }
+  .tile-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
+  .today-actions { display: flex; flex-wrap: wrap; gap: 8px 16px; font-size: 14px; }
+  .today-note { margin: 0; font-size: 14px; color: var(--muted); }
+  .test-banner {
+    background: var(--warn-bg); border: 1px solid var(--warn-line); border-radius: 8px;
+    padding: 8px 12px; font-size: 13px; display: flex; flex-wrap: wrap; gap: 4px 12px; align-items: center;
+  }
+  .test-tool { font-size: 13px; color: var(--muted); }
+  .test-tool summary { cursor: pointer; color: var(--accent); text-decoration: underline; width: max-content; }
+  .test-tool .test-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 8px; }
+  .test-tool input[type="date"] {
+    font: inherit; font-size: 16px; color: var(--ink);
+    background: var(--sunk); border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px;
+  }
+  .ghost {
+    font: inherit; font-size: 14px; font-weight: 500;
+    background: var(--sunk); color: var(--ink);
+    border: 1px solid var(--line); border-radius: 8px; padding: 8px 12px; cursor: pointer;
+  }
+  .ghost:focus-visible, .test-tool summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
   @media (max-width: 360px) {
+    .today-grid { grid-template-columns: 1fr; }
     .row { grid-template-columns: 56px 1fr; row-gap: 8px; }
     .side { grid-column: 2; justify-items: start; grid-auto-flow: column; align-items: center; }
     .fields { grid-template-columns: 1fr; }
@@ -203,6 +251,18 @@
       <button type="submit" class="primary" id="pw-btn">열기</button>
     </form>
     <p class="msg" id="lock-msg" aria-live="polite"></p>
+  </section>
+
+  <section class="today" id="today" hidden>
+    <div id="today-body" aria-live="polite"></div>
+    <details class="test-tool" id="test-tool">
+      <summary>날짜 바꿔서 시험해 보기</summary>
+      <div class="test-row">
+        <label for="test-date">이 날짜인 척 보기</label>
+        <input type="date" id="test-date" min="2026-12-01" max="2027-01-10" value="2026-12-16">
+        <button type="button" class="ghost" id="test-reset">원래 날짜로</button>
+      </div>
+    </details>
   </section>
 
   <ol id="legs" hidden></ol>
@@ -534,6 +594,8 @@
       }
     });
 
+    renderToday();
+
     const doneCount = legs.filter((l, i) => isBooked(l, i)).length;
     const sum = document.getElementById("summary");
     sum.innerHTML = `예매 완료 <b>${doneCount}</b> · 아직 <b>${legs.length - doneCount}</b> · 전체 ${legs.length}구간`;
@@ -543,6 +605,131 @@
     const t = new Date();
     return String(t.getHours()).padStart(2, "0") + ":" + String(t.getMinutes()).padStart(2, "0");
   }
+
+  // ---------- 오늘의 이동 ----------
+  // 날짜는 모두 'YYYY-MM-DD' 글자로 다룬다. 12월은 2026년, 1월은 2027년.
+  const pad = n => String(n).padStart(2, "0");
+  function legISO(d) {
+    const [m, day] = d.split("/").map(Number);
+    return (m === 12 ? 2026 : 2027) + "-" + pad(m) + "-" + pad(day);
+  }
+  // 폰에 설정된 시간대의 오늘 날짜 (여행 중 폰이 현지 시간으로 바뀌면 현지 날짜)
+  function realTodayISO() {
+    const t = new Date();
+    return t.getFullYear() + "-" + pad(t.getMonth() + 1) + "-" + pad(t.getDate());
+  }
+  let testDate = null;   // 시험용 날짜. null 이면 진짜 오늘
+  const todayISO = () => testDate || realTodayISO();
+
+  function niceDate(iso) {
+    const [y, m, d] = iso.split("-").map(Number);
+    const wd = "일월화수목금토"[new Date(y, m - 1, d).getDay()];
+    return `${m}월 ${d}일 (${wd})`;
+  }
+  function daysBetween(a, b) {
+    const toUTC = iso => { const [y, m, d] = iso.split("-").map(Number); return Date.UTC(y, m - 1, d); };
+    return Math.round((toUTC(b) - toUTC(a)) / 86400000);
+  }
+
+  function tile(label, value, cls, wide) {
+    const v = value
+      ? `<span class="tile-value ${cls || ""}">${esc(value)}</span>`
+      : `<span class="tile-value empty">아직 안 적었어요</span>`;
+    return `<div class="tile${wide ? " wide" : ""}"><span class="tile-label">${label}</span>${v}</div>`;
+  }
+
+  function renderToday() {
+    const body = document.getElementById("today-body");
+    const today = todayISO();
+    const idx = legs.findIndex(l => legISO(l.date) === today);
+    const nextIdx = idx >= 0 ? idx : legs.findIndex(l => legISO(l.date) > today);
+
+    const banner = testDate
+      ? `<div class="test-banner"><span><b>시험 중</b> · ${niceDate(testDate)}인 척 보고 있어요</span>
+           <button type="button" class="linkbtn" data-act="reset">원래 날짜로</button></div>`
+      : "";
+
+    if (nextIdx < 0) {
+      body.innerHTML = `${banner}
+        <div class="today-head"><span class="today-label">여행 끝</span><span class="today-date">오늘 ${niceDate(today)}</span></div>
+        <p class="today-note">13개 구간을 모두 마쳤어요. 수고 많으셨어요!</p>`;
+      return;
+    }
+
+    const leg = legs[nextIdx];
+    const id = legId(nextIdx);
+    const b = bookings[id] || {};
+    const isToday = idx >= 0;
+    const gap = daysBetween(today, legISO(leg.date));
+    const label = isToday ? "오늘의 이동" : "다음 이동";
+    const when = isToday
+      ? `오늘 ${niceDate(today)}`
+      : `${niceDate(legISO(leg.date))} · ${gap === 1 ? "내일" : gap + "일 뒤"}`;
+    const copyBtn = b.code
+      ? `<button type="button" class="linkbtn" data-act="copy" data-code="${esc(b.code)}">복사</button>` : "";
+
+    body.innerHTML = `${banner}
+      <div class="today-head">
+        <span class="today-label">${label}</span>
+        <span class="today-date">${when}</span>
+      </div>
+      <p class="today-route">${esc(leg.from)} <span class="arrow">→</span> ${esc(leg.to)}</p>
+      <p class="today-mode">${esc(leg.mode)}</p>
+      <div class="today-grid">
+        ${tile("출발 시간", b.time, "big")}
+        ${tile("출발 역·공항", b.station)}
+        <div class="tile wide">
+          <div class="tile-row"><span class="tile-label">예약번호</span>${copyBtn}</div>
+          ${b.code ? `<span class="tile-value code">${esc(b.code)}</span>` : `<span class="tile-value empty">아직 안 적었어요</span>`}
+        </div>
+      </div>
+      <div class="today-actions">
+        <button type="button" class="linkbtn" data-act="open" data-leg="${id}">
+          ${b.code ? "이 구간 자세히 보기" : "이 구간 예매 정보 적으러 가기"}</button>
+        <span class="today-note" id="copy-msg" aria-live="polite"></span>
+      </div>`;
+  }
+
+  function setTestDate(iso) {
+    testDate = iso || null;
+    const url = new URL(location.href);
+    if (testDate) url.searchParams.set("date", testDate); else url.searchParams.delete("date");
+    history.replaceState(null, "", url);
+    if (!testDate) document.getElementById("test-tool").open = false;
+    renderToday();
+  }
+
+  document.getElementById("today").addEventListener("click", async e => {
+    const btn = e.target.closest("button[data-act]");
+    if (!btn) return;
+    const act = btn.dataset.act;
+    if (act === "reset") setTestDate(null);
+    if (act === "open") {
+      const d = document.getElementById("leg-" + btn.dataset.leg);
+      d.open = true;
+      d.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+    if (act === "copy") {
+      const msg = document.getElementById("copy-msg");
+      try {
+        await navigator.clipboard.writeText(btn.dataset.code);
+        msg.textContent = "예약번호를 복사했어요";
+      } catch (err) {
+        msg.textContent = "복사가 안 돼요. 번호를 길게 눌러 복사해 주세요";
+      }
+    }
+  });
+  document.getElementById("test-date").addEventListener("change", e => setTestDate(e.target.value));
+  document.getElementById("test-reset").addEventListener("click", () => setTestDate(null));
+
+  // 주소에 ?date=2026-12-16 을 붙이면 그 날짜로 시험
+  (function () {
+    const q = new URLSearchParams(location.search).get("date");
+    if (q && /^\d{4}-\d{2}-\d{2}$/.test(q)) {
+      testDate = q;
+      document.getElementById("test-date").value = q;
+    }
+  })();
 
   // ---------- 동작 ----------
   async function load() {
@@ -583,13 +770,13 @@
 
   function showApp() {
     document.getElementById("lock").hidden = true;
-    ["legs", "summary", "toolbar", "foot"].forEach(id => document.getElementById(id).hidden = false);
+    ["today", "legs", "summary", "toolbar", "foot"].forEach(id => document.getElementById(id).hidden = false);
   }
 
   function lockAgain(reason) {
     password = null;
     storeDel();
-    ["legs", "summary", "toolbar", "foot"].forEach(id => document.getElementById(id).hidden = true);
+    ["today", "legs", "summary", "toolbar", "foot"].forEach(id => document.getElementById(id).hidden = true);
     document.getElementById("lock").hidden = false;
     const m = document.getElementById("lock-msg");
     m.className = "msg err";
