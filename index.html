@@ -332,6 +332,8 @@
       + (tab ? "&selectedTab=" + tab : "");
   }
   const BUS_TAB = "버스(Coach) 탭이 열린 채로, 도시와 날짜가 들어가 있음";
+  const BOTH_TRAIN = "기차 결과가 먼저 열림 · 위쪽 'Coach'를 누르면 버스";
+  const BOTH_COACH = "버스 결과가 먼저 열림 · 위쪽 'Train'을 누르면 기차";
   // Omio(한국어) 검색 화면 링크 (출발 도시 번호, 도착 도시 번호, 날짜 YYYY-MM-DD)
   function omio(from, to, iso) {
     const [y, m, d] = iso.split("-");
@@ -358,8 +360,7 @@
         verdict: "기차. 일찍 사면 버스와 값이 비슷한데 2배 빠릅니다.",
         note: "두 회사 합쳐 하루 100편 가까이 다녀서 자리 걱정이 적은 구간입니다.",
         links: [
-          { label: "Trainline에서 12/15 기차 검색", url: trainline("8544", "8434", "2026-12-15"), how: FILLED },
-          { label: "Trainline에서 12/15 버스 보기", url: trainline("8544", "8434", "2026-12-15", "coach"), how: BUS_TAB, alt: true },
+          { label: "Trainline에서 12/15 기차·버스 검색", url: trainline("8544", "8434", "2026-12-15"), how: BOTH_TRAIN },
           { label: "Omio에서 12/15 검색", url: omio("388498", "388058", "2026-12-15"), how: OMIO, alt: true },
         ],
         sources: [
@@ -380,8 +381,7 @@
         verdict: "기차. 버스는 2시간 가까이 더 걸리고, 섬 밖(메스트레·트론케토)에 내립니다.",
         note: "'Venezia Mestre'가 아니라 섬 안의 'Venezia Santa Lucia'행인지 확인하세요.",
         links: [
-          { label: "Trainline에서 12/16 기차 검색", url: trainline("8434", "8574", "2026-12-16"), how: FILLED },
-          { label: "Trainline에서 12/16 버스 보기", url: trainline("8434", "8574", "2026-12-16", "coach"), how: BUS_TAB, alt: true },
+          { label: "Trainline에서 12/16 기차·버스 검색", url: trainline("8434", "8574", "2026-12-16"), how: BOTH_TRAIN },
           { label: "Omio에서 12/16 검색", url: omio("388058", "388743", "2026-12-16"), how: OMIO, alt: true },
         ],
         sources: [
@@ -402,8 +402,7 @@
         verdict: "기차. 버스가 1인당 10만 원 안팎 싸지만 3시간 가까이 더 걸립니다. 돈을 아끼고 싶으면 버스도 괜찮습니다.",
         note: "하루 중 가장 긴 구간입니다. 아침 일찍 출발하는 편이 좋습니다.",
         links: [
-          { label: "Trainline에서 12/18 기차 검색", url: trainline("8574", "6353", "2026-12-18"), how: FILLED },
-          { label: "Trainline에서 12/18 버스 보기", url: trainline("8574", "6353", "2026-12-18", "coach"), how: BUS_TAB, alt: true },
+          { label: "Trainline에서 12/18 기차·버스 검색", url: trainline("8574", "6353", "2026-12-18"), how: BOTH_TRAIN },
           { label: "Omio에서 12/18 검색 (버스 포함)", url: omio("388743", "373152", "2026-12-18"), how: OMIO, alt: true },
         ],
         sources: [
@@ -426,7 +425,7 @@
         note: "스위스 기차는 Trainline에 나오지 않아 스위스 철도(SBB) 사이트를 붙였습니다. 좌석 지정이 없는 열차라 당일 SBB 앱이나 역에서 사도 됩니다.",
         links: [
           { label: "스위스 철도 SBB 열기 (기차)", url: "https://www.sbb.ch/en", how: SEARCH_ONLY },
-          { label: "Trainline에서 12/20 버스 보기", url: trainline("6353", "153", "2026-12-20", "coach"), how: BUS_TAB, alt: true },
+          { label: "Trainline에서 12/20 버스 검색", url: trainline("6353", "153", "2026-12-20", "coach"), how: BUS_TAB, alt: true },
           { label: "Omio에서 12/20 검색 (기차·버스 함께)", url: omio("373152", "379901", "2026-12-20"), how: OMIO, alt: true },
         ],
         sources: [
@@ -447,8 +446,7 @@
         verdict: "기차. 일찍 사면 가장 빠르면서 가장 쌉니다. 버스는 4시간 넘게 더 걸려 이득이 없습니다.",
         note: "크리스마스 기간(12/13~1/6) 프랑스 기차표는 9/30부터 팝니다. 판매가 열리면 바로 끊을수록 쌉니다. 하루 14~17편 있습니다.",
         links: [
-          { label: "Trainline에서 12/21 기차 검색", url: trainline("153", "4916", "2026-12-21"), how: FILLED },
-          { label: "Trainline에서 12/21 버스 보기", url: trainline("153", "4916", "2026-12-21", "coach"), how: BUS_TAB, alt: true },
+          { label: "Trainline에서 12/21 기차·버스 검색", url: trainline("153", "4916", "2026-12-21"), how: BOTH_TRAIN },
           { label: "Omio에서 12/21 검색", url: omio("379901", "379727", "2026-12-21"), how: OMIO, alt: true },
         ],
         sources: [
@@ -474,8 +472,7 @@
           text: "12/25에도 직통 기차가 다닙니다. 조회해 보면 06:56→13:49, 14:42→21:35 두 편이 있습니다. 다만 평소에도 하루 2~3편인 노선이고, 휴일이라 붐빌 수 있습니다. 9/30에 판매가 시작되면 바로 끊는 것이 좋습니다.",
         },
         links: [
-          { label: "Trainline에서 12/25 기차 검색", url: trainline("4924", "6625", "2026-12-25"), how: FILLED },
-          { label: "Trainline에서 12/25 버스 보기", url: trainline("4924", "6625", "2026-12-25", "coach"), how: BUS_TAB, alt: true },
+          { label: "Trainline에서 12/25 기차·버스 검색", url: trainline("4924", "6625", "2026-12-25"), how: BOTH_TRAIN },
           { label: "Google 항공편에서 12/25 비행기 검색", url: "https://www.google.com/travel/flights?q=Flights%20from%20Paris%20to%20Barcelona%20on%202026-12-25%20one%20way&hl=ko", how: FILLED, alt: true },
           { label: "Omio에서 12/25 검색 (기차·비행기 함께)", url: omio("379727", "378468", "2026-12-25"), how: OMIO, alt: true },
         ],
@@ -503,8 +500,7 @@
           text: "포르투갈 철도는 12/24와 12/31에 저녁 열차를 멈춥니다. 작년 공지를 보면 포르투에서 14:40, 19:45에 떠나는 리스본행이 운행하지 않았습니다. 오전이나 이른 오후 기차로 끊으세요. 올해 공지는 12월에 CP 사이트에 올라옵니다.",
         },
         links: [
-          { label: "Trainline에서 12/31 기차 검색", url: trainline("8697", "8721", "2026-12-31"), how: FILLED },
-          { label: "Trainline에서 12/31 버스 보기", url: trainline("8697", "8721", "2026-12-31", "coach"), how: BUS_TAB, alt: true },
+          { label: "Trainline에서 12/31 기차·버스 검색", url: trainline("8697", "8721", "2026-12-31"), how: BOTH_TRAIN },
           { label: "Omio에서 12/31 검색", url: omio("398868", "398773", "2026-12-31"), how: OMIO, alt: true },
           { label: "포르투갈 철도 CP 열기", url: "https://www.cp.pt/", how: SEARCH_ONLY, alt: true },
         ],
@@ -527,7 +523,7 @@
         verdict: "버스. 가장 싸고, 갈아타지 않아도 됩니다. 싼 항공권이 보이면 비행기가 2~3시간 빠릅니다.",
         note: "하루 17편 안팎의 직행 버스가 있습니다. 조회해 보면 11:10, 15:45 출발 버스가 있고 22:25 출발 야간 버스도 있습니다.",
         links: [
-          { label: "Trainline에서 1/2 버스 검색", url: trainline("8721", "6683", "2027-01-02", "coach"), how: BUS_TAB },
+          { label: "Trainline에서 1/2 버스·기차 검색", url: trainline("8721", "6683", "2027-01-02", "coach"), how: BOTH_COACH },
           { label: "Omio에서 1/2 검색 (버스·비행기 함께)", url: omio("398773", "378797", "2027-01-02"), how: OMIO, alt: true },
         ],
         sources: [
@@ -549,8 +545,7 @@
         verdict: "버스. 20분 정도만 더 걸리는데 값은 절반 가까이이고, 자주 있습니다.",
         note: "1월 표는 아직 판매 전일 수 있습니다.",
         links: [
-          { label: "Trainline에서 1/4 버스 검색", url: trainline("6683", "6656", "2027-01-04", "coach"), how: BUS_TAB },
-          { label: "Trainline에서 1/4 기차 보기", url: trainline("6683", "6656", "2027-01-04"), how: FILLED, alt: true },
+          { label: "Trainline에서 1/4 버스·기차 검색", url: trainline("6683", "6656", "2027-01-04", "coach"), how: BOTH_COACH },
           { label: "Omio에서 1/4 검색", url: omio("378797", "378585", "2027-01-04"), how: OMIO, alt: true },
           { label: "ALSA 버스 노선 페이지", url: "https://www.alsa.com/en/coach/granada-seville", how: SEARCH_ONLY, alt: true },
         ],
@@ -575,8 +570,7 @@
           text: "연휴 마지막 날이라 이동하는 사람이 많습니다. Renfe는 작년에 12/18~1/11 동안 특별 증편을 했습니다. 판매가 열리면 바로 끊으세요. 다음 날(1/7) 귀국 비행기가 있으니 너무 늦은 기차는 피하는 것이 좋습니다.",
         },
         links: [
-          { label: "Trainline에서 1/6 기차 검색", url: trainline("6656", "6663", "2027-01-06"), how: FILLED },
-          { label: "Trainline에서 1/6 버스 보기", url: trainline("6656", "6663", "2027-01-06", "coach"), how: BUS_TAB, alt: true },
+          { label: "Trainline에서 1/6 기차·버스 검색", url: trainline("6656", "6663", "2027-01-06"), how: BOTH_TRAIN },
           { label: "Omio에서 1/6 검색", url: omio("378585", "378655", "2027-01-06"), how: OMIO, alt: true },
         ],
         sources: [
