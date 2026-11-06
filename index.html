@@ -272,6 +272,10 @@
     .side { grid-column: 2; justify-items: start; grid-auto-flow: column; align-items: center; }
     .fields { grid-template-columns: 1fr; }
   }
+  .trip-link { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 4px 12px; margin-top: 6px; padding: 12px 14px; border: 1px solid var(--line); border-radius: 12px; background: var(--card); color: var(--ink); text-decoration: none; }
+  .trip-link strong { color: var(--accent); font-weight: 600; }
+  .trip-link span { color: var(--muted); font-size: 14px; }
+  .trip-link:hover, .trip-link:focus-visible { border-color: var(--accent); }
 </style>
 </head>
 <body>
@@ -279,7 +283,7 @@
   <header>
     <span class="eyebrow">12/12 – 1/7 · 13개 이동 구간</span>
     <h1>유럽여행 이동 일정표</h1>
-    <p class="summary" id="summary" hidden></p>
+    <a class="trip-link" href="spain.html"><strong>스페인 일정 보기 →</strong><span>바르셀로나 · 세비야 · 그라나다 · 마드리드</span></a>    <p class="summary" id="summary" hidden></p>
     <div class="toolbar" id="toolbar" hidden>
       <span id="synced">불러오는 중…</span>
       <button type="button" class="linkbtn" id="refresh">새로고침</button>
@@ -537,7 +541,7 @@
           ["CP 공지 — 성탄·새해 운행 중단 열차 (PDF)", "https://www.cp.pt/info/documents/d/cp/supressoes_natal_ano_novo_alfa_intercidades"],
         ],
       } },
-    { date: "1/2", from: "리스본", to: "세비야", mode: "버스 · 약 6~7시간 · 직행",
+    { date: "1/1", from: "리스본", to: "세비야", mode: "버스 · 약 6~7시간 · 직행 · 새해 첫날",
       plan: {
         pick: "직행 고속버스 (FlixBus, ALSA, Rede Expressos 등)",
         time: "약 6~7시간 (스페인이 1시간 빨라 시계로는 7~8시간)",
@@ -545,14 +549,18 @@
         change: "버스는 직행. 기차 직통은 없습니다. 기차로 가려면 리스본→파로(포르투갈 남쪽) 기차 후 파로에서 세비야행 버스(약 2시간 30분~3시간 15분)로 갈아탑니다.",
         compare: [
           ["빠름", "비행기 (리스본→세비야)", "약 3시간 40분 (공항 이동 포함)", "₩72,000~271,000 (9/26)"],
-          ["쌈", "버스 (직행)", "약 6시간 20분~7시간", "₩48,000~55,000 (10/28 조회)"],
+          ["쌈", "버스 (직행)", "약 6시간 20분~7시간", "₩48,000~55,000 (10/28, 1/2 날짜로 조회)"],
           ["기차", "기차+버스 (파로 환승)", "6시간 39분", "₩71,000~134,000 (9/26)"],
         ],
         verdict: "버스. 가장 싸고, 갈아타지 않아도 됩니다. 싼 항공권이 보이면 비행기가 2~3시간 빠릅니다.",
-        note: "10/28 조회 때 Trainline에는 11:10, 12:30(1번 환승), 15:45, 22:25(야간) 네 편이 보였습니다. 다른 회사 버스는 Omio에서 함께 보세요.",
+        note: "10/28에 예전 날짜(1/2)로 조회했을 때 Trainline에는 11:10, 12:30(1번 환승), 15:45, 22:25(야간) 네 편이 보였습니다. 다른 회사 버스는 Omio에서 함께 보세요.",
+        warn: {
+          title: "1/1은 새해 첫날 (포르투갈·스페인 공휴일)",
+          text: "버스 편수가 줄거나 시간이 바뀔 수 있습니다. 1/1 날짜로 다시 조회해 출발 편을 확인하세요. 세비야에 도착해도 문 연 식당이 적을 수 있으니 저녁을 미리 생각해 두세요.",
+        },
         links: [
-          { label: "Trainline에서 1/2 버스·기차 검색", url: trainline("8721", "6683", "2027-01-02", "coach"), how: BOTH_COACH },
-          { label: "Omio에서 1/2 검색 (버스·비행기 함께)", url: omio("398773", "378797", "2027-01-02"), how: OMIO, alt: true },
+          { label: "Trainline에서 1/1 버스·기차 검색", url: trainline("8721", "6683", "2027-01-01", "coach"), how: BOTH_COACH },
+          { label: "Omio에서 1/1 검색 (버스·비행기 함께)", url: omio("398773", "378797", "2027-01-01"), how: OMIO, alt: true },
         ],
         sources: [
           ["Rome2Rio — 리스본→세비야 수단별 가격·시간", "https://www.rome2rio.com/s/Lisbon/Seville"],
@@ -560,21 +568,21 @@
           ["Seat61 — 리스본 출발 국제 기차 (파로 경유 방법)", "https://www.seat61.com/international-trains/trains-from-Lisbon.htm"],
         ],
       } },
-    { date: "1/4", from: "세비야", to: "그라나다", mode: "버스 · 약 3시간 · 직행",
+    { date: "1/3", from: "세비야", to: "그라나다", mode: "버스 · 약 3시간 · 직행",
       plan: {
         pick: "ALSA 직행 버스",
         time: "버스 약 3시간 (1~2시간마다) / 기차 약 3시간 30분~3시간 45분 (1번 환승)",
         stations: "버스: 세비야 플라사 데 아르마스 터미널 → 그라나다 버스터미널 / 기차: 세비야 산타 후스타역 → 그라나다역",
         change: "버스는 직행. 기차는 10/28 조회 때 직통이 없고 모두 1번 갈아탑니다.",
         compare: [
-          ["빠름·쌈", "버스 (ALSA, 직행)", "3시간", "₩39,000~51,000 (10/28 조회)"],
-          ["기차", "기차 (Renfe AVE·Avlo, 1번 환승)", "3시간 29분~3시간 43분", "₩66,000~87,000 (10/28 조회)"],
+          ["빠름·쌈", "버스 (ALSA, 직행)", "3시간", "₩39,000~51,000 (10/28, 1/4 날짜로 조회)"],
+          ["기차", "기차 (Renfe AVE·Avlo, 1번 환승)", "3시간 29분~3시간 43분", "₩66,000~87,000 (10/28, 1/4 날짜로 조회)"],
         ],
         verdict: "버스. 지금은 기차가 갈아타야 해서 더 오래 걸리고, 값도 버스보다 비쌉니다.",
         note: "1월 표도 이미 팔고 있습니다.",
         links: [
-          { label: "Trainline에서 1/4 버스·기차 검색", url: trainline("6683", "6656", "2027-01-04", "coach"), how: BOTH_COACH },
-          { label: "Omio에서 1/4 검색", url: omio("378797", "378585", "2027-01-04"), how: OMIO, alt: true },
+          { label: "Trainline에서 1/3 버스·기차 검색", url: trainline("6683", "6656", "2027-01-03", "coach"), how: BOTH_COACH },
+          { label: "Omio에서 1/3 검색", url: omio("378797", "378585", "2027-01-03"), how: OMIO, alt: true },
           { label: "ALSA 버스 노선 페이지", url: "https://www.alsa.com/en/coach/granada-seville", how: SEARCH_ONLY, alt: true },
         ],
         sources: [
@@ -582,24 +590,24 @@
           ["ALSA — 그라나다↔세비야 버스", "https://www.alsa.com/en/coach/granada-seville"],
         ],
       } },
-    { date: "1/6", from: "그라나다", to: "마드리드", mode: "기차 · 약 3시간 30분 · 공휴일",
+    { date: "1/5", from: "그라나다", to: "마드리드", mode: "기차 · 약 3시간 30분 · 공휴일 전날",
       plan: {
         pick: "Renfe 고속열차, 직통 (이미 판매 중)",
         time: "약 3시간 34분~3시간 48분",
         stations: "그라나다역 → 마드리드 아토차역",
         change: "없음 (직통)",
         compare: [
-          ["빠름·쌈", "기차 (Renfe 직통)", "3시간 34분~3시간 48분", "₩69,000~83,000 (10/28 조회)"],
+          ["빠름·쌈", "기차 (Renfe 직통)", "3시간 34분~3시간 48분", "₩69,000~83,000 (10/28, 1/6 날짜로 조회)"],
           ["버스", "ALSA", "5시간", "₩50,000~85,000 (9/26)"],
         ],
-        verdict: "기차. 이미 판매 중이고 지금 7만~8만 원대입니다. 같은 노선이 1/7에는 4만 원대라, 공휴일 값이 더 오르기 전에 끊는 것이 좋습니다.",
+        verdict: "기차. 이미 판매 중입니다. 10/28에 예전 날짜(1/6)로 조회했을 때 7만~8만 원대였습니다. 1/5도 연휴 이동이 많아 값이 오를 수 있으니 일찍 끊는 것이 좋습니다.",
         warn: {
-          title: "1/6은 스페인 공휴일(동방박사의 날)",
-          text: "연휴 마지막 날이라 이동하는 사람이 많습니다. Renfe는 작년에 12/18~1/11 동안 특별 증편을 했습니다. 표는 이미 팔고 있으니 지금 끊으세요. 다음 날(1/7) 귀국 비행기가 있으니 너무 늦은 기차는 피하는 것이 좋습니다.",
+          title: "1/5는 공휴일 전날, 저녁엔 퍼레이드",
+          text: "다음 날 1/6이 스페인 공휴일(동방박사의 날)이라 연휴 이동이 많습니다. Renfe는 작년에 12/18~1/11 동안 특별 증편을 했습니다. 표는 이미 팔고 있으니 지금 끊으세요. 1/5 저녁에는 마드리드 시내에서 동방박사 퍼레이드가 열려 도로가 통제되니, 오후 일찍 도착해 숙소에 짐을 두는 편이 좋습니다.",
         },
         links: [
-          { label: "Trainline에서 1/6 기차·버스 검색", url: trainline("6656", "6663", "2027-01-06"), how: BOTH_TRAIN },
-          { label: "Omio에서 1/6 검색", url: omio("378585", "378655", "2027-01-06"), how: OMIO, alt: true },
+          { label: "Trainline에서 1/5 기차·버스 검색", url: trainline("6656", "6663", "2027-01-05"), how: BOTH_TRAIN },
+          { label: "Omio에서 1/5 검색", url: omio("378585", "378655", "2027-01-05"), how: OMIO, alt: true },
         ],
         sources: [
           ["Rome2Rio — 그라나다→마드리드 수단별 가격·시간", "https://www.rome2rio.com/s/Granada/Madrid"],
@@ -641,18 +649,18 @@
       other: "버스로 가면: 10:00 → 13:15, 11:00 → 14:15 (3시간 15분, 약 ₩14,000)",
       basis: "버스는 Trainline 12/31 조회 (10/28). 포르투갈 기차는 Trainline에서 팔지 않고, CP에서 11/1부터 판매",
       why: "12/31은 저녁 열차가 운행하지 않습니다. 이른 오후까지 도착해 새해 전날 저녁을 여유 있게 보내도록 잡았습니다." },
-    "1/2": { time: "11:10 출발 → 19:15 도착 (버스, 직행, 현지 시각, 약 ₩55,000)",
+    "1/1": { time: "11:10 출발 → 19:15 도착 (버스, 직행, 현지 시각) · 1/1 운행 여부 확인",
       other: "다른 편: 15:45 → 23:50, 야간 22:25 → 05:45 (약 ₩48,000)",
-      basis: "Trainline 1/2 버스 조회 (10/28)",
+      basis: "Trainline에서 예전 날짜 1/2로 조회 (10/28). 1/1 시간표는 다시 확인 필요",
       why: "7시간 정도 걸리고 스페인이 1시간 빠릅니다. 야간 버스는 잠을 설치게 됩니다." },
-    "1/4": { time: "08:00 출발 → 11:00 도착 (버스, 직행, 약 ₩39,000)",
+    "1/3": { time: "08:00 출발 → 11:00 도착 (버스, 직행, 약 ₩39,000)",
       other: "다른 편: 09:00 → 12:00 (약 ₩51,000), 11:00 → 14:00 (약 ₩39,000)",
-      basis: "Trainline 1/4 버스 조회 (10/28)",
+      basis: "Trainline에서 예전 날짜 1/4로 조회 (10/28). 1/3로 다시 확인 필요",
       why: "3시간이라 오전에 떠나면 그라나다 오후를 온전히 쓸 수 있고, 08:00·11:00 편이 가장 쌉니다." },
-    "1/6": { time: "11:04 출발 → 14:38 도착 (Renfe, 직통, 약 ₩78,000)",
+    "1/5": { time: "11:04 출발 → 14:38 도착 (Renfe, 직통, 약 ₩78,000)",
       other: "다른 편: 06:50 → 10:26, 15:00 → 18:39 (각 약 ₩83,000), 18:05 → 21:53 (약 ₩69,000)",
-      basis: "Trainline 1/6 조회 (10/28, 판매 중)",
-      why: "마드리드가 1박이고 다음 날 귀국 비행기가 있습니다. 공휴일이라 붐비니 늦은 기차는 피하세요." },
+      basis: "Trainline에서 예전 날짜 1/6으로 조회 (10/28). 1/5로 다시 확인 필요",
+      why: "마드리드가 2박으로 늘었지만, 1/5 저녁 퍼레이드를 보려면 오후 일찍 도착하는 편이 좋습니다. 연휴 이동이 많으니 늦은 기차는 피하세요." },
   };
   legs.forEach(l => { if (l.plan && WHEN[l.date]) l.plan.when = WHEN[l.date]; });
 
@@ -834,12 +842,12 @@
   const SALES = [
     { date: "지금", sub: "서두르기", soon: true,
       title: "판매 중 · 좌석이 줄고 있어요",
-      note: "10/28 조회 때 '좌석 적음'이나 '몇 석 남음'이 뜬 구간입니다. 12/25는 기차와 비행기 중 먼저 정하고, 1/6은 공휴일이라 값이 더 오를 수 있습니다.",
-      legs: ["12/18", "12/21", "12/25", "1/6"] },
+      note: "10/28 조회 때 '좌석 적음'이나 '몇 석 남음'이 뜬 구간입니다. 12/25는 기차와 비행기 중 먼저 정하고, 1/5는 공휴일 전날이라 값이 더 오를 수 있습니다.",
+      legs: ["12/18", "12/21", "12/25", "1/5"] },
     { date: "지금", sub: "판매 중",
       title: "이탈리아 기차 · 스페인 버스는 여유 있어요",
       note: "자리 걱정은 적지만 일찍 살수록 쌉니다.",
-      legs: ["12/15", "12/16", "1/2", "1/4"] },
+      legs: ["12/15", "12/16", "1/1", "1/3"] },
     { date: "11/1", sub: "일 · 출발 60일 전",
       title: "포르투갈 기차(CP) 12/31 표 판매 시작",
       note: "10/28 CP 예약 화면에서는 12/27까지만 고를 수 있었습니다. 버스로 갈 거라면 지금 바로 살 수 있습니다(1~2만 원대).",
