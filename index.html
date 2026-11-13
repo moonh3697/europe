@@ -281,7 +281,7 @@
 <body>
 <div class="wrap">
   <header>
-    <span class="eyebrow">12/12 – 1/7 · 13개 이동 구간</span>
+    <span class="eyebrow">12/12 – 1/7 · 14개 이동 구간</span>
     <h1>유럽여행 이동 일정표</h1>
     <a class="trip-link" href="spain.html"><strong>스페인 일정 보기 →</strong><span>바르셀로나 · 세비야 · 그라나다 · 마드리드</span></a>    <p class="summary" id="summary" hidden></p>
     <div class="toolbar" id="toolbar" hidden>
@@ -375,7 +375,7 @@
   const FILLED = "출발·도착 도시와 날짜가 들어간 채로 열림";
   const SEARCH_ONLY = "검색 화면까지 열림 (도시·날짜 직접 입력)";
 
-  // 이동 구간 13개. booked: true 는 처음부터 끊어 둔 항공
+  // 이동 구간 14개. booked: true 는 처음부터 끊어 둔 항공
   const legs = [
     { date: "12/12", from: "인천", to: "로마", mode: "비행기", booked: true },
     { date: "12/15", from: "로마", to: "피렌체", mode: "기차 · 약 1시간 40분",
@@ -568,29 +568,57 @@
           ["Seat61 — 리스본 출발 국제 기차 (파로 경유 방법)", "https://www.seat61.com/international-trains/trains-from-Lisbon.htm"],
         ],
       } },
-    { date: "1/3", from: "세비야", to: "그라나다", mode: "버스 · 약 3시간 · 직행",
+    { id: "11", date: "1/3", from: "세비야", to: "론다", mode: "버스 · 약 2시간 15분 · 직행 · 오전 출발",
       plan: {
-        pick: "ALSA 직행 버스",
-        time: "버스 약 3시간 (1~2시간마다) / 기차 약 3시간 30분~3시간 45분 (1번 환승)",
-        stations: "버스: 세비야 플라사 데 아르마스 터미널 → 그라나다 버스터미널 / 기차: 세비야 산타 후스타역 → 그라나다역",
-        change: "버스는 직행. 기차는 10/28 조회 때 직통이 없고 모두 1번 갈아탑니다.",
+        pick: "Damas 직행 버스",
+        time: "버스 약 2시간 15분~2시간 30분 / 기차 약 3시간 30분~4시간 30분 (환승 1번 이상)",
+        stations: "버스: 세비야 플라사 데 아르마스 터미널 → 론다 버스터미널 / 기차: 세비야 산타 후스타역 → 론다역",
+        change: "버스는 직행. 기차는 갈아타야 해서 훨씬 오래 걸립니다.",
         compare: [
-          ["빠름·쌈", "버스 (ALSA, 직행)", "3시간", "₩39,000~51,000 (10/28, 1/4 날짜로 조회)"],
-          ["기차", "기차 (Renfe AVE·Avlo, 1번 환승)", "3시간 29분~3시간 43분", "₩66,000~87,000 (10/28, 1/4 날짜로 조회)"],
+          ["빠름·쌈", "버스 (Damas, 직행)", "약 2시간 15분~2시간 30분", "약 €12~20 (11/13 조사, 사이트마다 조금씩 다름)"],
+          ["기차", "기차 (Renfe, 환승)", "약 3시간 30분~4시간 30분", "약 €25~45 (11/13 조사)"],
         ],
-        verdict: "버스. 지금은 기차가 갈아타야 해서 더 오래 걸리고, 값도 버스보다 비쌉니다.",
-        note: "1월 표도 이미 팔고 있습니다.",
+        verdict: "버스. 직행이라 2시간 남짓이고, 기차는 환승 때문에 1~2시간 더 걸리고 값도 더 비쌉니다.",
+        warn: {
+          title: "론다는 같은 날(1/3) 들렀다 가는 일정이에요",
+          text: "세비야 → 론다 → 그라나다를 1/3 하루에 이동하는 일정입니다. 론다에 오래 머물 수 없으니 터미널·역 짐 보관소에 가방을 맡기고 누에보 다리 주변만 보는 코스가 현실적입니다. 론다에서 하루 자고 가려면 세비야나 그라나다 숙박을 하루 줄이고 날짜를 다시 맞춰야 합니다.",
+        },
+        note: "1/3 버스 시간표는 아직 확인하지 못했습니다. 링크에서 날짜를 넣어 꼭 확인하세요.",
         links: [
-          { label: "Trainline에서 1/3 버스·기차 검색", url: trainline("6683", "6656", "2027-01-03", "coach"), how: BOTH_COACH },
-          { label: "Omio에서 1/3 검색", url: omio("378797", "378585", "2027-01-03"), how: OMIO, alt: true },
-          { label: "ALSA 버스 노선 페이지", url: "https://www.alsa.com/en/coach/granada-seville", how: SEARCH_ONLY, alt: true },
+          { label: "Damas 버스 시간표·예매", url: "https://www.damas-sa.es", how: SEARCH_ONLY },
+          { label: "Omio 세비야→론다 검색", url: "https://www.omio.com/travel/sevilla/ronda", how: SEARCH_ONLY, alt: true },
+          { label: "Trainline 세비야→론다 기차 시간표", url: "https://www.thetrainline.com/en/train-times/sevilla-santa-justa-to-ronda", how: SEARCH_ONLY, alt: true },
         ],
         sources: [
-          ["Rome2Rio — 세비야→그라나다 수단별 가격·시간", "https://www.rome2rio.com/s/Seville/Granada"],
-          ["ALSA — 그라나다↔세비야 버스", "https://www.alsa.com/en/coach/granada-seville"],
+          ["Rome2Rio — 세비야→론다 수단별 가격·시간", "https://www.rome2rio.com/s/Seville/Ronda"],
+          ["Omio — 세비야→론다", "https://www.omio.com/travel/sevilla/ronda"],
+          ["Trainline — 세비야 산타 후스타→론다", "https://www.thetrainline.com/en/train-times/sevilla-santa-justa-to-ronda"],
         ],
       } },
-    { date: "1/5", from: "그라나다", to: "마드리드", mode: "기차 · 약 3시간 30분 · 공휴일 전날",
+    { id: "14", key: "1/3b", date: "1/3", from: "론다", to: "그라나다", mode: "기차 · 약 3시간~3시간 30분 · 안테케라 환승",
+      plan: {
+        pick: "Renfe 기차 (안테케라에서 환승)",
+        time: "기차 약 3시간~3시간 30분 / 버스는 말라가를 거쳐 약 4~5시간",
+        stations: "론다역 → 안테케라 → 그라나다역",
+        change: "안테케라에서 1번 갈아탑니다. 직통은 없습니다.",
+        compare: [
+          ["빠름·쌈", "기차 (Renfe, 안테케라 환승)", "약 3시간 10분~3시간 30분", "약 €17~45 (11/13 조사)"],
+          ["버스", "버스 (Damas+ALSA, 말라가 환승)", "약 4시간~5시간", "약 €19~40 (11/13 조사)"],
+        ],
+        verdict: "기차. 직통은 없지만 버스(말라가 환승)보다 1~2시간 짧습니다.",
+        warn: {
+          title: "론다 출발 열차는 편수가 적어요",
+          text: "론다~안테케라 구간은 하루 4~5편 정도뿐입니다. 론다에서 보낼 시간을 정하기 전에 마지막으로 탈 수 있는 열차와 환승 시각을 먼저 확인하세요. 1월 3일 시간표는 아직 확인하지 못했습니다.",
+        },
+        links: [
+          { label: "Renfe에서 론다→그라나다 검색", url: "https://www.renfe.com/es/en", how: SEARCH_ONLY },
+        ],
+        sources: [
+          ["Rome2Rio — 론다→그라나다 수단별 가격·시간", "https://www.rome2rio.com/s/Ronda/Granada"],
+          ["Rome2Rio — 그라나다→론다 수단별 가격·시간", "https://www.rome2rio.com/s/Granada/Ronda"],
+        ],
+      } },
+    { id: "12", date: "1/5", from: "그라나다", to: "마드리드", mode: "기차 · 약 3시간 30분 · 공휴일 전날",
       plan: {
         pick: "Renfe 고속열차, 직통 (이미 판매 중)",
         time: "약 3시간 34분~3시간 48분",
@@ -615,7 +643,7 @@
           ["Renfe — 크리스마스 기간 좌석 증편 안내", "https://www.renfe.com/es/es/grupo-renfe/comunicacion/renfe-al-dia/sala-de-prensa/renfe-ofrece-mas-de-2-millones-de-plazas-en-navidad-2025"],
         ],
       } },
-    { date: "1/7", from: "마드리드", to: "인천", mode: "비행기", booked: true },
+    { id: "13", date: "1/7", from: "마드리드", to: "인천", mode: "비행기", booked: true },
   ];
 
   // 구간별 추천 출발 시간. 도착 도시에 머무는 날이 짧을수록 일찍 떠나고,
@@ -653,16 +681,22 @@
       other: "다른 편: 15:45 → 23:50, 야간 22:25 → 05:45 (약 ₩48,000)",
       basis: "Trainline에서 예전 날짜 1/2로 조회 (10/28). 1/1 시간표는 다시 확인 필요",
       why: "7시간 정도 걸리고 스페인이 1시간 빠릅니다. 야간 버스는 잠을 설치게 됩니다." },
-    "1/3": { time: "08:00 출발 → 11:00 도착 (버스, 직행, 약 ₩39,000)",
-      other: "다른 편: 09:00 → 12:00 (약 ₩51,000), 11:00 → 14:00 (약 ₩39,000)",
-      basis: "Trainline에서 예전 날짜 1/4로 조회 (10/28). 1/3로 다시 확인 필요",
-      why: "3시간이라 오전에 떠나면 그라나다 오후를 온전히 쓸 수 있고, 08:00·11:00 편이 가장 쌉니다." },
+    "1/3": { time: "오전 출발 (예: 10:00 → 12:15, Damas 직행 버스, 약 2시간 15분)",
+      other: "하루 여러 편. 정확한 시각은 Damas에서 날짜를 넣어 확인",
+      basis: "Omio 예시 시간표와 Rome2Rio 소요 시간 참고 (11/13). 1/3 시간표는 확인 필요",
+      why: "론다에서 점심과 누에보 다리를 보고 오후 기차를 타야 하니, 오전에 일찍 떠나는 편이 좋습니다." },
+    "1/3b": { time: "오후 출발 → 저녁 도착 (기차, 안테케라 환승, 약 3시간 10분~3시간 30분)",
+      other: "론다~안테케라 구간은 하루 4~5편 정도. 마지막 환승 시각을 먼저 확인",
+      basis: "Rome2Rio 소요 시간 참고 (11/13). 1/3 시간표는 확인 필요",
+      why: "론다에서 오후까지 보낸 뒤 출발하면 저녁에 그라나다에 닿습니다. 열차 편수가 적으니 시간표를 먼저 보고 론다에 머물 시간을 정하세요." },
     "1/5": { time: "11:04 출발 → 14:38 도착 (Renfe, 직통, 약 ₩78,000)",
       other: "다른 편: 06:50 → 10:26, 15:00 → 18:39 (각 약 ₩83,000), 18:05 → 21:53 (약 ₩69,000)",
       basis: "Trainline에서 예전 날짜 1/6으로 조회 (10/28). 1/5로 다시 확인 필요",
       why: "마드리드가 2박으로 늘었지만, 1/5 저녁 퍼레이드를 보려면 오후 일찍 도착하는 편이 좋습니다. 연휴 이동이 많으니 늦은 기차는 피하세요." },
   };
-  legs.forEach(l => { if (l.plan && WHEN[l.date]) l.plan.when = WHEN[l.date]; });
+  // 같은 날 구간이 둘 이상이면 key 로 구분한다 (key 가 없으면 날짜)
+  const legKey = l => l.key || l.date;
+  legs.forEach(l => { if (l.plan && WHEN[legKey(l)]) l.plan.when = WHEN[legKey(l)]; });
 
   const FIELDS = [
     { key: "time", label: "출발 시간", ph: "예: 08:20" },
@@ -693,7 +727,8 @@
 
   // ---------- 화면 그리기 ----------
   const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
-  const legId = i => String(i + 1);
+  // 예매 정보는 이 번호로 저장되므로, 구간을 끼워 넣어도 기존 번호가 밀리지 않게 id 를 고정한다
+  const legId = i => legs[i].id || String(i + 1);
   const isBooked = (leg, i) => leg.booked || !!(bookings[legId(i)] && bookings[legId(i)].code);
 
   function toDay(d) {
@@ -786,7 +821,8 @@
       if (next) {
         const stay = document.createElement("li");
         stay.className = "stay";
-        stay.innerHTML = `<b>${leg.to}</b> ${toDay(next.date) - toDay(leg.date)}박`;
+        const nights = toDay(next.date) - toDay(leg.date);
+        stay.innerHTML = nights === 0 ? `<b>${leg.to}</b> 당일 경유` : `<b>${leg.to}</b> ${nights}박`;
         list.appendChild(stay);
       }
     });
@@ -847,7 +883,7 @@
     { date: "지금", sub: "판매 중",
       title: "이탈리아 기차 · 스페인 버스는 여유 있어요",
       note: "자리 걱정은 적지만 일찍 살수록 쌉니다.",
-      legs: ["12/15", "12/16", "1/1", "1/3"] },
+      legs: ["12/15", "12/16", "1/1", "1/3", "1/3b"] },
     { date: "11/1", sub: "일 · 출발 60일 전",
       title: "포르투갈 기차(CP) 12/31 표 판매 시작",
       note: "10/28 CP 예약 화면에서는 12/27까지만 고를 수 있었습니다. 버스로 갈 거라면 지금 바로 살 수 있습니다(1~2만 원대).",
@@ -863,10 +899,10 @@
     let open = 0;
     list.innerHTML = SALES.map(s => {
       const chips = s.legs.map(d => {
-        const i = legs.findIndex(l => l.date === d);
+        const i = legs.findIndex(l => legKey(l) === d);
         const done = isBooked(legs[i], i);
         if (!done) open++;
-        return `<button type="button" class="chip${done ? " done" : ""}" data-leg="${legId(i)}">${d} ${legs[i].from}→${legs[i].to}${done ? " ✓" : ""}</button>`;
+        return `<button type="button" class="chip${done ? " done" : ""}" data-leg="${legId(i)}">${legs[i].date} ${legs[i].from}→${legs[i].to}${done ? " ✓" : ""}</button>`;
       }).join("");
       return `<li class="sale${s.soon ? " soon" : ""}">
         <div class="sale-date">${s.date}<small>${s.sub}</small></div>
@@ -932,7 +968,7 @@
     if (nextIdx < 0) {
       body.innerHTML = `${banner}
         <div class="today-head"><span class="today-label">여행 끝</span><span class="today-date">오늘 ${niceDate(today)}</span></div>
-        <p class="today-note">13개 구간을 모두 마쳤어요. 수고 많으셨어요!</p>`;
+        <p class="today-note">${legs.length}개 구간을 모두 마쳤어요. 수고 많으셨어요!</p>`;
       return;
     }
 
