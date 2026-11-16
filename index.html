@@ -3,129 +3,93 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="robots" content="noindex">
-<title>유럽 27일 플래너 & 이동표</title>
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<title>유럽 27일 여행 플래너</title>
 <style>
-:root{--bg:#eef2f4;--card:#fff;--sunk:#f5f8fa;--ink:#17222c;--mut:#5d6b77;--line:#d5dde3;--acc:#1d5c82;--soft:#e6f1f8;--ok:#1f6a3f;--okbg:#dcefe3;--err:#b3261e}
-*{box-sizing:border-box}[hidden]{display:none!important}
-body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Malgun Gothic",sans-serif;font-size:14px;line-height:1.5;padding:16px}
-.wrap{max-width:1120px;margin:0 auto}
-header{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:10px;margin-bottom:14px}
-h1{margin:0;font-size:22px}.sub{color:var(--mut);font-size:13px}
-.tabs{display:flex;gap:6px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:5px;margin-bottom:14px}
-.tab{flex:1;padding:10px;border:0;border-radius:8px;font:inherit;font-weight:700;cursor:pointer;background:transparent;color:var(--mut)}
-.tab.active{background:var(--acc);color:#fff}
-.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:14px}
-.lock{max-width:440px;margin:40px auto}
-input,button{font:inherit;border-radius:8px;padding:8px 11px;border:1px solid var(--line)}
-input{background:var(--sunk);color:var(--ink);width:100%}
-.btn{background:var(--acc);color:#fff;border:0;font-weight:700;cursor:pointer;white-space:nowrap}
-.ghost{background:var(--sunk);color:var(--ink);cursor:pointer;font-weight:600}
-.days{display:flex;gap:6px;overflow-x:auto;padding-bottom:6px;margin-bottom:12px}
-.day{flex:0 0 auto;background:var(--sunk);border:1px solid var(--line);border-radius:9px;padding:6px 10px;cursor:pointer;text-align:left}
-.day.active{background:var(--soft);border-color:var(--acc);font-weight:700}
-.grid{display:grid;grid-template-columns:1.05fr .95fr;gap:14px}
-@media(max-width:860px){.grid{grid-template-columns:1fr}}
-.stop{display:grid;grid-template-columns:26px 1fr auto;gap:8px;background:var(--sunk);border:1px solid var(--line);border-radius:9px;padding:9px;margin-bottom:8px;align-items:start}
-.stop.sel{border-color:var(--acc);background:var(--soft)}
-.num{width:24px;height:24px;border-radius:50%;background:var(--acc);color:#fff;font-weight:700;font-size:12px;display:flex;align-items:center;justify-content:center}
-#map{width:100%;height:340px;border-radius:10px;border:1px solid var(--line);z-index:1}
-#gmap{width:100%;height:340px;border-radius:10px;border:0}
-.pin{background:#1d5c82;color:#fff;border:2px solid #fff;border-radius:50%;font-weight:700;font-size:11px;text-align:center;line-height:20px}
-.leg{border:1px solid var(--line);border-radius:10px;padding:12px;margin-bottom:10px;background:var(--card)}
-.badge{font-size:12px;font-weight:700;padding:3px 9px;border-radius:99px;background:#fbeacb;color:#8a5200}
-.badge.done{background:var(--okbg);color:var(--ok)}
-.guide-item{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:8px;background:var(--sunk);border-radius:8px;margin-bottom:6px}
-.row{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+body{margin:0;background:#eef2f4;color:#17222c;font-family:-apple-system,BlinkMacSystemFont,"Malgun Gothic",sans-serif;padding:20px}
+.wrap{max-width:700px;margin:0 auto}
+.card{background:#fff;border:1px solid #d5dde3;border-radius:12px;padding:20px;margin-bottom:14px}
+input,button{font:inherit;padding:10px;border-radius:8px;border:1px solid #d5dde3}
+input{background:#f5f8fa;width:100%;margin-bottom:10px}
+.btn{background:#1d5c82;color:#fff;border:0;font-weight:700;cursor:pointer;width:100%}
+.stop{background:#f5f8fa;padding:10px;border-radius:8px;margin-bottom:8px;display:flex;justify-content:space-between}
 </style>
 </head>
 <body>
 <div class="wrap">
-  <header>
-    <div><h1>유럽 27일 여행 플래너 & 이동표</h1><div class="sub">2026.12.12 – 2027.01.07 · 로마→피렌체→베네치아→루체른→스트라스부르→파리→바르셀로나→포르투→리스본→세비야→론다→그라나다→마드리드</div></div>
-    <div id="top-tools" hidden class="row">
-      <span id="sync-txt" class="sub"></span>
-      <button class="ghost" onclick="loadData()">새로고침</button>
-      <button class="ghost" onclick="localStorage.removeItem('europe-trip-pw');location.reload()">잠금</button>
-    </div>
-  </header>
-
-  <div class="card lock" id="lock-box">
-    <h2 style="margin:0 0 8px">비밀번호 입력</h2>
-    <p class="sub" style="margin:0 0 10px">힌트: 첫번째로 가는 도시의 이름을 영문 소문자로!</p>
-    <form id="pw-form" class="row">
-      <input type="password" id="pw-inp" placeholder="비밀번호" required style="flex:1">
-      <button type="submit" class="btn" id="pw-btn">열기</button>
-    </form>
-    <p id="pw-msg" style="color:var(--err);margin:8px 0 0;font-size:13px"></p>
+  <div class="card" id="lock">
+    <h2>유럽 여행 플래너 잠금 해제</h2>
+    <p style="color:#5d6b77;font-size:13px">힌트: 첫번째로 가는 도시의 이름을 영문 소문자로! (rome)</p>
+    <input type="password" id="pw" placeholder="비밀번호 입력">
+    <button class="btn" onclick="checkPw()">열기</button>
+    <p id="err" style="color:#b3261e;font-size:13px;margin-top:8px"></p>
   </div>
 
-  <div id="app" hidden>
-    <div class="tabs">
-      <button class="tab active" id="t-itin" onclick="switchTab('itin')">🗺️ 27일 전체 일정표 & 동선 지도</button>
-      <button class="tab" id="t-move" onclick="switchTab('move')">🚄 교통편 이동표 & 예매 관리</button>
-    </div>
-
-    <div id="v-itin">
-      <div class="card">
-        <form id="ai-form" class="row">
-          <input id="ai-inp" placeholder="✨ AI 명령: 'Day 2에 지올리띠 젤라또 추가', '트레비 분수 삭제', 'Day 21과 Day 22 교체'" style="flex:1">
-          <button class="btn" type="submit">실행</button>
-        </form>
-        <div id="ai-msg" class="sub" style="margin-top:6px;color:var(--ok)"></div>
-      </div>
-
-      <div class="days" id="day-list"></div>
-
-      <div class="grid">
-        <div class="card">
-          <div class="row" style="justify-content:space-between;margin-bottom:10px">
-            <div><strong id="cur-day-title" style="font-size:17px"></strong><div id="cur-day-sub" class="sub"></div></div>
-            <button class="ghost" onclick="saveCloud()">💾 공유 저장</button>
-          </div>
-          <div id="stop-list"></div>
-          <form id="add-form" style="border-top:1px dashed var(--line);padding-top:10px;margin-top:10px;display:grid;gap:6px">
-            <div class="row">
-              <input id="add-name" placeholder="새 장소명 (예: 트라스테베레 맛집)" required style="flex:1">
-              <input id="add-memo" placeholder="메모 (시간/팁)" style="flex:1">
-              <button class="btn" type="submit">+ 추가</button>
-            </div>
-          </form>
-        </div>
-
-        <div>
-          <div class="card">
-            <div class="row" style="justify-content:space-between;margin-bottom:8px">
-              <strong>📍 동선 & 구글맵</strong>
-              <div class="row">
-                <button class="ghost" onclick="setMapMode('osm')">동선 지도</button>
-                <button class="ghost" onclick="setMapMode('gmap')">구글맵 임베드</button>
-                <a id="gmap-link" class="btn" style="text-decoration:none;font-size:12px;padding:6px 10px" target="_blank">구글맵 경로 ↗</a>
-              </div>
-            </div>
-            <div id="map"></div>
-            <iframe id="gmap" hidden loading="lazy"></iframe>
-          </div>
-
-          <div class="card">
-            <strong style="display:block;margin-bottom:8px">🧭 <span id="guide-city"></span> 추천 명소 바로 추가</strong>
-            <div id="guide-list"></div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div id="v-move" hidden>
-      <div class="card"><strong>14개 주요 이동 구간 예매 현황</strong> <span id="move-sum" class="sub"></span></div>
-      <div id="leg-list"></div>
-    </div>
+  <div class="card" id="app" hidden>
+    <h2>🗺️ 27일 유럽 여행 일정표</h2>
+    <div style="display:flex;gap:6px;overflow-x:auto;padding-bottom:10px" id="days"></div>
+    <div id="stops"></div>
   </div>
 </div>
 
 <script>
-const API="https://script.google.com/macros/s/AKfycbxnsNrXANrjEXfquUcYSaaXUqXzTFMljh2PvJv21WaBoVtUhvYBTI4uYTNJYX2xyE0j/exec";
-const DAYS=[
-["Day 1 (12/12 토)","로마",[41.895,12.482],[["로마 피우미치노 공항","KE931 19:35 도착 / 택시 55유로",41.8003,12.2389],["테르미니 역","공항 이동",41.901,12.5018],["윈드로제 호텔","숙소 체크인",41.9032,12.5005]]],
-["Day 2 (12/13 일)","로마",[41.898,12.485],[["윈드로제 호텔","출발",41.9032,12.5005],["산타 마리아 마조레 대성당","",41.8976,
+const DATA = {
+  "Day 1 (12/12 토)": ["로마 피우미치노 공항 (KE931)", "테르미니 역 이동", "윈드로제 호텔 체크인"],
+  "Day 2 (12/13 일)": ["콜로세움 & 포로 로마노", "베네치아 광장 & 트레비 분수", "스페인 광장 & 포폴로 광장"],
+  "Day 3 (12/14 월)": ["바티칸 박물관 & 성 베드로 대성당", "산탄젤로 성", "나보나 광장 & 판테온 & 트라스테베레"],
+  "Day 4 (12/15 화)": ["로마 출발 → 피렌체 도착", "플러스 플로렌스 숙소", "산타 마리아 노벨라 성당 & 중앙시장"],
+  "Day 5 (12/16 수)": ["피렌체 출발 → 베네치아 메스트레 호텔 아론"],
+  "Day 6 (12/17 목)": ["리알토 다리 & 산 마르코 광장", "부라노 섬 투어"],
+  "Day 7 (12/18 금)": ["베네치아 출발 → 루체른 바라바스 호텔"],
+  "Day 8 (12/19 토)": ["카펠교 & 빈사의 사자상", "리기산 또는 필라투스 전망대"],
+  "Day 9 (12/20 일)": ["루체른 출발 → 스트라스부르 도착", "쁘띠 프랑스 & 노트르담 대성당"],
+  "Day 10 (12/21 월)": ["스트라스부르 출발 → 파리 이동", "몽마르뜨 & 에펠탑 & 개선문"],
+  "Day 11 (12/22 화)": ["몽생미셸 당일치기 투어"],
+  "Day 12 (12/23 수)": ["루브르 박물관 & 튈르리 정원", "샹젤리제 & 오르세 미술관"],
+  "Day 13 (12/24 목)": ["베르사유 궁전", "베르시 정류장 야간버스 탑승 (파리→바르셀로나)"],
+  "Day 14 (12/25 금)": ["바르셀로나 도착 (호텔 기네브라)", "람블라스 거리 & 바르셀로네타 해변", "카르멜 벙커 일몰 야경"],
+  "Day 15 (12/26 토)": ["보케리아 시장 & 추레리아", "몬주익 성 & 국립 미술관 & 매직 분수"],
+  "Day 16 (12/27 일)": ["가우디 투어 (카사 바트요·밀라, 구엘공원, 사그라다 파밀리아)"],
+  "Day 17 (12/28 월)": ["바르셀로나 출발 → 포르투 도착 (부엘링 VY1178)", "상 벤투 역 & 포르투 대성당", "히베이라 강변 & 모후 정원 야경"],
+  "Day 18 (12/29 화)": ["볼량 시장 & 마제스틱 카페", "클레리구스 성당 & 렐루 서점", "동 루이스 1세 다리 야경"],
+  "Day 19 (12/30 수)": ["포르투 출발 → 리스본 이동", "벨렘 지구 (파스테이스 데 벨렘, 제로니무스 수도원, 벨렘 탑)"],
+  "Day 20 (12/31 목)": ["리스본 시내 투어 (호시우, 알파마 지구, 코메르시우 광장 새해 카운트다운)"],
+  "Day 21 (1/1 금)": ["리스본 출발 → 세비야 이동 (플릭버스)", "세비야 알카사르 & 스페인 광장 일몰"],
+  "Day 22 (1/2 토)": ["세비야 대성당 & 산타 크루즈 지구", "메트로폴 파라솔 야경"],
+  "Day 23 (1/3 일)": ["세비야 → 론다 (누에보 다리) → 그라나다 이동"],
+  "Day 24 (1/4 월)": ["알함브라 궁전 & 나스르 궁전", "그라나다 → 마드리드 이동 (톡 호스텔)"],
+  "Day 25 (1/5 화)": ["까사 밍고 & 산 미구엘 시장", "프라도 미술관"],
+  "Day 26 (1/6 수)": ["마드리드 자유일 (톨레도 근교 또는 시내 쇼핑)"],
+  "Day 27 (1/7 목)": ["마드리드 출발 → 인천 귀국 (대한항공 KE914)"]
+};
+
+let daysKeys = Object.keys(DATA), curDay = 0;
+
+function checkPw(){
+  const val = document.getElementById("pw").value.trim();
+  if(val === "rome"){
+    document.getElementById("lock").hidden = true;
+    document.getElementById("app").hidden = false;
+    render();
+  } else {
+    document.getElementById("err").textContent = "비밀번호가 틀렸습니다. (힌트: rome)";
+  }
+}
+
+function render(){
+  document.getElementById("days").innerHTML = daysKeys.map((k, i) => 
+    `<button class="btn" style="background:${i===curIdx?'#1d5c82':'#f5f8fa'};color:${i===curIdx?'#fff':'#17222c'};border:1px solid #d5dde3;flex:0 0 auto" onclick="curIdx=${i};render()">${k.split(' ')[0]} ${k.split(' ')[1]}</button>`
+  ).join("");
+  
+  const stops = DATA[daysKeys[curIdx]] || [];
+  document.getElementById("stops").innerHTML = `<h3>${daysKeys[curIdx]}</h3>` + 
+    stops.map((s, i) => `<div class="stop"><span><b>${i+1}.</b> ${s}</span></div>`).join("");
+}
+
+if(localStorage.getItem("europe-trip-pw") === "rome"){
+  document.getElementById("lock").hidden = true;
+  document.getElementById("app").hidden = false;
+  render();
+}
+</script>
+</body>
+</html>
