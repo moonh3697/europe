@@ -4,10 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex">
-<title>유럽여행 이동표</title>
+<title>유럽 27일 여행 플래너 & 이동표</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;700&family=IBM+Plex+Mono:wght@500;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap">
 <style>
   :root {
     color-scheme: light;
@@ -18,6 +18,7 @@
     --muted: #5d6b77;
     --line: #d5dde3;
     --accent: #1d5c82;
+    --accent-soft: #e3eff7;
     --accent-ink: #ffffff;
     --done-bg: #dcefe3;
     --done-ink: #1f6a3f;
@@ -37,6 +38,7 @@
       --muted: #97a6b2;
       --line: #2c3842;
       --accent: #7fb8dd;
+      --accent-soft: #1d3242;
       --accent-ink: #0d1a24;
       --done-bg: #1d3a2a;
       --done-ink: #8fd8ab;
@@ -58,17 +60,19 @@
     font-size: 16px;
     line-height: 1.5;
     padding-inline: 16px;
-    padding-block: calc(20px + env(safe-area-inset-top, 0px)) calc(48px + env(safe-area-inset-bottom, 0px));
+    padding-block: calc(20px + env(safe-area-inset-top, 0px)) calc(56px + env(safe-area-inset-bottom, 0px));
   }
-  .wrap { max-width: 560px; margin: 0 auto; }
 
-  header { display: grid; gap: 6px; margin-bottom: 20px; }
+  .wrap { max-width: 1120px; margin: 0 auto; }
+  .narrow-wrap { max-width: 600px; margin: 0 auto; }
+
+  header { display: grid; gap: 6px; margin-bottom: 18px; }
   .eyebrow {
     font-family: "IBM Plex Mono", ui-monospace, monospace;
     font-size: 12px; letter-spacing: 0.08em; color: var(--accent);
   }
   h1 { margin: 0; font-size: 26px; line-height: 1.25; text-wrap: balance; }
-  .summary { margin: 0; color: var(--muted); font-size: 15px; }
+  .summary { margin: 0; color: var(--muted); font-size: 14px; }
   .summary b { color: var(--ink); }
   .toolbar { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; font-size: 13px; color: var(--muted); }
   .linkbtn {
@@ -76,8 +80,28 @@
     text-decoration: underline; cursor: pointer;
   }
 
+  /* 상단 메인 탭 내비게이션 */
+  .main-nav {
+    display: flex; gap: 8px; margin-bottom: 18px;
+    background: var(--card); border: 1px solid var(--line);
+    border-radius: 12px; padding: 6px;
+  }
+  .nav-tab {
+    flex: 1; font: inherit; font-weight: 700; font-size: 15px;
+    border: 0; border-radius: 8px; padding: 10px 14px;
+    background: transparent; color: var(--muted); cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .nav-tab.active {
+    background: var(--accent); color: var(--accent-ink);
+  }
+  .nav-tab:not(.active):hover {
+    background: var(--sunk); color: var(--ink);
+  }
+
   /* 비밀번호 화면 */
   .lock {
+    max-width: 560px; margin: 0 auto;
     background: var(--card); border: 1px solid var(--line); border-radius: 12px;
     padding: 20px 16px; display: grid; gap: 12px;
   }
@@ -95,1109 +119,117 @@
   .msg.ok { color: var(--done-ink); }
   .msg.err { color: var(--err); }
 
-  input[type="text"], input[type="password"] {
-    font: inherit; font-size: 16px; color: var(--ink);
+  input[type="text"], input[type="password"], textarea, select {
+    font: inherit; font-size: 15px; color: var(--ink);
     background: var(--sunk); border: 1px solid var(--line); border-radius: 8px;
-    padding: 10px 12px; width: 100%; min-width: 0;
+    padding: 9px 12px; width: 100%; min-width: 0;
   }
-  input:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+  input:focus-visible, textarea:focus-visible, select:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
   .primary {
-    font: inherit; font-weight: 700; font-size: 15px;
+    font: inherit; font-weight: 700; font-size: 14px;
     background: var(--accent); color: var(--accent-ink);
-    border: 0; border-radius: 10px; padding: 10px 18px; cursor: pointer;
+    border: 0; border-radius: 10px; padding: 10px 16px; cursor: pointer;
   }
   .primary:disabled { opacity: 0.6; cursor: default; }
-  .primary:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
-
-  ol { list-style: none; margin: 0; padding: 0; }
-
-  .leg { background: var(--card); border: 1px solid var(--line); border-radius: 12px; }
-  .row {
-    padding: 14px 16px;
-    display: grid; grid-template-columns: 64px 1fr auto;
-    align-items: center; column-gap: 12px;
-  }
-  summary.row { cursor: pointer; list-style: none; border-radius: 12px; }
-  summary.row::-webkit-details-marker { display: none; }
-  summary.row:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-  .date {
-    font-family: "IBM Plex Mono", ui-monospace, monospace;
-    font-variant-numeric: tabular-nums;
-    font-weight: 600; font-size: 20px; line-height: 1.1;
-  }
-  .num { display: block; margin-top: 4px; font-size: 11px; font-weight: 500; color: var(--muted); letter-spacing: 0.04em; }
-  .route { font-size: 18px; font-weight: 700; line-height: 1.3; min-width: 0; }
-  .route .arrow { color: var(--accent); font-weight: 500; padding-inline: 2px; }
-  .mode { display: block; font-size: 13px; font-weight: 400; color: var(--muted); margin-top: 2px; }
-  .booked-line {
-    display: block; font-size: 13px; font-weight: 500; color: var(--done-ink); margin-top: 2px;
-    font-variant-numeric: tabular-nums; overflow-wrap: anywhere;
-  }
-  .side { display: grid; justify-items: end; gap: 6px; }
-  .chev { font-size: 12px; color: var(--accent); font-weight: 500; }
-  details[open] .chev-closed, details:not([open]) .chev-open { display: none; }
-
-  .status { font-size: 14px; font-weight: 700; padding: 6px 12px; border-radius: 999px; white-space: nowrap; }
-  .status.done { background: var(--done-bg); color: var(--done-ink); }
-  .status.todo { background: var(--todo-bg); color: var(--todo-ink); }
-
-  .detail { border-top: 1px solid var(--line); padding: 14px 16px 16px; display: grid; gap: 14px; font-size: 15px; }
-  .detail p { margin: 0; }
-  .pick { font-size: 16px; font-weight: 700; }
-  .facts { display: grid; grid-template-columns: auto 1fr; gap: 4px 12px; margin: 0; }
-  .facts dt { color: var(--muted); font-size: 13px; padding-top: 2px; }
-  .facts dd { margin: 0; }
-  .warn { background: var(--warn-bg); border: 1px solid var(--warn-line); border-radius: 8px; padding: 10px 12px; font-size: 14px; }
-  .warn b { display: block; margin-bottom: 2px; }
-
-  .when { display: grid; gap: 2px; border-left: 3px solid var(--accent); padding: 2px 0 2px 12px; }
-  .when-label { font-size: 12px; color: var(--accent); font-weight: 700; }
-  .when b { font-size: 16px; font-variant-numeric: tabular-nums; }
-  .when-other { font-size: 13px; font-variant-numeric: tabular-nums; }
-  .when-why { font-size: 13px; color: var(--muted); }
-  .when-basis { font-size: 11px; color: var(--muted); }
-
-  /* 예매 오픈 달력 */
-  .sales { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 16px; margin-bottom: 16px; display: grid; gap: 12px; }
-  .sales h2 { margin: 0; font-size: 16px; }
-  .sales ol { display: grid; gap: 12px; }
-  .sale { display: grid; grid-template-columns: 72px 1fr; gap: 10px; align-items: start; }
-  .sale-date { font-family: "IBM Plex Mono", ui-monospace, monospace; font-weight: 600; font-size: 15px; line-height: 1.3; font-variant-numeric: tabular-nums; }
-  .sale-date small { display: block; font-family: "IBM Plex Sans KR", sans-serif; font-weight: 400; font-size: 11px; color: var(--muted); }
-  .sale.soon .sale-date { color: var(--accent); }
-  .sale-body { display: grid; gap: 4px; min-width: 0; }
-  .sale-title { font-weight: 700; font-size: 15px; }
-  .sale-note { font-size: 13px; color: var(--muted); }
-  .chips { display: flex; flex-wrap: wrap; gap: 6px; }
-  .chip {
-    font: inherit; font-size: 13px; cursor: pointer;
-    border: 1px solid var(--line); background: var(--sunk); color: var(--ink);
-    border-radius: 999px; padding: 3px 10px;
-  }
-  .chip.done { background: var(--done-bg); color: var(--done-ink); border-color: transparent; text-decoration: line-through; }
-  .chip:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-  .compare { display: grid; gap: 8px; }
-  .compare-title { font-size: 14px; font-weight: 700; }
-  .compare-title span { font-weight: 400; font-size: 12px; color: var(--muted); }
-  .compare-scroll { overflow-x: auto; }
-  .compare table { width: 100%; border-collapse: collapse; font-size: 13px; }
-  .compare th, .compare td { text-align: left; vertical-align: top; padding: 6px 8px 6px 0; border-top: 1px solid var(--line); }
-  .compare thead th { border-top: 0; font-weight: 500; color: var(--muted); font-size: 12px; padding-top: 0; }
-  .compare td:last-child { font-variant-numeric: tabular-nums; }
-  .compare .tag { display: inline-block; white-space: nowrap; font-size: 11px; font-weight: 700; background: var(--sunk); border: 1px solid var(--line); border-radius: 999px; padding: 1px 8px; }
-  .verdict { font-size: 14px; background: var(--done-bg); color: var(--ink); border-radius: 8px; padding: 8px 12px; }
-  .verdict b { color: var(--done-ink); }
-  .links { display: grid; gap: 8px; }
-  .btn {
-    display: grid; gap: 1px;
-    background: var(--accent); color: var(--accent-ink);
-    text-decoration: none; border-radius: 10px;
-    padding: 12px 14px; font-weight: 700; font-size: 15px;
-  }
-  .btn.alt { background: var(--sunk); color: var(--ink); border: 1px solid var(--line); }
-  .btn small { font-weight: 400; font-size: 12px; opacity: 0.85; }
-  .btn:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
-
-  /* 예매 정보 칸 */
-  .booking { background: var(--sunk); border: 1px solid var(--line); border-radius: 10px; padding: 14px; display: grid; gap: 10px; }
-  .booking h3 { margin: 0; font-size: 15px; }
-  .booking .hint { font-size: 12px; color: var(--muted); }
-  .fields { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-  .fields label { display: grid; gap: 4px; font-size: 13px; color: var(--muted); }
-  .fields .wide { grid-column: 1 / -1; }
-  .fields input { background: var(--card); }
-  .save-row { display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: center; }
-  .save-row .msg { color: var(--muted); font-size: 13px; }
-
-  .src { font-size: 12px; color: var(--muted); }
-  .src ul { margin: 4px 0 0; padding-left: 18px; display: grid; gap: 2px; }
-  .src a { color: var(--muted); word-break: break-word; }
-
-  .stay { margin-left: 40px; border-left: 2px dashed var(--line); padding: 8px 0 8px 18px; font-size: 13px; color: var(--muted); }
-  .stay b { color: var(--ink); font-weight: 500; }
-
-  footer { margin-top: 24px; font-size: 13px; color: var(--muted); display: grid; gap: 6px; }
-  footer p { margin: 0; }
-
-  /* 오늘의 이동 */
-  .today {
-    background: var(--card);
-    border: 2px solid var(--accent);
-    border-radius: 14px;
-    padding: 16px;
-    margin-bottom: 20px;
-    display: grid; gap: 12px;
-  }
-  .today-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 4px 12px; }
-  .today-label { font-size: 14px; font-weight: 700; color: var(--accent); letter-spacing: 0.02em; }
-  .today-date { font-size: 13px; color: var(--muted); font-variant-numeric: tabular-nums; }
-  .today-route { margin: 0; font-size: 24px; line-height: 1.25; font-weight: 700; text-wrap: balance; }
-  .today-route .arrow { color: var(--accent); font-weight: 500; }
-  .today-mode { margin: -6px 0 0; font-size: 14px; color: var(--muted); }
-  .today-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-  .tile { background: var(--sunk); border-radius: 10px; padding: 10px 12px; min-width: 0; }
-  .tile.wide { grid-column: 1 / -1; }
-  .tile-label { display: block; font-size: 12px; color: var(--muted); margin-bottom: 2px; }
-  .tile-value { font-size: 18px; font-weight: 700; line-height: 1.3; overflow-wrap: anywhere; }
-  .tile-value.big {
-    font-family: "IBM Plex Mono", ui-monospace, monospace;
-    font-variant-numeric: tabular-nums; font-size: 32px; line-height: 1.1;
-  }
-  .tile-value.code { font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: 26px; letter-spacing: 0.04em; }
-  .tile-value.empty { font-size: 15px; font-weight: 400; color: var(--muted); }
-  .tile-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
-  .today-actions { display: flex; flex-wrap: wrap; gap: 8px 16px; font-size: 14px; }
-  .today-note { margin: 0; font-size: 14px; color: var(--muted); }
-  .test-banner {
-    background: var(--warn-bg); border: 1px solid var(--warn-line); border-radius: 8px;
-    padding: 8px 12px; font-size: 13px; display: flex; flex-wrap: wrap; gap: 4px 12px; align-items: center;
-  }
-  .test-tool { font-size: 13px; color: var(--muted); }
-  .test-tool summary { cursor: pointer; color: var(--accent); text-decoration: underline; width: max-content; }
-  .test-tool .test-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 8px; }
-  .test-tool input[type="date"] {
-    font: inherit; font-size: 16px; color: var(--ink);
-    background: var(--sunk); border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px;
-  }
   .ghost {
     font: inherit; font-size: 14px; font-weight: 500;
     background: var(--sunk); color: var(--ink);
     border: 1px solid var(--line); border-radius: 8px; padding: 8px 12px; cursor: pointer;
   }
-  .ghost:focus-visible, .test-tool summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
-  @media (max-width: 360px) {
-    .today-grid { grid-template-columns: 1fr; }
-    .row { grid-template-columns: 56px 1fr; row-gap: 8px; }
-    .side { grid-column: 2; justify-items: start; grid-auto-flow: column; align-items: center; }
-    .fields { grid-template-columns: 1fr; }
+  /* ==================== [탭 1] 27일 전체 일정표 & 지도 ==================== */
+  .planner-layout {
+    display: grid;
+    grid-template-columns: 270px 1fr;
+    gap: 16px;
+    align-items: start;
   }
-  .trip-link { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 4px 12px; margin-top: 6px; padding: 12px 14px; border: 1px solid var(--line); border-radius: 12px; background: var(--card); color: var(--ink); text-decoration: none; }
-  .trip-link strong { color: var(--accent); font-weight: 600; }
-  .trip-link span { color: var(--muted); font-size: 14px; }
-  .trip-link:hover, .trip-link:focus-visible { border-color: var(--accent); }
-</style>
-</head>
-<body>
-<div class="wrap">
-  <header>
-    <span class="eyebrow">12/12 – 1/7 · 14개 이동 구간</span>
-    <h1>유럽여행 이동 일정표</h1>
-    <a class="trip-link" href="spain.html"><strong>스페인 일정 보기 →</strong><span>바르셀로나 · 세비야 · 그라나다 · 마드리드</span></a>    <p class="summary" id="summary" hidden></p>
-    <div class="toolbar" id="toolbar" hidden>
-      <span id="synced">불러오는 중…</span>
-      <button type="button" class="linkbtn" id="refresh">새로고침</button>
-      <button type="button" class="linkbtn" id="forget">이 기기에서 비밀번호 지우기</button>
-      <button type="button" class="linkbtn" id="pwchange-open">비밀번호 바꾸기</button>
-    </div>
-  </header>
-
-  <section class="lock pwchange" id="pwchange" hidden>
-    <h2>비밀번호 바꾸기</h2>
-    <p>바꾸면 일행 모두 새 비밀번호를 다시 넣어야 합니다. 바꾼 뒤 카톡으로 새 비밀번호를 알려 주세요.</p>
-    <form id="pwchange-form" autocomplete="off">
-      <input type="password" id="pw-new" placeholder="새 비밀번호 (4자 이상)" aria-label="새 비밀번호" minlength="4" maxlength="50" required>
-      <input type="password" id="pw-new2" placeholder="새 비밀번호 한 번 더" aria-label="새 비밀번호 확인" minlength="4" maxlength="50" required>
-      <button type="submit" class="primary" id="pwchange-btn">바꾸기</button>
-      <button type="button" class="ghost" id="pwchange-cancel">닫기</button>
-    </form>
-    <p class="msg" id="pwchange-msg" aria-live="polite"></p>
-  </section>
-
-  <section class="lock" id="lock">
-    <h2>비밀번호를 넣어 주세요</h2>
-    <p>일행끼리 정한 비밀번호를 넣어야 일정과 예매 정보가 보입니다. 한 번 넣으면 이 기기에서는 다시 묻지 않습니다.</p>
-    <form id="lock-form" autocomplete="off">
-      <input type="password" id="pw" placeholder="비밀번호" aria-label="비밀번호" required>
-      <button type="submit" class="primary" id="pw-btn">열기</button>
-    </form>
-    <p class="pw-hint" id="pw-hint"></p>
-    <p class="msg" id="lock-msg" aria-live="polite"></p>
-  </section>
-
-  <section class="sales" id="sales" hidden aria-labelledby="sales-h">
-    <h2 id="sales-h">예매 오픈 달력</h2>
-    <ol id="sales-list"></ol>
-  </section>
-
-  <section class="today" id="today" hidden>
-    <div id="today-body" aria-live="polite"></div>
-    <details class="test-tool" id="test-tool">
-      <summary>날짜 바꿔서 시험해 보기</summary>
-      <div class="test-row">
-        <label for="test-date">이 날짜인 척 보기</label>
-        <input type="date" id="test-date" min="2026-12-01" max="2027-01-10" value="2026-12-16">
-        <button type="button" class="ghost" id="test-reset">원래 날짜로</button>
-      </div>
-    </details>
-  </section>
-
-  <ol id="legs" hidden></ol>
-
-  <footer id="foot" hidden>
-    <p>구간을 누르면 추천 수단, 예매 링크, 예매 정보 칸이 펼쳐집니다.</p>
-    <p>예약번호를 적고 저장하면 그 구간이 '예매 완료'로 바뀌고, 일행 모두의 화면에 보입니다.</p>
-    <p>Trainline 링크는 그 날짜 검색 결과가 바로 열립니다. Omio 링크는 도시와 날짜가 채워진 검색 화면이 열리고, '검색'을 누르면 기차·버스·비행기가 함께 나옵니다.</p>
-    <p>'빠른 길 · 싼 길 비교'의 가격은 대략적인 1인 편도 가격입니다. '10/28 조회'는 2026-10-28에 다시 본 값(1달러 약 1,340원으로 바꿈), '9/26'은 9월 조사 값입니다. 실제 가격은 링크를 눌러 확인하세요.</p>
-    <p>검색 결과가 비어 있거나 "Not available"이 보이면 아직 표 판매가 시작되지 않은 것입니다.</p>
-    <p>추천 수단 조사 2026-09-25, 시간표·가격·판매 상황 다시 확인 2026-10-28. 시간과 운행 편수는 바뀔 수 있습니다.</p>
-  </footer>
-</div>
-
-<script>
-  // 예매 정보 저장소(구글 Apps Script) 주소. 배포 후 받은 주소를 넣는다.
-  const API_URL = "https://script.google.com/macros/s/AKfycbxnsNrXANrjEXfquUcYSaaXUqXzTFMljh2PvJv21WaBoVtUhvYBTI4uYTNJYX2xyE0j/exec";
-  const PW_KEY = "europe-trip-pw";
-  // 비밀번호 화면에 보이는 힌트. 비밀번호를 바꾸면 이것도 맞게 바꾼다 (빈 글자면 숨김)
-  const PW_HINT = "힌트: 첫번째로 가는 도시의 이름을 영문 소문자로!";
-  document.getElementById("pw-hint").textContent = PW_HINT;
-
-  // Trainline 검색 결과 링크 (출발역 코드, 도착역 코드, 날짜)
-  // tab 에 "coach" 를 주면 버스(Coach) 탭이 열린 채로 뜬다
-  function trainline(from, to, date, tab) {
-    return "https://www.thetrainline.com/book/results?journeySearchType=single"
-      + "&origin=urn%3Atrainline%3Ageneric%3Aloc%3A" + from
-      + "&destination=urn%3Atrainline%3Ageneric%3Aloc%3A" + to
-      + "&outwardDate=" + date + "T08%3A00%3A00"
-      + "&outwardDateType=departAfter&passengers%5B%5D=1996-01-01&directSearch=false&lang=en"
-      + (tab ? "&selectedTab=" + tab : "");
-  }
-  const BUS_TAB = "버스(Coach) 탭이 열린 채로, 도시와 날짜가 들어가 있음";
-  const BOTH_TRAIN = "기차 결과가 먼저 열림 · 위쪽 'Coach'를 누르면 버스";
-  const BOTH_COACH = "버스 결과가 먼저 열림 · 위쪽 'Train'을 누르면 기차";
-  // Omio(한국어) 검색 화면 링크 (출발 도시 번호, 도착 도시 번호, 날짜 YYYY-MM-DD)
-  function omio(from, to, iso) {
-    const [y, m, d] = iso.split("-");
-    return "https://www.omio.co.kr/?departure_fk=" + from + "&arrival_fk=" + to
-      + "&departure_date=" + d + "%2F" + m + "%2F" + y;
-  }
-  const OMIO = "출발·도착 도시와 날짜가 채워진 채로 열림 → '검색'만 누르면 됨";
-  const FILLED = "출발·도착 도시와 날짜가 들어간 채로 열림";
-  const SEARCH_ONLY = "검색 화면까지 열림 (도시·날짜 직접 입력)";
-
-  // 이동 구간 14개. booked: true 는 처음부터 끊어 둔 항공
-  const legs = [
-    { date: "12/12", from: "인천", to: "로마", mode: "비행기", booked: true },
-    { date: "12/15", from: "로마", to: "피렌체", mode: "기차 · 약 1시간 40분",
-      plan: {
-        pick: "고속열차 (Frecciarossa 또는 Italo), 직통",
-        time: "약 1시간 40분",
-        stations: "로마 테르미니역 → 피렌체 산타 마리아 노벨라역",
-        change: "없음 (직통)",
-        compare: [
-          ["빠름", "기차", "1시간 37분~1시간 42분", "₩31,000~39,000 (10/28 조회)"],
-          ["쌈", "버스 (FlixBus)", "3시간 15분", "₩24,000~60,000 (9/26)"],
-        ],
-        verdict: "기차. 지금 3만~4만 원대로 버스와 값이 거의 같은데 2배 빠릅니다.",
-        note: "두 회사 합쳐 하루 100편 가까이 다녀서 자리 걱정이 적은 구간입니다.",
-        links: [
-          { label: "Trainline에서 12/15 기차·버스 검색", url: trainline("8544", "8434", "2026-12-15"), how: BOTH_TRAIN },
-          { label: "Omio에서 12/15 검색", url: omio("388498", "388058", "2026-12-15"), how: OMIO, alt: true },
-        ],
-        sources: [
-          ["Rome2Rio — 로마→피렌체 수단별 가격·시간", "https://www.rome2rio.com/s/Rome/Florence"],
-          ["Italo — 로마↔피렌체 노선 안내", "https://www.italotreno.com/en/destinations-timetable/rome-florence-tickets"],
-        ],
-      } },
-    { date: "12/16", from: "피렌체", to: "베네치아", mode: "기차 · 약 2시간 15분",
-      plan: {
-        pick: "고속열차 (Frecciarossa 또는 Italo), 직통",
-        time: "약 2시간 15분",
-        stations: "피렌체 산타 마리아 노벨라역 → 베네치아 산타 루치아역",
-        change: "없음 (직통)",
-        compare: [
-          ["빠름", "기차", "2시간 14분~2시간 16분", "₩36,000~42,000 (10/28 조회)"],
-          ["쌈", "버스 (FlixBus)", "4시간 5분", "₩31,000~55,000 (9/26)"],
-        ],
-        verdict: "기차. 버스는 2시간 가까이 더 걸리고, 섬 밖(메스트레·트론케토)에 내립니다.",
-        note: "'Venezia Mestre'가 아니라 섬 안의 'Venezia Santa Lucia'행인지 확인하세요.",
-        links: [
-          { label: "Trainline에서 12/16 기차·버스 검색", url: trainline("8434", "8574", "2026-12-16"), how: BOTH_TRAIN },
-          { label: "Omio에서 12/16 검색", url: omio("388058", "388743", "2026-12-16"), how: OMIO, alt: true },
-        ],
-        sources: [
-          ["Rome2Rio — 피렌체→베네치아 수단별 가격·시간", "https://www.rome2rio.com/s/Florence/Venice"],
-          ["Trainline — 피렌체→베네치아 산타 루치아", "https://www.thetrainline.com/en-us/train-times/florence-to-venezia-santa-lucia"],
-        ],
-      } },
-    { date: "12/18", from: "베네치아", to: "루체른", mode: "기차 · 약 6시간 20분 · 밀라노 환승",
-      plan: {
-        pick: "기차 2개 이어 타기 (고속열차 + EuroCity)",
-        time: "약 6시간 20분~7시간 40분 (10/28 조회: 07:18 출발 → 13:41 도착, 6시간 23분)",
-        stations: "베네치아 산타 루치아역 → 루체른역",
-        change: "추천 편(07:18)은 밀라노 중앙역(Milano Centrale)에서 1번. 05:57 편 중 12:41에 도착하는 편은 아르트골다우(Arth-Goldau)에서 한 번 더 갈아탑니다.",
-        compare: [
-          ["빠름", "기차 (밀라노 환승)", "약 6시간 20분~7시간 40분", "₩80,000~131,000 (10/28 조회)"],
-          ["쌈", "버스 (FlixBus)", "8시간 45분", "₩62,000~113,000 (9/26)"],
-        ],
-        verdict: "기차. 지금 기차가 8만 원대부터라 버스와 값 차이가 크지 않은데 2시간 넘게 빠릅니다.",
-        note: "하루 중 가장 긴 구간입니다. 9월에 추천했던 06:48 편은 지금 시간표에 없어 07:18 편으로 바꿨습니다.",
-        links: [
-          { label: "Trainline에서 12/18 기차·버스 검색", url: trainline("8574", "6353", "2026-12-18"), how: BOTH_TRAIN },
-          { label: "Omio에서 12/18 검색 (버스 포함)", url: omio("388743", "373152", "2026-12-18"), how: OMIO, alt: true },
-        ],
-        sources: [
-          ["Rome2Rio — 베네치아→루체른 수단별 가격·시간", "https://www.rome2rio.com/s/Venice/Lucerne"],
-          ["Trainline — 베네치아→루체른 (최저가·편수)", "https://www.thetrainline.com/en/train-times/venice-to-lucerne"],
-          ["Seat61 — 스위스↔이탈리아 EuroCity", "https://www.seat61.com/trains-and-routes/switzerland-to-italy-by-train.htm"],
-        ],
-      } },
-    { date: "12/20", from: "루체른", to: "스트라스부르", mode: "기차 · 약 3시간 · 바젤 환승 (버스는 16:30 1편)",
-      plan: {
-        pick: "기차 2개 이어 타기 (바젤 환승). 돈을 아끼려면 16:30 직행 버스",
-        time: "기차 약 2시간 45분~3시간 50분 / 버스 5시간 (이날 16:30 출발 → 21:30 도착 1편뿐)",
-        stations: "기차: 루체른역 → 바젤 SBB역 → 스트라스부르역 / 버스: 루체른 → 스트라스부르 버스 정류장",
-        change: "기차는 바젤 SBB역에서 1번 (루체른→바젤 약 1시간, 바젤→스트라스부르 약 1시간 15분). 버스는 직행",
-        compare: [
-          ["빠름", "기차 (바젤 환승)", "약 2시간 45분~3시간 50분", "₩94,000~265,000 (9/26)"],
-          ["쌈", "버스 (FlixBus, 직행)", "5시간 (16:30 → 21:30)", "약 ₩38,000 (10/28 조회)"],
-        ],
-        verdict: "기차. 버스가 1인당 6만~20만 원 싸지만 12/20에는 16:30 한 편뿐이라 스트라스부르에 밤 9시 30분에 도착합니다. 스트라스부르가 1박이라 오전 기차가 낫습니다. 돈이 더 중요하면 버스도 괜찮습니다.",
-        note: "스위스 기차는 Trainline에 나오지 않아 스위스 철도(SBB) 사이트를 붙였습니다. 좌석 지정이 없는 열차라 당일 SBB 앱이나 역에서 사도 됩니다.",
-        links: [
-          { label: "스위스 철도 SBB 열기 (기차)", url: "https://www.sbb.ch/en", how: SEARCH_ONLY },
-          { label: "Trainline에서 12/20 버스 검색", url: trainline("6353", "153", "2026-12-20", "coach"), how: BUS_TAB, alt: true },
-          { label: "Omio에서 12/20 검색 (기차·버스 함께)", url: omio("373152", "379901", "2026-12-20"), how: OMIO, alt: true },
-        ],
-        sources: [
-          ["Rome2Rio — 루체른→스트라스부르 수단별 가격·시간", "https://www.rome2rio.com/s/Lucerne/Strasbourg"],
-          ["Trainline — 루체른→스트라스부르", "https://www.thetrainline.com/en-us/train-times/lucerne-to-strasbourg"],
-        ],
-      } },
-    { date: "12/21", from: "스트라스부르", to: "파리", mode: "기차 · 약 1시간 45분",
-      plan: {
-        pick: "TGV INOUI 직통. 싸게 가려면 OUIGO (시간이 더 걸림)",
-        time: "약 1시간 45분",
-        stations: "스트라스부르역 → 파리 동역(Gare de l'Est)",
-        change: "없음 (직통)",
-        compare: [
-          ["빠름", "기차 (TGV INOUI·ICE, 직통)", "1시간 45분", "₩139,000~196,000 (10/28 조회)"],
-          ["쌈", "기차 (OUIGO, 직통)", "2시간~3시간 6분", "₩55,000~70,000 (10/28 조회)"],
-          ["버스", "BlaBlaCar Bus", "6시간", "₩55,000~100,000 (9/26)"],
-        ],
-        verdict: "기차. 판매가 열린 지 한 달이 지나 £14짜리 표는 사라졌습니다. 빠른 TGV는 14만 원대부터, OUIGO는 5만 원대지만 1~3시간 걸립니다. 남은 좌석이 적은 편이 많아 지금 끊는 것이 좋습니다.",
-        note: "크리스마스 기간(12/13~1/6) 프랑스 기차표는 9/30부터 팔고 있습니다. 10/28 조회 때 오전·저녁 TGV에 '몇 석 남음'이 많이 떴습니다.",
-        links: [
-          { label: "Trainline에서 12/21 기차·버스 검색", url: trainline("153", "4916", "2026-12-21"), how: BOTH_TRAIN },
-          { label: "Omio에서 12/21 검색", url: omio("379901", "379727", "2026-12-21"), how: OMIO, alt: true },
-        ],
-        sources: [
-          ["Rome2Rio — 스트라스부르→파리 수단별 가격·시간", "https://www.rome2rio.com/s/Strasbourg/Paris"],
-          ["Trainline — 스트라스부르→파리 (최저가·편수)", "https://www.thetrainline.com/en/train-times/strasbourg-to-paris"],
-          ["Voyagerentrain — 2026 크리스마스 기차표 판매 시작일", "https://www.voyagerentrain.fr/ouverture-billets-sncf-noel-2026/"],
-        ],
-      } },
-    { date: "12/25", from: "파리", to: "바르셀로나", mode: "기차 · 약 6시간 50분 · 성탄절",
-      plan: {
-        pick: "TGV INOUI 직통 고속열차 또는 비행기. 지금은 비행기가 더 쌉니다",
-        time: "기차 약 6시간 50분 / 비행기 약 5시간 (공항 이동 포함, 비행 약 1시간 50분)",
-        stations: "파리 리옹역(Gare de Lyon) → 바르셀로나 산츠역",
-        change: "없음 (직통)",
-        compare: [
-          ["빠름·쌈", "비행기 (오를리→엘프라트, 직항)", "약 5시간 (공항 이동 포함)", "₩132,000부터, 위탁 수하물 별도 (10/28 조회)"],
-          ["직통", "기차 (TGV INOUI)", "6시간 53분", "₩202,000~233,000 (10/28 조회)"],
-          ["버스", "FlixBus 등", "14시간 20분", "₩85,000~230,000 (9/26)"],
-        ],
-        verdict: "€39 기차표는 남아 있지 않습니다. 지금은 기차가 1인 20만 원 안팎, 비행기가 13만~14만 원대(짐을 부치면 추가)입니다. 큰 짐을 부치면 차이가 줄어드니 편한 쪽을 고르세요. 기차는 두 편 모두 좌석이 적어, 기차로 정했다면 지금 끊으세요. 버스는 14시간이라 권하지 않습니다.",
-        warn: {
-          title: "성탄절 운행: 하루 2편뿐",
-          text: "12/25 직통 기차는 06:56→13:49, 14:42→21:35 두 편뿐입니다. 10/28 조회 때 두 편 모두 '좌석 적음(Limited availability)'이 떴습니다.",
-        },
-        links: [
-          { label: "Trainline에서 12/25 기차·버스 검색", url: trainline("4924", "6625", "2026-12-25"), how: BOTH_TRAIN },
-          { label: "Google 항공편에서 12/25 비행기 검색", url: "https://www.google.com/travel/flights?q=Flights%20from%20Paris%20to%20Barcelona%20on%202026-12-25%20one%20way&hl=ko", how: FILLED, alt: true },
-          { label: "Omio에서 12/25 검색 (기차·비행기 함께)", url: omio("379727", "378468", "2026-12-25"), how: OMIO, alt: true },
-        ],
-        sources: [
-          ["Rome2Rio — 파리→바르셀로나 수단별 가격·시간", "https://www.rome2rio.com/s/Paris/Barcelona"],
-          ["Seat61 — 파리→바르셀로나 기차 (€39부터)", "https://www.seat61.com/trains-and-routes/paris-to-barcelona-by-train.htm"],
-          ["Seat61 — 유럽 크리스마스 기간 기차 운행", "https://www.seat61.com/european-train-travel.htm"],
-          ["Voyagerentrain — 2026 크리스마스 판매 시작일", "https://www.voyagerentrain.fr/ouverture-billets-sncf-noel-2026/"],
-        ],
-      } },
-    { date: "12/28", from: "바르셀로나", to: "포르투", mode: "비행기", booked: true },
-    { date: "12/31", from: "포르투", to: "리스본", mode: "기차 · 약 2시간 50분 · 새해 전날",
-      plan: {
-        pick: "Alfa Pendular 특급열차, 직통 (포르투갈 철도 CP). 더 싸게 가려면 FlixBus",
-        time: "기차 약 2시간 40분~3시간 / 버스 약 3시간 15분",
-        stations: "포르투 캄파냥역(Campanhã) → 리스본 오리엔트역 / 산타 아폴로니아역",
-        change: "없음 (직통)",
-        compare: [
-          ["빠름", "기차 (Alfa Pendular)", "2시간 42분", "₩50,000~100,000 (9/26)"],
-          ["쌈", "버스 (FlixBus 등)", "3시간 15분", "₩10,000~20,000 (10/28 조회)"],
-        ],
-        verdict: "기차. 30분 정도 빠르고 편합니다. 다만 지금 버스가 1~2만 원대로 아주 싸서, 값을 아끼고 싶으면 버스도 좋습니다. 버스는 15~30분마다 있습니다.",
-        warn: {
-          title: "12/31 저녁 열차는 운행하지 않음",
-          text: "포르투갈 철도는 12/24와 12/31에 저녁 열차를 멈춥니다. 작년 공지를 보면 포르투에서 14:40, 19:45에 떠나는 리스본행이 운행하지 않았습니다. 오전이나 이른 오후 기차로 끊으세요. 올해 공지는 12월에 CP 사이트에 올라옵니다. 이 날 기차표는 11/1부터 살 수 있습니다.",
-        },
-        links: [
-          { label: "Trainline에서 12/31 기차·버스 검색", url: trainline("8697", "8721", "2026-12-31"), how: BOTH_TRAIN },
-          { label: "Omio에서 12/31 검색", url: omio("398868", "398773", "2026-12-31"), how: OMIO, alt: true },
-          { label: "포르투갈 철도 CP 열기", url: "https://www.cp.pt/", how: SEARCH_ONLY, alt: true },
-        ],
-        sources: [
-          ["Rome2Rio — 포르투→리스본 수단별 가격·시간", "https://www.rome2rio.com/s/Porto/Lisbon"],
-          ["CP 공지 — 성탄·새해 운행 중단 열차 (PDF)", "https://www.cp.pt/info/documents/d/cp/supressoes_natal_ano_novo_alfa_intercidades"],
-        ],
-      } },
-    { date: "1/1", from: "리스본", to: "세비야", mode: "버스 · 약 6~7시간 · 직행 · 새해 첫날",
-      plan: {
-        pick: "직행 고속버스 (FlixBus, ALSA, Rede Expressos 등)",
-        time: "약 6~7시간 (스페인이 1시간 빨라 시계로는 7~8시간)",
-        stations: "리스본 (오리엔트 등) → 세비야 플라사 데 아르마스 버스터미널",
-        change: "버스는 직행. 기차 직통은 없습니다. 기차로 가려면 리스본→파로(포르투갈 남쪽) 기차 후 파로에서 세비야행 버스(약 2시간 30분~3시간 15분)로 갈아탑니다.",
-        compare: [
-          ["빠름", "비행기 (리스본→세비야)", "약 3시간 40분 (공항 이동 포함)", "₩72,000~271,000 (9/26)"],
-          ["쌈", "버스 (직행)", "약 6시간 20분~7시간", "₩48,000~55,000 (10/28, 1/2 날짜로 조회)"],
-          ["기차", "기차+버스 (파로 환승)", "6시간 39분", "₩71,000~134,000 (9/26)"],
-        ],
-        verdict: "버스. 가장 싸고, 갈아타지 않아도 됩니다. 싼 항공권이 보이면 비행기가 2~3시간 빠릅니다.",
-        note: "10/28에 예전 날짜(1/2)로 조회했을 때 Trainline에는 11:10, 12:30(1번 환승), 15:45, 22:25(야간) 네 편이 보였습니다. 다른 회사 버스는 Omio에서 함께 보세요.",
-        warn: {
-          title: "1/1은 새해 첫날 (포르투갈·스페인 공휴일)",
-          text: "버스 편수가 줄거나 시간이 바뀔 수 있습니다. 1/1 날짜로 다시 조회해 출발 편을 확인하세요. 세비야에 도착해도 문 연 식당이 적을 수 있으니 저녁을 미리 생각해 두세요.",
-        },
-        links: [
-          { label: "Trainline에서 1/1 버스·기차 검색", url: trainline("8721", "6683", "2027-01-01", "coach"), how: BOTH_COACH },
-          { label: "Omio에서 1/1 검색 (버스·비행기 함께)", url: omio("398773", "378797", "2027-01-01"), how: OMIO, alt: true },
-        ],
-        sources: [
-          ["Rome2Rio — 리스본→세비야 수단별 가격·시간", "https://www.rome2rio.com/s/Lisbon/Seville"],
-          ["Trainline — 리스본→세비야 버스", "https://www.thetrainline.com/buses/lisbon-to-seville"],
-          ["Seat61 — 리스본 출발 국제 기차 (파로 경유 방법)", "https://www.seat61.com/international-trains/trains-from-Lisbon.htm"],
-        ],
-      } },
-    { id: "11", date: "1/3", from: "세비야", to: "론다", mode: "버스 · 약 2시간 15분 · 직행 · 오전 출발",
-      plan: {
-        pick: "Damas 직행 버스",
-        time: "버스 약 2시간 15분~2시간 30분 / 기차 약 3시간 30분~4시간 30분 (환승 1번 이상)",
-        stations: "버스: 세비야 플라사 데 아르마스 터미널 → 론다 버스터미널 / 기차: 세비야 산타 후스타역 → 론다역",
-        change: "버스는 직행. 기차는 갈아타야 해서 훨씬 오래 걸립니다.",
-        compare: [
-          ["빠름·쌈", "버스 (Damas, 직행)", "약 2시간 15분~2시간 30분", "약 €12~20 (11/13 조사, 사이트마다 조금씩 다름)"],
-          ["기차", "기차 (Renfe, 환승)", "약 3시간 30분~4시간 30분", "약 €25~45 (11/13 조사)"],
-        ],
-        verdict: "버스. 직행이라 2시간 남짓이고, 기차는 환승 때문에 1~2시간 더 걸리고 값도 더 비쌉니다.",
-        warn: {
-          title: "론다는 같은 날(1/3) 들렀다 가는 일정이에요",
-          text: "세비야 → 론다 → 그라나다를 1/3 하루에 이동하는 일정입니다. 론다에 오래 머물 수 없으니 터미널·역 짐 보관소에 가방을 맡기고 누에보 다리 주변만 보는 코스가 현실적입니다. 론다에서 하루 자고 가려면 세비야나 그라나다 숙박을 하루 줄이고 날짜를 다시 맞춰야 합니다.",
-        },
-        note: "1/3 버스 시간표는 아직 확인하지 못했습니다. 링크에서 날짜를 넣어 꼭 확인하세요.",
-        links: [
-          { label: "Damas 버스 시간표·예매", url: "https://www.damas-sa.es", how: SEARCH_ONLY },
-          { label: "Omio 세비야→론다 검색", url: "https://www.omio.com/travel/sevilla/ronda", how: SEARCH_ONLY, alt: true },
-          { label: "Trainline 세비야→론다 기차 시간표", url: "https://www.thetrainline.com/en/train-times/sevilla-santa-justa-to-ronda", how: SEARCH_ONLY, alt: true },
-        ],
-        sources: [
-          ["Rome2Rio — 세비야→론다 수단별 가격·시간", "https://www.rome2rio.com/s/Seville/Ronda"],
-          ["Omio — 세비야→론다", "https://www.omio.com/travel/sevilla/ronda"],
-          ["Trainline — 세비야 산타 후스타→론다", "https://www.thetrainline.com/en/train-times/sevilla-santa-justa-to-ronda"],
-        ],
-      } },
-    { id: "14", key: "1/3b", date: "1/3", from: "론다", to: "그라나다", mode: "기차 · 약 3시간~3시간 30분 · 안테케라 환승",
-      plan: {
-        pick: "Renfe 기차 (안테케라에서 환승)",
-        time: "기차 약 3시간~3시간 30분 / 버스는 말라가를 거쳐 약 4~5시간",
-        stations: "론다역 → 안테케라 → 그라나다역",
-        change: "안테케라에서 1번 갈아탑니다. 직통은 없습니다.",
-        compare: [
-          ["빠름·쌈", "기차 (Renfe, 안테케라 환승)", "약 3시간 10분~3시간 30분", "약 €17~45 (11/13 조사)"],
-          ["버스", "버스 (Damas+ALSA, 말라가 환승)", "약 4시간~5시간", "약 €19~40 (11/13 조사)"],
-        ],
-        verdict: "기차. 직통은 없지만 버스(말라가 환승)보다 1~2시간 짧습니다.",
-        warn: {
-          title: "론다 출발 열차는 편수가 적어요",
-          text: "론다~안테케라 구간은 하루 4~5편 정도뿐입니다. 론다에서 보낼 시간을 정하기 전에 마지막으로 탈 수 있는 열차와 환승 시각을 먼저 확인하세요. 1월 3일 시간표는 아직 확인하지 못했습니다.",
-        },
-        links: [
-          { label: "Renfe에서 론다→그라나다 검색", url: "https://www.renfe.com/es/en", how: SEARCH_ONLY },
-        ],
-        sources: [
-          ["Rome2Rio — 론다→그라나다 수단별 가격·시간", "https://www.rome2rio.com/s/Ronda/Granada"],
-          ["Rome2Rio — 그라나다→론다 수단별 가격·시간", "https://www.rome2rio.com/s/Granada/Ronda"],
-        ],
-      } },
-    { id: "12", date: "1/5", from: "그라나다", to: "마드리드", mode: "기차 · 약 3시간 30분 · 공휴일 전날",
-      plan: {
-        pick: "Renfe 고속열차, 직통 (이미 판매 중)",
-        time: "약 3시간 34분~3시간 48분",
-        stations: "그라나다역 → 마드리드 아토차역",
-        change: "없음 (직통)",
-        compare: [
-          ["빠름·쌈", "기차 (Renfe 직통)", "3시간 34분~3시간 48분", "₩69,000~83,000 (10/28, 1/6 날짜로 조회)"],
-          ["버스", "ALSA", "5시간", "₩50,000~85,000 (9/26)"],
-        ],
-        verdict: "기차. 이미 판매 중입니다. 10/28에 예전 날짜(1/6)로 조회했을 때 7만~8만 원대였습니다. 1/5도 연휴 이동이 많아 값이 오를 수 있으니 일찍 끊는 것이 좋습니다.",
-        warn: {
-          title: "1/5는 공휴일 전날, 저녁엔 퍼레이드",
-          text: "다음 날 1/6이 스페인 공휴일(동방박사의 날)이라 연휴 이동이 많습니다. Renfe는 작년에 12/18~1/11 동안 특별 증편을 했습니다. 표는 이미 팔고 있으니 지금 끊으세요. 1/5 저녁에는 마드리드 시내에서 동방박사 퍼레이드가 열려 도로가 통제되니, 오후 일찍 도착해 숙소에 짐을 두는 편이 좋습니다.",
-        },
-        links: [
-          { label: "Trainline에서 1/5 기차·버스 검색", url: trainline("6656", "6663", "2027-01-05"), how: BOTH_TRAIN },
-          { label: "Omio에서 1/5 검색", url: omio("378585", "378655", "2027-01-05"), how: OMIO, alt: true },
-        ],
-        sources: [
-          ["Rome2Rio — 그라나다→마드리드 수단별 가격·시간", "https://www.rome2rio.com/s/Granada/Madrid"],
-          ["Trainline — 그라나다→마드리드 (최저가·편수)", "https://www.thetrainline.com/en/train-times/granada-to-madrid"],
-          ["Renfe — 크리스마스 기간 좌석 증편 안내", "https://www.renfe.com/es/es/grupo-renfe/comunicacion/renfe-al-dia/sala-de-prensa/renfe-ofrece-mas-de-2-millones-de-plazas-en-navidad-2025"],
-        ],
-      } },
-    { id: "13", date: "1/7", from: "마드리드", to: "인천", mode: "비행기", booked: true },
-  ];
-
-  // 구간별 추천 출발 시간. 도착 도시에 머무는 날이 짧을수록 일찍 떠나고,
-  // 떠나는 도시에 머문 날이 짧으면 그 도시에서 오전을 쓰고 떠난다. (12월 해 지는 시각 16:30~17:30)
-  const WHEN = {
-    "12/15": { time: "07:50 출발 → 09:31 도착 (Italo, 직통, 약 ₩36,000)",
-      other: "다른 편: 07:04 → 08:46, 08:05 → 09:46 (Frecciarossa, 약 ₩31,000)",
-      basis: "Trainline 12/15 조회 (10/28)",
-      why: "로마는 3박을 채웠고 피렌체는 1박뿐이라, 일찍 가서 피렌체 오후를 통째로 쓰는 편이 좋습니다." },
-    "12/16": { time: "12:39 출발 → 14:55 도착 (Italo, 직통, 약 ₩42,000)",
-      other: "다른 편: 12:20 → 14:34 (Frecciarossa, 약 ₩36,000), 11:39 → 13:55",
-      basis: "Trainline 12/16 조회 (10/28)",
-      why: "피렌체가 1박이라 오전은 피렌체에서 쓰고, 해 지기(약 16:30) 전에 베네치아 숙소를 찾아가도록 잡았습니다." },
-    "12/18": { time: "07:18 출발 → 13:41 도착 (기차, 밀라노 환승 1번, 약 ₩80,000)",
-      other: "더 일찍: 05:57 → 12:41 (2번 환승, 조회 때 1석 남음), 05:57 → 13:41 (1번 환승) · 07:57 이후 편은 버스가 섞이고 16:25에 도착",
-      basis: "Trainline 12/18 조회 (10/28)",
-      why: "가장 긴 구간입니다. 07:18 편이 9월 추천 편(06:48)과 같은 13:41에 도착하면서 값도 가장 쌉니다." },
-    "12/20": { time: "10:54 출발 → 13:39 도착 (기차, 바젤 환승)",
-      other: "루체른 10:54 → 바젤 11:55 / 바젤 12:21 → 스트라스부르 13:39 · 더 일찍: 07:54 → 10:39 · 버스: 16:30 → 21:30",
-      basis: "기차는 스위스 철도 공개 시간표 조회 (9/26), 버스는 Trainline 조회 (10/28)",
-      why: "스트라스부르가 1박뿐이라 오후를 확보하는 편이 좋습니다. 루체른 오전을 쓰고 싶으면 이 편, 스트라스부르를 더 보고 싶으면 07:54 편입니다." },
-    "12/21": { time: "15:49 출발 → 17:35 도착 (TGV INOUI, 직통, 약 ₩139,000)",
-      other: "다른 편: 14:50 → 16:35 (약 ₩158,000, 좌석 적음) · 가장 싼 편: OUIGO 16:44 → 19:50 (약 ₩55,000, 3시간 6분)",
-      basis: "Trainline 12/21 조회 (10/28)",
-      why: "스트라스부르가 1박이라 오전을 쓰고 떠나도 됩니다. 지금 직통 TGV 가운데 이 편이 가장 쌉니다. 파리는 4박이라 급하지 않습니다." },
-    "12/25": { time: "06:56 출발 → 13:49 도착 (기차, 직통)",
-      other: "다른 기차: 14:42 → 21:35 (하루 2편뿐) · 비행기: 오를리 08:20 → 10:00 (부엘링, 약 ₩140,000)",
-      basis: "Trainline·Google 항공편 12/25 조회 (10/28). 기차 06:56 편 약 ₩202,000, 좌석 적음",
-      why: "다른 편은 성탄절 밤 21:35에 도착합니다. 파리는 4박을 채웠으니 첫 차로 가서 바르셀로나 오후를 쓰는 편이 좋습니다." },
-    "12/31": { time: "오전 10시~정오 사이 기차 (정확한 시각은 CP에서 확인)",
-      other: "버스로 가면: 10:00 → 13:15, 11:00 → 14:15 (3시간 15분, 약 ₩14,000)",
-      basis: "버스는 Trainline 12/31 조회 (10/28). 포르투갈 기차는 Trainline에서 팔지 않고, CP에서 11/1부터 판매",
-      why: "12/31은 저녁 열차가 운행하지 않습니다. 이른 오후까지 도착해 새해 전날 저녁을 여유 있게 보내도록 잡았습니다." },
-    "1/1": { time: "11:10 출발 → 19:15 도착 (버스, 직행, 현지 시각) · 1/1 운행 여부 확인",
-      other: "다른 편: 15:45 → 23:50, 야간 22:25 → 05:45 (약 ₩48,000)",
-      basis: "Trainline에서 예전 날짜 1/2로 조회 (10/28). 1/1 시간표는 다시 확인 필요",
-      why: "7시간 정도 걸리고 스페인이 1시간 빠릅니다. 야간 버스는 잠을 설치게 됩니다." },
-    "1/3": { time: "오전 출발 (예: 10:00 → 12:15, Damas 직행 버스, 약 2시간 15분)",
-      other: "하루 여러 편. 정확한 시각은 Damas에서 날짜를 넣어 확인",
-      basis: "Omio 예시 시간표와 Rome2Rio 소요 시간 참고 (11/13). 1/3 시간표는 확인 필요",
-      why: "론다에서 점심과 누에보 다리를 보고 오후 기차를 타야 하니, 오전에 일찍 떠나는 편이 좋습니다." },
-    "1/3b": { time: "오후 출발 → 저녁 도착 (기차, 안테케라 환승, 약 3시간 10분~3시간 30분)",
-      other: "론다~안테케라 구간은 하루 4~5편 정도. 마지막 환승 시각을 먼저 확인",
-      basis: "Rome2Rio 소요 시간 참고 (11/13). 1/3 시간표는 확인 필요",
-      why: "론다에서 오후까지 보낸 뒤 출발하면 저녁에 그라나다에 닿습니다. 열차 편수가 적으니 시간표를 먼저 보고 론다에 머물 시간을 정하세요." },
-    "1/5": { time: "11:04 출발 → 14:38 도착 (Renfe, 직통, 약 ₩78,000)",
-      other: "다른 편: 06:50 → 10:26, 15:00 → 18:39 (각 약 ₩83,000), 18:05 → 21:53 (약 ₩69,000)",
-      basis: "Trainline에서 예전 날짜 1/6으로 조회 (10/28). 1/5로 다시 확인 필요",
-      why: "마드리드가 2박으로 늘었지만, 1/5 저녁 퍼레이드를 보려면 오후 일찍 도착하는 편이 좋습니다. 연휴 이동이 많으니 늦은 기차는 피하세요." },
-  };
-  // 같은 날 구간이 둘 이상이면 key 로 구분한다 (key 가 없으면 날짜)
-  const legKey = l => l.key || l.date;
-  legs.forEach(l => { if (l.plan && WHEN[legKey(l)]) l.plan.when = WHEN[legKey(l)]; });
-
-  const FIELDS = [
-    { key: "time", label: "출발 시간", ph: "예: 08:20" },
-    { key: "station", label: "출발 역·공항", ph: "예: 로마 테르미니" },
-    { key: "price", label: "가격", ph: "예: 2명 €58" },
-    { key: "by", label: "예매한 사람", ph: "예: 혁재" },
-    { key: "code", label: "예약번호", ph: "예: ABC123", wide: true },
-  ];
-
-  let password = null;
-  let bookings = {};          // 서버에서 받은 예매 정보 { "1": {time, station, ...} }
-  const dirty = new Set();    // 아직 저장 안 한 칸이 있는 구간
-
-  // ---------- 저장소와 주고받기 ----------
-  async function api(body) {
-    const res = await fetch(API_URL, {
-      method: "POST",
-      headers: { "Content-Type": "text/plain;charset=utf-8" },
-      body: JSON.stringify(body),
-    });
-    if (!res.ok) throw new Error("HTTP " + res.status);
-    return res.json();
+  @media (max-width: 840px) {
+    .planner-layout { grid-template-columns: 1fr; }
   }
 
-  function storeGet() { try { return localStorage.getItem(PW_KEY); } catch (e) { return null; } }
-  function storeSet(v) { try { localStorage.setItem(PW_KEY, v); } catch (e) {} }
-  function storeDel() { try { localStorage.removeItem(PW_KEY); } catch (e) {} }
-
-  // ---------- 화면 그리기 ----------
-  const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
-  // 예매 정보는 이 번호로 저장되므로, 구간을 끼워 넣어도 기존 번호가 밀리지 않게 id 를 고정한다
-  const legId = i => legs[i].id || String(i + 1);
-  const isBooked = (leg, i) => leg.booked || !!(bookings[legId(i)] && bookings[legId(i)].code);
-
-  function toDay(d) {
-    const [m, day] = d.split("/").map(Number);
-    return m === 12 ? day : 31 + day;
+  .day-sidebar {
+    background: var(--card); border: 1px solid var(--line); border-radius: 14px;
+    padding: 12px; display: grid; gap: 8px;
+    max-height: calc(100vh - 140px); overflow-y: auto;
+    position: sticky; top: 16px;
   }
-
-  function planHtml(p) {
-    const warn = p.warn ? `<div class="warn"><b>${p.warn.title}</b>${p.warn.text}</div>` : "";
-    const note = p.note ? `<p>${p.note}</p>` : "";
-    const compare = p.compare ? `
-      <div class="compare">
-        <p class="compare-title">빠른 길 · 싼 길 비교 <span>(1인 편도, 조사 시점 대략 가격)</span></p>
-        <div class="compare-scroll"><table>
-          <thead><tr><th></th><th>수단</th><th>시간</th><th>가격</th></tr></thead>
-          <tbody>${p.compare.map(([tag, how, time, price]) => `
-            <tr><th scope="row"><span class="tag">${tag}</span></th><td>${how}</td><td>${time}</td><td>${price}</td></tr>`).join("")}
-          </tbody>
-        </table></div>
-        <p class="verdict"><b>추천:</b> ${p.verdict}</p>
-      </div>` : "";
-    const links = p.links.map(l => `
-      <a class="btn${l.alt ? " alt" : ""}" href="${l.url}" target="_blank" rel="noopener">
-        ${l.label}<small>${l.how}</small></a>`).join("");
-    return `
-      <p class="pick">추천: ${p.pick}</p>
-      ${p.when ? `<div class="when"><span class="when-label">추천 편</span><b>${p.when.time}</b>
-        ${p.when.other ? `<span class="when-other">${p.when.other}</span>` : ""}
-        <span class="when-why">${p.when.why}</span>
-        ${p.when.basis ? `<span class="when-basis">기준: ${p.when.basis}</span>` : ""}</div>` : ""}
-      <dl class="facts">
-        <dt>걸리는 시간</dt><dd>${p.time}</dd>
-        <dt>타는 곳</dt><dd>${p.stations}</dd>
-        <dt>갈아타기</dt><dd>${p.change}</dd>
-      </dl>
-      ${compare}${warn}${note}
-      <div class="links">${links}</div>`;
-  }
-
-  function bookingHtml(i) {
-    const id = legId(i);
-    const inputs = FIELDS.map(f => `
-      <label class="${f.wide ? "wide" : ""}" for="f-${id}-${f.key}">${f.label}
-        <input type="text" id="f-${id}-${f.key}" data-leg="${id}" data-key="${f.key}" placeholder="${f.ph}" maxlength="100" autocomplete="off">
-      </label>`).join("");
-    return `
-      <form class="booking" data-leg="${id}">
-        <h3>우리 예매 정보</h3>
-        <div class="fields">${inputs}</div>
-        <p class="hint">예약번호를 적고 저장하면 '예매 완료'로 바뀝니다. 적은 내용은 일행 모두에게 보입니다.</p>
-        <div class="save-row">
-          <button type="submit" class="primary">저장</button>
-          <span class="msg" id="save-msg-${id}" aria-live="polite"></span>
-        </div>
-      </form>`;
-  }
-
-  function sourcesHtml(p) {
-    const srcs = p.sources.map(([t, u]) => `<li><a href="${u}" target="_blank" rel="noopener">${t}</a></li>`).join("");
-    return `<div class="src">출처<ul>${srcs}</ul></div>`;
-  }
-
-  function buildList() {
-    const list = document.getElementById("legs");
-    list.innerHTML = "";
-    legs.forEach((leg, i) => {
-      const id = legId(i);
-      const li = document.createElement("li");
-      li.innerHTML = `
-        <details class="leg" id="leg-${id}">
-          <summary class="row">
-            <div class="date">${leg.date}<span class="num">구간 ${id}</span></div>
-            <div class="route">${leg.from}<span class="arrow"> → </span>${leg.to}
-              <span class="mode">${leg.mode}</span>
-              <span class="booked-line" id="line-${id}" hidden></span></div>
-            <div class="side">
-              <span class="status" id="status-${id}"></span>
-              <span class="chev"><span class="chev-closed">펼치기 ▾</span><span class="chev-open">접기 ▴</span></span>
-            </div>
-          </summary>
-          <div class="detail">
-            ${leg.plan ? planHtml(leg.plan) : ""}
-            ${bookingHtml(i)}
-            ${leg.plan ? sourcesHtml(leg.plan) : ""}
-          </div>
-        </details>`;
-      list.appendChild(li);
-
-      const next = legs[i + 1];
-      if (next) {
-        const stay = document.createElement("li");
-        stay.className = "stay";
-        const nights = toDay(next.date) - toDay(leg.date);
-        stay.innerHTML = nights === 0 ? `<b>${leg.to}</b> 당일 경유` : `<b>${leg.to}</b> ${nights}박`;
-        list.appendChild(stay);
-      }
-    });
-
-    list.addEventListener("input", e => {
-      if (e.target.dataset.leg) dirty.add(e.target.dataset.leg);
-    });
-    list.addEventListener("submit", e => {
-      e.preventDefault();
-      save(e.target.dataset.leg, e.target);
-    });
-  }
-
-  // 서버 데이터로 상태·요약·입력칸을 채운다 (고치는 중인 칸은 건드리지 않음)
-  function applyBookings() {
-    legs.forEach((leg, i) => {
-      const id = legId(i);
-      const b = bookings[id] || {};
-      const done = isBooked(leg, i);
-
-      const st = document.getElementById("status-" + id);
-      st.className = "status " + (done ? "done" : "todo");
-      st.textContent = done ? "예매 완료" : "아직";
-
-      const line = document.getElementById("line-" + id);
-      const parts = [b.time, b.station, b.code && "예약 " + b.code].filter(Boolean);
-      line.textContent = parts.join(" · ");
-      line.hidden = parts.length === 0;
-
-      if (!dirty.has(id)) {
-        FIELDS.forEach(f => {
-          const el = document.getElementById(`f-${id}-${f.key}`);
-          if (el && document.activeElement !== el) el.value = b[f.key] || "";
-        });
-      }
-    });
-
-    renderToday();
-    renderSales();
-
-    const doneCount = legs.filter((l, i) => isBooked(l, i)).length;
-    const sum = document.getElementById("summary");
-    sum.innerHTML = `예매 완료 <b>${doneCount}</b> · 아직 <b>${legs.length - doneCount}</b> · 전체 ${legs.length}구간`;
-  }
-
-  function stamp() {
-    const t = new Date();
-    return String(t.getHours()).padStart(2, "0") + ":" + String(t.getMinutes()).padStart(2, "0");
-  }
-
-  // ---------- 예매 오픈 달력 ----------
-  // 표 판매가 열리는 날짜별로 구간을 묶는다 (10/28 다시 조사)
-  const SALES = [
-    { date: "지금", sub: "서두르기", soon: true,
-      title: "판매 중 · 좌석이 줄고 있어요",
-      note: "10/28 조회 때 '좌석 적음'이나 '몇 석 남음'이 뜬 구간입니다. 12/25는 기차와 비행기 중 먼저 정하고, 1/5는 공휴일 전날이라 값이 더 오를 수 있습니다.",
-      legs: ["12/18", "12/21", "12/25", "1/5"] },
-    { date: "지금", sub: "판매 중",
-      title: "이탈리아 기차 · 스페인 버스는 여유 있어요",
-      note: "자리 걱정은 적지만 일찍 살수록 쌉니다.",
-      legs: ["12/15", "12/16", "1/1", "1/3", "1/3b"] },
-    { date: "11/1", sub: "일 · 출발 60일 전",
-      title: "포르투갈 기차(CP) 12/31 표 판매 시작",
-      note: "10/28 CP 예약 화면에서는 12/27까지만 고를 수 있었습니다. 버스로 갈 거라면 지금 바로 살 수 있습니다(1~2만 원대).",
-      legs: ["12/31"] },
-    { date: "당일", sub: "미리 안 사도 됨",
-      title: "스위스 기차는 좌석 지정이 없어요",
-      note: "당일 역이나 SBB 앱에서 사도 됩니다. 16:30 버스를 탈 거라면 버스는 미리 끊으세요.",
-      legs: ["12/20"] },
-  ];
-
-  function renderSales() {
-    const list = document.getElementById("sales-list");
-    let open = 0;
-    list.innerHTML = SALES.map(s => {
-      const chips = s.legs.map(d => {
-        const i = legs.findIndex(l => legKey(l) === d);
-        const done = isBooked(legs[i], i);
-        if (!done) open++;
-        return `<button type="button" class="chip${done ? " done" : ""}" data-leg="${legId(i)}">${legs[i].date} ${legs[i].from}→${legs[i].to}${done ? " ✓" : ""}</button>`;
-      }).join("");
-      return `<li class="sale${s.soon ? " soon" : ""}">
-        <div class="sale-date">${s.date}<small>${s.sub}</small></div>
-        <div class="sale-body"><span class="sale-title">${s.title}</span><div class="chips">${chips}</div><span class="sale-note">${s.note}</span></div>
-      </li>`;
-    }).join("");
-    // 모두 끊었으면 달력을 숨긴다
-    document.getElementById("sales").dataset.allDone = open === 0 ? "1" : "";
-    if (password) document.getElementById("sales").hidden = open === 0;
-  }
-
-  document.getElementById("sales-list").addEventListener("click", e => {
-    const chip = e.target.closest(".chip");
-    if (!chip) return;
-    const d = document.getElementById("leg-" + chip.dataset.leg);
-    d.open = true;
-    d.scrollIntoView({ behavior: "smooth", block: "start" });
-  });
-
-  // ---------- 오늘의 이동 ----------
-  // 날짜는 모두 'YYYY-MM-DD' 글자로 다룬다. 12월은 2026년, 1월은 2027년.
-  const pad = n => String(n).padStart(2, "0");
-  function legISO(d) {
-    const [m, day] = d.split("/").map(Number);
-    return (m === 12 ? 2026 : 2027) + "-" + pad(m) + "-" + pad(day);
-  }
-  // 폰에 설정된 시간대의 오늘 날짜 (여행 중 폰이 현지 시간으로 바뀌면 현지 날짜)
-  function realTodayISO() {
-    const t = new Date();
-    return t.getFullYear() + "-" + pad(t.getMonth() + 1) + "-" + pad(t.getDate());
-  }
-  let testDate = null;   // 시험용 날짜. null 이면 진짜 오늘
-  const todayISO = () => testDate || realTodayISO();
-
-  function niceDate(iso) {
-    const [y, m, d] = iso.split("-").map(Number);
-    const wd = "일월화수목금토"[new Date(y, m - 1, d).getDay()];
-    return `${m}월 ${d}일 (${wd})`;
-  }
-  function daysBetween(a, b) {
-    const toUTC = iso => { const [y, m, d] = iso.split("-").map(Number); return Date.UTC(y, m - 1, d); };
-    return Math.round((toUTC(b) - toUTC(a)) / 86400000);
-  }
-
-  function tile(label, value, cls, wide) {
-    const v = value
-      ? `<span class="tile-value ${cls || ""}">${esc(value)}</span>`
-      : `<span class="tile-value empty">아직 안 적었어요</span>`;
-    return `<div class="tile${wide ? " wide" : ""}"><span class="tile-label">${label}</span>${v}</div>`;
-  }
-
-  function renderToday() {
-    const body = document.getElementById("today-body");
-    const today = todayISO();
-    const idx = legs.findIndex(l => legISO(l.date) === today);
-    const nextIdx = idx >= 0 ? idx : legs.findIndex(l => legISO(l.date) > today);
-
-    const banner = testDate
-      ? `<div class="test-banner"><span><b>시험 중</b> · ${niceDate(testDate)}인 척 보고 있어요</span>
-           <button type="button" class="linkbtn" data-act="reset">원래 날짜로</button></div>`
-      : "";
-
-    if (nextIdx < 0) {
-      body.innerHTML = `${banner}
-        <div class="today-head"><span class="today-label">여행 끝</span><span class="today-date">오늘 ${niceDate(today)}</span></div>
-        <p class="today-note">${legs.length}개 구간을 모두 마쳤어요. 수고 많으셨어요!</p>`;
-      return;
-    }
-
-    const leg = legs[nextIdx];
-    const id = legId(nextIdx);
-    const b = bookings[id] || {};
-    const isToday = idx >= 0;
-    const gap = daysBetween(today, legISO(leg.date));
-    const label = isToday ? "오늘의 이동" : "다음 이동";
-    const when = isToday
-      ? `오늘 ${niceDate(today)}`
-      : `${niceDate(legISO(leg.date))} · ${gap === 1 ? "내일" : gap + "일 뒤"}`;
-    const copyBtn = b.code
-      ? `<button type="button" class="linkbtn" data-act="copy" data-code="${esc(b.code)}">복사</button>` : "";
-
-    body.innerHTML = `${banner}
-      <div class="today-head">
-        <span class="today-label">${label}</span>
-        <span class="today-date">${when}</span>
-      </div>
-      <p class="today-route">${esc(leg.from)} <span class="arrow">→</span> ${esc(leg.to)}</p>
-      <p class="today-mode">${esc(leg.mode)}</p>
-      <div class="today-grid">
-        ${b.time || !(leg.plan && leg.plan.when)
-          ? tile("출발 시간", b.time, "big")
-          : `<div class="tile"><span class="tile-label">출발 시간 (아직 안 적음)</span><span class="tile-value empty">추천: ${esc(leg.plan.when.time)}</span></div>`}
-        ${tile("출발 역·공항", b.station)}
-        <div class="tile wide">
-          <div class="tile-row"><span class="tile-label">예약번호</span>${copyBtn}</div>
-          ${b.code ? `<span class="tile-value code">${esc(b.code)}</span>` : `<span class="tile-value empty">아직 안 적었어요</span>`}
-        </div>
-      </div>
-      <div class="today-actions">
-        <button type="button" class="linkbtn" data-act="open" data-leg="${id}">
-          ${b.code ? "이 구간 자세히 보기" : "이 구간 예매 정보 적으러 가기"}</button>
-        <span class="today-note" id="copy-msg" aria-live="polite"></span>
-      </div>`;
-  }
-
-  function setTestDate(iso) {
-    testDate = iso || null;
-    const url = new URL(location.href);
-    if (testDate) url.searchParams.set("date", testDate); else url.searchParams.delete("date");
-    history.replaceState(null, "", url);
-    if (!testDate) document.getElementById("test-tool").open = false;
-    renderToday();
-  }
-
-  document.getElementById("today").addEventListener("click", async e => {
-    const btn = e.target.closest("button[data-act]");
-    if (!btn) return;
-    const act = btn.dataset.act;
-    if (act === "reset") setTestDate(null);
-    if (act === "open") {
-      const d = document.getElementById("leg-" + btn.dataset.leg);
-      d.open = true;
-      d.scrollIntoView({ behavior: "smooth", block: "start" });
-    }
-    if (act === "copy") {
-      const msg = document.getElementById("copy-msg");
-      try {
-        await navigator.clipboard.writeText(btn.dataset.code);
-        msg.textContent = "예약번호를 복사했어요";
-      } catch (err) {
-        msg.textContent = "복사가 안 돼요. 번호를 길게 눌러 복사해 주세요";
-      }
-    }
-  });
-  document.getElementById("test-date").addEventListener("change", e => setTestDate(e.target.value));
-  document.getElementById("test-reset").addEventListener("click", () => setTestDate(null));
-
-  // 주소에 ?date=2026-12-16 을 붙이면 그 날짜로 시험
-  (function () {
-    const q = new URLSearchParams(location.search).get("date");
-    if (q && /^\d{4}-\d{2}-\d{2}$/.test(q)) {
-      testDate = q;
-      document.getElementById("test-date").value = q;
-    }
-  })();
-
-  // ---------- 동작 ----------
-  async function load() {
-    const synced = document.getElementById("synced");
-    synced.textContent = "불러오는 중…";
-    try {
-      const r = await api({ action: "get", pw: password });
-      if (!r.ok) { lockAgain(r.reason); return; }
-      bookings = r.bookings || {};
-      applyBookings();
-      synced.textContent = "마지막으로 불러온 시각 " + stamp();
-    } catch (e) {
-      synced.textContent = "불러오지 못했습니다. 인터넷 연결을 확인하고 새로고침을 눌러 주세요.";
+  @media (max-width: 840px) {
+    .day-sidebar {
+      position: static; max-height: none;
+      display: flex; overflow-x: auto; gap: 8px; padding: 10px;
     }
   }
+  .country-filter {
+    display: flex; flex-wrap: wrap; gap: 4px; padding-bottom: 6px; border-bottom: 1px solid var(--line);
+  }
+  @media (max-width: 840px) { .country-filter { display: none; } }
+  .c-pill {
+    font: inherit; font-size: 12px; font-weight: 600;
+    border: 1px solid var(--line); background: var(--sunk); color: var(--muted);
+    border-radius: 999px; padding: 3px 9px; cursor: pointer;
+  }
+  .c-pill.active { background: var(--accent); color: var(--accent-ink); border-color: transparent; }
 
-  async function save(id, form) {
-    const msg = document.getElementById("save-msg-" + id);
-    const btn = form.querySelector("button");
-    const data = {};
-    FIELDS.forEach(f => { data[f.key] = document.getElementById(`f-${id}-${f.key}`).value; });
-    btn.disabled = true;
-    msg.textContent = "저장하는 중…";
-    try {
-      const r = await api({ action: "save", pw: password, legId: id, data });
-      if (!r.ok) { lockAgain(r.reason); return; }
-      dirty.delete(id);
-      bookings = r.bookings || {};
-      applyBookings();
-      msg.textContent = "저장했습니다 (" + stamp() + ")";
-      document.getElementById("synced").textContent = "마지막으로 불러온 시각 " + stamp();
-    } catch (e) {
-      msg.textContent = "저장하지 못했습니다. 인터넷 연결을 확인하고 다시 눌러 주세요.";
-    } finally {
-      btn.disabled = false;
-    }
+  .day-btn {
+    text-align: left; font: inherit; border: 1px solid transparent;
+    background: transparent; color: var(--ink); border-radius: 10px;
+    padding: 9px 11px; cursor: pointer; display: grid; gap: 2px;
+    flex-shrink: 0;
+  }
+  .day-btn:hover { background: var(--sunk); }
+  .day-btn.active {
+    background: var(--accent-soft); border-color: var(--accent);
+  }
+  .day-btn-top { display: flex; justify-content: space-between; align-items: center; gap: 8px; font-size: 13px; font-weight: 700; color: var(--accent); }
+  .day-btn-city { font-size: 14px; font-weight: 600; color: var(--ink); }
+  .day-btn-cnt { font-size: 11px; color: var(--muted); font-family: "IBM Plex Mono", monospace; }
+
+  .day-main { display: grid; gap: 14px; }
+  .day-header-card {
+    background: var(--card); border: 1px solid var(--line); border-radius: 14px;
+    padding: 16px; display: grid; gap: 10px;
+  }
+  .day-title-row { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 8px; }
+  .day-title-row h2 { margin: 0; font-size: 21px; }
+  .day-actions { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+
+  .map-box {
+    background: var(--card); border: 1px solid var(--line); border-radius: 14px;
+    overflow: hidden; display: grid;
+  }
+  .map-frame { width: 100%; height: 320px; border: 0; display: block; background: var(--sunk); }
+  .map-bar {
+    padding: 10px 14px; background: var(--sunk); border-top: 1px solid var(--line);
+    display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 8px;
+    font-size: 13px; color: var(--muted);
+  }
+  .gmaps-btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: var(--accent); color: var(--accent-ink);
+    text-decoration: none; font-weight: 700; font-size: 13px;
+    padding: 7px 12px; border-radius: 8px;
   }
 
-  function showApp() {
-    document.getElementById("lock").hidden = true;
-    ["today", "legs", "summary", "toolbar", "foot"].forEach(id => document.getElementById(id).hidden = false);
-    document.getElementById("sales").hidden = document.getElementById("sales").dataset.allDone === "1";
+  .spot-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+  .spot-card {
+    background: var(--card); border: 1px solid var(--line); border-radius: 12px;
+    padding: 12px 14px; display: grid; grid-template-columns: 32px 1fr auto;
+    gap: 10px; align-items: start;
   }
-
-  function lockAgain(reason) {
-    // 전에 들어와 있던 기기라면 누군가 비밀번호를 바꾼 것일 수 있다
-    const wasIn = password !== null || storeGet() !== null;
-    password = null;
-    storeDel();
-    ["sales", "today", "legs", "summary", "toolbar", "foot", "pwchange"].forEach(id => document.getElementById(id).hidden = true);
-    document.getElementById("lock").hidden = false;
-    const m = document.getElementById("lock-msg");
-    m.className = "msg err";
-    m.textContent = reason === "setup"
-      ? "저장소에 아직 비밀번호가 정해지지 않았습니다. 만든 사람에게 알려 주세요."
-      : wasIn
-        ? "비밀번호가 바뀌었을 수 있습니다. 일행에게 새 비밀번호를 물어보고 넣어 주세요."
-        : "비밀번호가 맞지 않습니다. 다시 넣어 주세요.";
+  .spot-card.visited { opacity: 0.65; background: var(--sunk); }
+  .spot-num {
+    width: 28px; height: 28px; border-radius: 999px;
+    background: var(--accent); color: var(--accent-ink);
+    font-family: "IBM Plex Mono", monospace; font-weight: 700; font-size: 13px;
+    display: grid; place-items: center; margin-top: 2px;
   }
-
-  async function changePassword() {
-    const m = document.getElementById("pwchange-msg");
-    const btn = document.getElementById("pwchange-btn");
-    const a = document.getElementById("pw-new").value.trim();
-    const b = document.getElementById("pw-new2").value.trim();
-    m.className = "msg err";
-    if (a.length < 4) { m.textContent = "새 비밀번호는 4자 이상으로 넣어 주세요."; return; }
-    if (a !== b) { m.textContent = "두 칸에 넣은 새 비밀번호가 서로 다릅니다. 똑같이 넣어 주세요."; return; }
-    if (a === password) { m.textContent = "지금 비밀번호와 같습니다. 다른 비밀번호를 넣어 주세요."; return; }
-    btn.disabled = true;
-    m.className = "msg";
-    m.textContent = "바꾸는 중…";
-    try {
-      const r = await api({ action: "changePw", pw: password, newPw: a });
-      if (!r.ok && r.reason === "bad_password") { m.className = "msg err"; m.textContent = "새 비밀번호는 4~50자로 넣어 주세요."; return; }
-      if (!r.ok && r.reason === "bad_request") { m.className = "msg err"; m.textContent = "저장소가 아직 비밀번호 바꾸기를 지원하지 않습니다. 만든 사람에게 알려 주세요."; return; }
-      if (!r.ok) { lockAgain(r.reason); return; }
-      password = a;
-      storeSet(a);
-      document.getElementById("pw-new").value = "";
-      document.getElementById("pw-new2").value = "";
-      m.className = "msg ok";
-      m.textContent = "비밀번호를 바꿨습니다. 일행에게 새 비밀번호를 알려 주세요. 이 기기는 그대로 쓸 수 있습니다.";
-    } catch (e) {
-      m.className = "msg err";
-      m.textContent = "바꾸지 못했습니다. 인터넷 연결을 확인하고 다시 눌러 주세요.";
-    } finally {
-      btn.disabled = false;
-    }
-  }
-
-  async function unlock(pw) {
-    const m = document.getElementById("lock-msg");
-    const btn = document.getElementById("pw-btn");
-    m.className = "msg";
-    m.textContent = "확인하는 중…";
-    btn.disabled = true;
-    try {
-      const r = await api({ action: "get", pw });
-      if (!r.ok) { lockAgain(r.reason); return; }
-      password = pw;
-      storeSet(pw);
-      bookings = r.bookings || {};
-      m.textContent = "";
-      showApp();
-      applyBookings();
-      document.getElementById("synced").textContent = "마지막으로 불러온 시각 " + stamp();
-    } catch (e) {
-      m.className = "msg err";
-      m.textContent = "저장소에 연결하지 못했습니다. 인터넷 연결을 확인하고 다시 눌러 주세요.";
-    } finally {
-      btn.disabled = false;
-    }
-  }
-
-  buildList();
-
-  document.getElementById("lock-form").addEventListener("submit", e => {
-    e.preventDefault();
-    unlock(document.getElementById("pw").value);
-  });
-  document.getElementById("refresh").addEventListener("click", load);
-  document.getElementById("pwchange-open").addEventListener("click", () => {
-    const s = document.getElementById("pwchange");
-    s.hidden = false;
-    document.getElementById("pwchange-msg").textContent = "";
-    document.getElementById("pw-new").focus();
-  });
-  document.getElementById("pwchange-cancel").addEventListener("click", () => {
-    document.getElementById("pwchange").hidden = true;
-  });
-  document.getElementById("pwchange-form").addEventListener("submit", e => {
-    e.preventDefault();
-    changePassword();
-  });
-  document.getElementById("forget").addEventListener("click", () => {
-    storeDel();
-    location.reload();
-  });
-
-  // 화면을 다시 볼 때, 그리고 1분마다 새 내용 불러오기
-  document.addEventListener("visibilitychange", () => {
-    if (document.visibilityState === "visible" && password) load();
-  });
-  setInterval(() => {
-    if (document.visibilityState === "visible" && password) load();
-  }, 60000);
-
-  const saved = storeGet();
-  if (saved) unlock(saved);
-</script>
-</body>
-</html>
+  .spot-body { display: grid; gap: 4px; min-width: 0; }
+  .spot-name-row { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+  .spot-name { font-weight: 700; font-size: 16px; }
+  .spot-card.visited .spot-name { text-decoration: line-through; }
+  .spot-query { font-size: 12px; color: var(--muted); font-family: "IBM Plex Mono", monospace; }
+  .spot-memo { font-size: 14px; color: var(--ink); background: var(--sunk); padding: 6px 10px; border-radius: 8px; margin-top: 2px; }
+  .spot-tools { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+  .icon-btn {
+    font: inherit; font-size
