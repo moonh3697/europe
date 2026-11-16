@@ -4,14 +4,14 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex">
-<title>유럽 27일 여행 플래너 & 이동표</title>
+<title>2026-2027 유럽 4인 여행 플래너 & 이동표</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <style>
 :root {
-  --bg:#eef2f4; --card:#fff; --sunk:#f5f8fa; --ink:#17222c; --mut:#5d6b77; 
-  --line:#d5dde3; --acc:#1d5c82; --soft:#e6f1f8; --ok:#1f6a3f; --okbg:#dcefe3; 
-  --err:#b3261e; --warn-bg:#fdf1dc; --warn-line:#e3b35c;
+  --bg: #eef2f4; --card: #fff; --sunk: #f5f8fa; --ink: #17222c; --mut: #5d6b77; 
+  --line: #d5dde3; --acc: #1d5c82; --soft: #e6f1f8; --ok: #1f6a3f; --okbg: #dcefe3; 
+  --err: #b3261e; --warn-bg: #fdf1dc; --warn-line: #e3b35c;
 }
 * { box-sizing: border-box; }
 [hidden] { display: none !important; }
@@ -151,9 +151,15 @@ input { background: var(--sunk); color: var(--ink); width: 100%; }
   </div>
 </div>
 
+<script type="application/json" id="raw-rows-data">[["Day 1 (12/12 토)",1,"로마 피우미치노 공항","Rome Fiumicino Airport","ICN 14:05 - FCO 19:35 (대한항공 KE931) / 공항-테르미니 택시 55유로 (https://naver.me/xll20Y8D)",41.8003,12.2389],["Day 1 (12/12 토)",2,"테르미니 역","Roma Termini","공항에서 약 23.4km 이동",41.901,12.5018],["Day 1 (12/12 토)",3,"윈드로제 호텔","Hotel Windrose Rome","숙소 (테르미니 역 도보 402m)",41.9032,12.5005],["Day 2 (12/13 일)",1,"윈드로제 호텔","Hotel Windrose Rome","숙소 출발",41.9032,12.5005],["Day 2 (12/13 일)",2,"산타 마리아 마조레 대성당","Basilica Papale di Santa Maria Maggiore, Rome","784m 이동",41.8976,12.4984],["Day 2 (12/13 일)",3,"콜로세움","Colosseum, Rome","968m 이동",41.8902,12.4922],["Day 2 (12/13 일)",4,"콘스탄티누스 개선문","Arch of Constantine, Rome","143m 이동",41.8898,12.4907],["Day 2 (12/13 일)",5,"팔라티노 언덕","Palatine Hill, Rome","263m 이동",41.8894,12.4875],["Day 2 (12/13 일)",6,"포로 로마노","Roman Forum, Rome","385m 이동",41.8925,12.4853],["Day 2 (12/13 일)",7,"포리 임페리알리","Via dei Fori Imperiali, Rome","167m 이동",41.8938,12.4862],["Day 2 (12/13 일)",8,"캄피돌리오 광장","Piazza del Campidoglio, Rome","328m 이동 (캄피돌리오 언덕 동일 위치 통합)",41.8933,12.4829],["Day 2 (12/13 일)",9,"베네치아 광장","Piazza Venezia, Rome","269m 이동",41.8958,12.4825],["Day 2 (12/13 일)",10,"트레비 분수","Trevi Fountain, Rome","578m 이동",41.9009,12.4833],["Day 2 (12/13 일)",11,"스페인 광장","Piazza di Spagna, Rome","536m 이동",41.9057,12.4823],["Day 2 (12/13 일)",12,"콘도티 거리","Via dei Condotti, Rome","스페인 광장 바로 앞 명품 거리 (동선 최적화)",41.9054,12.4804],["Day 2 (12/13 일)",13,"코르소 거리","Via del Corso, Rome","232m 이동",41.9035,12.4789],["Day 2 (12/13 일)",14,"포폴로 광장","Piazza del Popolo, Rome","873m 이동",41.9107,12.4763],["Day 2 (12/13 일)",15,"핀치오 언덕","Pincian Hill, Rome","137m 이동",41.9112,12.4783],["Day 2 (12/13 일)",16,"보르게세 공원","Villa Borghese, Rome","690m 이동",41.9142,12.4852],["Day 3 (12/14 월)",1,"윈드로제 호텔","Hotel Windrose Rome","숙소 출발",41.9032,12.5005],["Day 3 (12/14 월)",2,"바티칸 박물관","Vatican Museums, Rome","사전 예약 필수 (오전 입장 권장)",41.9065,12.4536],["Day 3 (12/14 월)",3,"시스티나 성당","Sistine Chapel, Vatican City","바티칸 박물관 내부 코스 연결",41.9029,12.4545],["Day 3 (12/14 월)",4,"성 베드로 대성당","St. Peter's Basilica, Vatican City","481m 이동",41.9022,12.4539],["Day 3 (12/14 월)",5,"성 베드로 광장","St. Peter's Square, Vatican City","231m 이동",41.9022,12.4568],["Day 3 (12/14 월)",6,"비아 델라 콘칠리아치오네","Via della Conciliazione, Rome","627m 이동",41.9022,12.4616],["Day 3 (12/14 월)",7,"산탄젤로 성","Castel Sant'Angelo, Rome","362m 이동 / 전망 이쁨, 굳이 안들어가도됨",41.9031,12.4663],["Day 3 (12/14 월)",8,"나보나 광장","Piazza Navona, Rome","710m 이동",41.8992,12.4731],["Day 3 (12/14 월)",9,"판테온","Pantheon, Rome","320m 이동 / 굳이 안들어가도됨",41.8986,12.4769],["Day 3 (12/14 월)",10,"캄포 데 피오리","Campo de' Fiori, Rome","524m 이동",41.8956,12.4722],["Day 3 (12/14 월)",11,"빌라 파르네시나","Villa Farnesina, Rome","다리 건너 트라스테베레 방면 (동선 최적화)",41.8936,12.4673],["Day 3 (12/14 월)",12,"트릴루사 광장","Piazza Trilussa, Rome","339m 이동",41.8919,12.4694],["Day 3 (12/14 월)",13,"자니콜로 언덕","Janiculum Hill, Rome","539m 이동",41.8913,12.4614],["Day 3 (12/14 월)",14,"가리발디 다리","Ponte Garibaldi, Rome","1.1km 이동",41.8902,12.4738],["Day 3 (12/14 월)",15,"파브리치오 다리","Ponte Fabricio, Rome","308m 이동",41.8913,12.4782],["Day 3 (12/14 월)",16,"마르첼로 원형극장","Theatre of Marcellus, Rome","169m 이동",41.8919,12.4799],["Day 4 (12/15 화)",1,"산타 마리아 노벨라 역","Firenze Santa Maria Novella","로마 -> 피렌체 이동 도착",43.7764,11.2478],["Day 4 (12/15 화)",2,"플러스 플로렌스 호스텔","PLUS Florence","숙소 (역에서 859m)",43.7815,11.2558],["Day 4 (12/15 화)",3,"산타 마리아 노벨라 성당","Basilica of Santa Maria Novella, Florence","역에서 236m",43.7746,11.2494],["Day 4 (12/15 화)",4,"산타 마리아 노벨라 약국","Officina Profumo-Farmaceutica di Santa Maria Novella, Florence","143m 이동 (쇼핑)",43.7742,11.2475],["Day 4 (12/15 화)",5,"피렌체 산 로렌초 성당","Basilica di San Lorenzo, Florence","501m 이동 / 선택-메디치가의 묘지",43.775,11.2538],["Day 4 (12/15 화)",6,"라우렌치아나 도서관","Biblioteca Medicea Laurenziana, Florence","32m 이동 / 선택-미켈란젤로가 설계",43.7746,11.2535],["Day 4 (12/15 화)",7,"피렌체 중앙시장","Mercato Centrale, Florence","214m 이동 / 2층 푸드코트, 가죽시장",43.7767,11.2531],["Day 5 (12/16 수)",1,"호텔 아론","Hotel Aaron, Venice Mestre","피렌체 -> 베네치아 이동 / 숙소 (베네치아 메스트레)",45.4839,12.2355],["Day 7 (12/18 금)",1,"바라바스 루체른","Barabas Hotel Luzern","베네치아 -> 루체른 이동 / 숙소 (루체른)",47.0542,8.3032],["Day 9 (12/20 일)",1,"스트라스부르 역","Gare de Strasbourg-Ville","루체른 -> 스트라스부르 이동 도착",48.5851,7.7345],["Day 9 (12/20 일)",2,"버스정류장(Flix)","Gare Routière de Strasbourg Place de l'Étoile","FlixBus 정류장",48.5738,7.7547],["Day 9 (12/20 일)",3,"쁘띠 프랑스","La Petite France, Strasbourg","관광명소",48.5806,7.7408],["Day 9 (12/20 일)",4,"스트라스부르 노트르담 대성당","Cathédrale Notre-Dame-de-Strasbourg","관광명소",48.5818,7.7509],["Day 9 (12/20 일)",5,"오 브리셀","Au Brasseur, Strasbourg","음식점",48.5829,7.7554],["Day 9 (12/20 일)",6,"학자들의 연회장","Maison Kammerzell, Strasbourg","음식점",48.5821,7.7501],["Day 9 (12/20 일)",7,"레지던스 세리즈 스트라스부르","Cerise Strasbourg","숙소 체크인",48.5593,7.7538],["Day 10 (12/21 월)",1,"레지던스 세리즈 스트라스부르","Cerise Strasbourg","체크아웃 후 스트라스부르 -> 파리 이동",48.5593,7.7538],["Day 10 (12/21 월)",2,"몽마르뜨","Montmartre, Paris","파리 도착 후 첫 코스",48.8867,2.3431],["Day 10 (12/21 월)",3,"트로카데로 광장","Place du Trocadéro, Paris","에펠탑 뷰포인트 (동선 최적화)",48.8628,2.2873],["Day 10 (12/21 월)",4,"에펠탑","Eiffel Tower, Paris","관광명소",48.8584,2.2945],["Day 10 (12/21 월)",5,"샹 드 마르스 공원","Champ de Mars, Paris","에펠탑 남쪽 공원",48.8556,2.2986],["Day 10 (12/21 월)",6,"개선문","Arc de Triomphe, Paris","샹젤리제 방면 이동",48.8738,2.295],["Day 10 (12/21 월)",7,"르 봉 마르셰","Le Bon Marché, Paris","쇼핑 (센강 남쪽 백화점)",48.8511,2.3245],["Day 10 (12/21 월)",8,"더 피플 파리 마레","The People - Paris Marais","숙소 체크인",48.8505,2.3622],["Day 11 (12/22 화)",1,"더 피플 파리 마레","The People - Paris Marais","숙소 출발",48.8505,2.3622],["Day 11 (12/22 화)",2,"몽파르나스 역","Gare Montparnasse, Paris","몽생미셸행 기차 출발",48.8414,2.3209],["Day 11 (12/22 화)",3,"렌 역","Gare de Rennes","환승역",48.1035,-1.6725],["Day 11 (12/22 화)",4,"몽생미셸 수도원","Mont-Saint-Michel Abbey","당일치기 투어 후 파리 숙소 복귀",48.636,-1.5114],["Day 12 (12/23 수)",1,"더 피플 파리 마레","The People - Paris Marais","숙소 출발",48.8505,2.3622],["Day 12 (12/23 수)",2,"루브르 박물관","Louvre Museum, Paris","관광명소",48.8606,2.3376],["Day 12 (12/23 수)",3,"앙젤리나 리볼리 점","Angelina Paris Rivoli","카페/디저트",48.8651,2.3284],["Day 12 (12/23 수)",4,"튈르리 정원","Tuileries Garden, Paris","산책",48.8635,2.3275],["Day 12 (12/23 수)",5,"콩코르드 광장","Place de la Concorde, Paris","강 건너기 전 북쪽 라인 일직선 연결 (동선 최적화)",48.8656,2.3212],["Day 12 (12/23 수)",6,"라뒤레 파리 로얄 점","Ladurée Paris Royale","카페/디저트",48.8678,2.3227],["Day 12 (12/23 수)",7,"샹젤리제 거리","Champs-Élysées, Paris","쇼핑/산책",48.8698,2.3075],["Day 12 (12/23 수)",8,"알렉상드르 3세 다리","Pont Alexandre III, Paris","도보 건넘",48.8639,2.3136],["Day 12 (12/23 수)",9,"오르세 미술관","Musée d'Orsay, Paris","강 남쪽 미술관",48.86,2.3266],["Day 12 (12/23 수)",10,"바토 무슈","Bateaux Mouches, Paris","유람선 선착장 (택1)",48.8636,2.3052],["Day 12 (12/23 수)",11,"바토 파리지앵","Bateaux Parisiens, Paris","유람선 선착장 (에펠탑 앞, 택1)",48.8604,2.2932],["Day 13 (12/24 목)",1,"더 피플 파리 마레","The People - Paris Marais","숙소 출발",48.8505,2.3622],["Day 13 (12/24 목)",2,"베르사유 궁전","Palace of Versailles","오전/낮 베르사유 관람",48.8049,2.1204],["Day 13 (12/24 목)",3,"노트르담 대성당","Cathédrale Notre-Dame de Paris","파리 시내 복귀 후 관람",48.853,2.3499],["Day 13 (12/24 목)",4,"더 피플 파리 마레","The People - Paris Marais","짐 찾기",48.8505,2.3622],["Day 13 (12/24 목)",5,"베르시 버스 정류장","Paris Bercy Seine Bus Station","파리 -> 바르셀로나 야간버스 탑승",48.8364,2.3806],["Day 14 (12/25 금)",1,"북 역 버스 터미널","Estació d'Autobusos Barcelona Nord","파리 야간버스 도착",41.3946,2.1833],["Day 14 (12/25 금)",2,"호텔 기네브라","Hotel Ginebra Barcelona","카탈루냐 광장 앞 숙소 짐 보관",41.3868,2.1691],["Day 14 (12/25 금)",3,"람블라스 거리","La Rambla, Barcelona","해변 방면 내려가며 거리 구경 (12/25 보케리아 시장 휴무)",41.3809,2.1733],["Day 14 (12/25 금)",4,"콜럼버스 기념탑","Columbus Monument, Barcelona","람블라스 거리 끝",41.3758,2.1778],["Day 14 (12/25 금)",5,"포트 벨","Port Vell, Barcelona","항구 산책",41.3765,2.1823],["Day 14 (12/25 금)",6,"바르셀로네타 해변","Barceloneta Beach, Barcelona","해변 산책 및 점심",41.3784,2.1925],["Day 14 (12/25 금)",7,"시우타데야 공원","Parc de la Ciutadella, Barcelona","해변에서 북상하며 공원 산책",41.3881,2.186],["Day 14 (12/25 금)",8,"개선문","Arc de Triomf, Barcelona","공원 북쪽 출구",41.3911,2.1806],["Day 14 (12/25 금)",9,"카르멜 벙커","Bunkers del Carmel, Barcelona","16:40경 도착 추천 (일몰 17:25 / V19 버스 또는 택시 이동)",41.4193,2.1616],["Day 14 (12/25 금)",10,"바르셀로나 대성당","Barcelona Cathedral","벙커 야경 후 고딕 지구 야경 산책 시작",41.384,2.1762],["Day 14 (12/25 금)",11,"왕의 광장","Plaça del Rei, Barcelona","고딕 지구 야경",41.3842,2.1774],["Day 14 (12/25 금)",12,"레이알 광장","Plaça Reial, Barcelona","고딕 지구 야경 마무리 후 호텔 기네브라 복귀",41.38,2.1753],["Day 15 (12/26 토)",1,"호텔 기네브라","Hotel Ginebra Barcelona","숙소 출발",41.3868,2.1691],["Day 15 (12/26 토)",2,"카탈루냐 음악당","Palau de la Música Catalana, Barcelona","오전/낮 관람",41.3876,2.1753],["Day 15 (12/26 토)",3,"호프만 빵집","Hofmann Pastisseria, Barcelona","디저트",41.3853,2.1818],["Day 15 (12/26 토)",4,"보케리아 시장","Mercato de la Boqueria, Barcelona","점심/간식 (12/26 정상 영업)",41.3817,2.1716],["Day 15 (12/26 토)",5,"추레리아 마누엘 산 로만","Xurreria Manuel San Román, Barcelona","츄러스 간식",41.3827,2.1761],["Day 15 (12/26 토)",6,"몬주익 성","Montjuïc Castle, Barcelona","케이블카/버스로 정상 먼저 이동 후 내려오는 동선",41.3636,2.1651],["Day 15 (12/26 토)",7,"카탈루냐 국립 미술관","Museu Nacional d'Art de Catalunya, Barcelona","몬주익 언덕 내려오며 관람",41.3684,2.1536],["Day 15 (12/26 토)",8,"매직 분수","Magic Fountain of Montjuïc, Barcelona","12/26(토) 20:00 / 20:30 분수쇼 진행 (관람 후 숙소 복귀)",41.3712,2.1517],["Day 16 (12/27 일)",1,"호텔 기네브라","Hotel Ginebra Barcelona","가우디 투어 출발 (비행기 온라인 체크인 필수!)",41.3868,2.1691],["Day 16 (12/27 일)",2,"카사 바트요","Casa Batlló, Barcelona","가우디 투어 1",41.3917,2.1649],["Day 16 (12/27 일)",3,"카사 밀라","Casa Milà, Barcelona","가우디 투어 2",41.3954,2.162],["Day 16 (12/27 일)",4,"구엘 공원","Park Güell, Barcelona","가우디 투어 3",41.4145,2.1527],["Day 16 (12/27 일)",5,"사그라다 파밀리아 성당","Sagrada Família, Barcelona","가우디 투어 4",41.4036,2.1744],["Day 16 (12/27 일)",6,"산타 크레우 이 산 파우 병원","Hospital de la Santa Creu i Sant Pau, Barcelona","사그라다 파밀리아 도보 10분 (선택)",41.4116,2.1744],["Day 16 (12/27 일)",7,"그라시아 거리","Passeig de Gràcia, Barcelona","시내 방면 내려오며 쇼핑/산책",41.3924,2.1642],["Day 16 (12/27 일)",8,"비니투스 본점","Vinitus, Barcelona","타파스 저녁 후 호텔 기네브라 복귀",41.3905,2.1636],["Day 17 (12/28 월)",1,"호텔 기네브라","Hotel Ginebra Barcelona","체크아웃 후 공항 이동",41.3868,2.1691],["Day 17 (12/28 월)",2,"바르셀로나 엘프라트 공항","Josep Tarradellas Barcelona-El Prat Airport","BCN 13:00 - OPO 13:55 (부엘링 VY1178)",41.2974,2.0833],["Day 17 (12/28 월)",3,"프란시스쿠 드 사 카르네이루 공항","Francisco Sá Carneiro Airport, Porto","포르투 도착",41.2481,-8.6814],["Day 17 (12/28 월)",4,"스팟 패밀리 아파트먼트","Spot Family Apartments, Porto","숙소 체크인 (구시가지)",41.1502,-8.6095],["Day 17 (12/28 월)",5,"리베르다드 광장","Praça da Liberdade, Porto","도보 코스 시작",41.1466,-8.6114],["Day 17 (12/28 월)",6,"맥도날드 임페리얼 점","McDonald's Imperial, Porto","세계에서 가장 아름다운 맥도날드",41.1474,-8.6111],["Day 17 (12/28 월)",7,"안토니오 도스 콘그레가두스 성당","Igreja de Santo António dos Congregados, Porto","관광명소",41.1461,-8.6101],["Day 17 (12/28 월)",8,"상 벤투 기차역","São Bento Railway Station, Porto","아줄레주 벽화",41.1456,-8.6104],["Day 17 (12/28 월)",9,"플로레스 거리","Rua das Flores, Porto","상점가 거리",41.1436,-8.6133],["Day 17 (12/28 월)",10,"포르투 대성당","Porto Cathedral","관광명소",41.1428,-8.6112],["Day 17 (12/28 월)",11,"성 로렌스 성당","Igreja de São Lourenço, Porto","전망 포인트",41.1416,-8.6134],["Day 17 (12/28 월)",12,"Ribeira do Porto","Cais da Ribeira, Porto","도우루 강변",41.1404,-8.6131],["Day 17 (12/28 월)",13,"카이스 다 히베이라 드 가이아","Cais de Gaia, Vila Nova de Gaia","다리 건너 강 남쪽",41.1372,-8.6143],["Day 17 (12/28 월)",14,"와우 포르투","WOW Porto","문화 지구",41.1345,-8.6149],["Day 17 (12/28 월)",15,"그라함","Graham's Port Lodge, Vila Nova de Gaia","와이너리 후보 1 (4개 중 택1 / 투어 없이 테이스팅만 가능)",41.138,-8.6238],["Day 17 (12/28 월)",16,"테일러","Taylor's Port, Vila Nova de Gaia","와이너리 후보 2",41.1338,-8.6141],["Day 17 (12/28 월)",17,"칼렘","Cálem, Vila Nova de Gaia","와이너리 후보 3",41.1376,-8.6112],["Day 17 (12/28 월)",18,"샌드맨","Sandeman, Vila Nova de Gaia","와이너리 후보 4",41.1373,-8.6126],["Day 17 (12/28 월)",19,"콥케","Kopke Port Wine House, Vila Nova de Gaia","와이너리 후보 5",41.1369,-8.6152],["Day 17 (12/28 월)",20,"Sogevinus Wine","Sogevinus Fine Wines, Vila Nova de Gaia","와이너리",41.1375,-8.6118],["Day 17 (12/28 월)",21,"모후 정원","Jardim do Morro, Vila Nova de Gaia","일몰/야경",41.1374,-8.6094],["Day 17 (12/28 월)",22,"세라 두 필라르 수도원","Monastery of Serra do Pilar, Vila Nova de Gaia","관광명소",41.1381,-8.6078],["Day 17 (12/28 월)",23,"세라 두 필라르 전망대","Miradouro da Serra do Pilar, Vila Nova de Gaia","야경 명소",41.1385,-8.6085],["Day 18 (12/29 화)",1,"스팟 패밀리 아파트먼트","Spot Family Apartments, Porto","숙소 출발",41.1502,-8.6095],["Day 18 (12/29 화)",2,"산타 카타리나 거리","Rua de Santa Catarina, Porto","쇼핑 거리",41.1492,-8.6063],["Day 18 (12/29 화)",3,"알마스 성당","Capela das Almas, Porto","외벽 아줄레주",41.1499,-8.6056],["Day 18 (12/29 화)",4,"볼량 시장","Mercado do Bolhão, Porto","재래시장",41.1494,-8.6069],["Day 18 (12/29 화)",5,"마제스틱 카페","Café Majestic, Porto","역사적 카페",41.1472,-8.6066],["Day 18 (12/29 화)",6,"산투 알폰소 성당","Igreja de Santo Ildefonso, Porto","관광명소",41.146,-8.6066],["Day 18 (12/29 화)",7,"알리아두스 거리","Avenida dos Aliados, Porto","중심 대로",41.1485,-8.6109],["Day 18 (12/29 화)",8,"포르투 시청","Câmara Municipal do Porto","관광명소",41.1501,-8.6107],["Day 18 (12/29 화)",9,"삼위일체 성당","Igreja da Santíssima Trindade, Porto","시청 뒤편 성당",41.1513,-8.6098],["Day 18 (12/29 화)",10,"클레리구스 성당","Clérigos Church, Porto","종탑 전망",41.1458,-8.6146],["Day 18 (12/29 화)",11,"렐루 서점","Livraria Lello, Porto","사전 예약 필수",41.1468,-8.6149],["Day 18 (12/29 화)",12,"카르모 성당","Igreja do Carmo, Porto","측면 아줄레주",41.1473,-8.6164],["Day 18 (12/29 화)",13,"비르투데스 공원","Passeio das Virtudes, Porto","뷰포인트",41.1444,-8.6186],["Day 18 (12/29 화)",14,"빅토리아 전망대","Miradouro da Vitória, Porto","구시가지 전망",41.1428,-8.6158],["Day 18 (12/29 화)",15,"볼사 궁전","Palácio da Bolsa, Porto","가이드 투어",41.1414,-8.6156],["Day 18 (12/29 화)",16,"상 프란시스코 성당","Igreja de São Francisco, Porto","황금 내부",41.1409,-8.6158],["Day 18 (12/29 화)",17,"히베이라 광장 & 거리","Praça da Ribeira, Porto","강변 산책",41.1406,-8.613],["Day 18 (12/29 화)",18,"동 루이스 1세 다리","Dom Luís I Bridge, Porto","도보 횡단 야경",41.1399,-8.6094],["Day 19 (12/30 수)",1,"더 센트럴 하우스 리스본 바이샤","The Central House Lisbon Baixa","포르투 -> 리스본 오전 이동 후 숙소 짐 보관 (아센소르 다 비카 / Laundry & Luggage Pessoa 인근)",38.7115,-9.1378],["Day 19 (12/30 수)",2,"피게이라 광장","Praça da Figueira, Lisbon","벨렘 지구행 15E 트램 탑승",38.7138,-9.1384],["Day 19 (12/30 수)",3,"파스테이스 드 벨렘","Pastéis de Belém, Lisbon","원조 에그타르트",38.6975,-9.2032],["Day 19 (12/30 수)",4,"제로니무스 수도원","Jerónimos Monastery, Lisbon","관광명소",38.6979,-9.2067],["Day 19 (12/30 수)",5,"산타 마리아 드 벨렘 성당","Church of Santa Maria of Belém, Lisbon","수도원 인접 성당",38.6977,-9.2059],["Day 19 (12/30 수)",6,"발견기념비","Padrão dos Descobrimentos, Lisbon","강변 기념비",38.6936,-9.2057],["Day 19 (12/30 수)",7,"벨렘 탑","Belém Tower, Lisbon","관광명소",38.6916,-9.216],["Day 19 (12/30 수)",8,"만테이가리아 카이스 두 소드레","Manteigaria Cais do Sodré, Lisbon","시내 복귀 후 에그타르트",38.7107,-9.1436],["Day 19 (12/30 수)",9,"아센소르 다 비카","Elevador da Bica, Lisbon","트램 포토 스팟",38.7105,-9.1464],["Day 19 (12/30 수)",10,"산타 주스타 엘리베이터","Santa Justa Lift, Lisbon","야경 뷰포인트",38.7121,-9.1394],["Day 20 (12/31 목)",1,"더 센트럴 하우스 리스본 바이샤","The Central House Lisbon Baixa","신트라/호카곶 근교 제외 -> 12/31+1/1 시내 일정 통합 진행",38.7115,-9.1378],["Day 20 (12/31 목)",2,"호시우 광장","Rossio Square, Lisbon","시내 투어 시작",38.7139,-9.1394],["Day 20 (12/31 목)",3,"카르모 수녀원","Carmo Convent, Lisbon","지붕 없는 성당",38.7121,-9.1403],["Day 20 (12/31 목)",4,"상 페드로 알칸타라 전망대","Miradouro de São Pedro de Alcântara, Lisbon","시내 전망",38.7152,-9.1442],["Day 20 (12/31 목)",5,"상 호케 성당","Igreja de São Roque, Lisbon","관광명소",38.7135,-9.1435],["Day 20 (12/31 목)",6,"마르팀 모니즈 광장","Praça Martim Moniz, Lisbon","28번 트램 출발 기점",38.7158,-9.1365],["Day 20 (12/31 목)",7,"상 조르제 성","Castelo de São Jorge, Lisbon","알파마 언덕 성채",38.7139,-9.1335],["Day 20 (12/31 목)",8,"리스본 대성당","Lisbon Cathedral","28번 트램 대표 스팟",38.7099,-9.1326],["Day 20 (12/31 목)",9,"파브리카 다 나타 (아우구스타점)","Fábrica da Nata - Rua Augusta, Lisbon","에그타르트",38.7125,-9.1376],["Day 20 (12/31 목)",10,"아우구스타 거리","Rua Augusta, Lisbon","메인 쇼핑/보행자 거리",38.7114,-9.1372],["Day 20 (12/31 목)",11,"아우구스타 개선문","Rua Augusta Arch, Lisbon","광장 입구",38.7084,-9.1368],["Day 20 (12/31 목)",12,"리스본 시청","Lisbon City Hall","광장 인접",38.7081,-9.1384],["Day 20 (12/31 목)",13,"코메르시우 광장","Praça do Comércio, Lisbon","12/31 밤 새해 카운트다운 불꽃놀이 메인 장소",38.7075,-9.1364],["Day 21 (1/1 금)",1,"오리엔트 역","Gare do Oriente, Lisbon","리스본 -> 세비야 플릭버스 (07:20 출발, 일정 하루 앞당김)",38.7678,-9.0991],["Day 21 (1/1 금)",2,"세비야 플라자 아르마스","Estación de Autobuses Plaza de Armas, Seville","세비야 버스 터미널 도착",37.3924,-6.0044],["Day 21 (1/1 금)",3,"Room00 Salvador 호스텔","Room00 Salvador Hostel, Seville","숙소 짐 보관",37.3917,-5.9926],["Day 21 (1/1 금)",4,"세비야 알카사르","Royal Alcázar of Seville","관광명소 (1/1 휴무 여부 확인 필요: 1/1 신정 휴무 시 1/2과 순서 교체 권장)",37.3831,-5.9902],["Day 21 (1/1 금)",5,"세비야 대학","University of Seville","구 왕립 담배공장",37.3812,-5.9912],["Day 21 (1/1 금)",6,"산 텔모 궁전","Palacio de San Telmo, Seville","외관 관람",37.3802,-5.9936],["Day 21 (1/1 금)",7,"스페인 광장","Plaza de España, Seville","세비야 하이라이트 (일몰 추천)",37.3772,-5.9869],["Day 21 (1/1 금)",8,"마리아 루이사 공원","Parque de María Luisa, Seville","스페인 광장 인접 공원",37.3746,-5.9886],["Day 21 (1/1 금)",9,"황금의 탑","Torre del Oro, Seville","강변 산책 후 숙소 복귀",37.3824,-5.9965],["Day 22 (1/2 토)",1,"Room00 Salvador 호스텔","Room00 Salvador Hostel, Seville","숙소 출발 (일정 하루 앞당김)",37.3917,-5.9926],["Day 22 (1/2 토)",2,"세비야 대성당","Seville Cathedral","히랄다 탑 포함",37.3861,-5.9926],["Day 22 (1/2 토)",3,"산타 크루즈 지구","Barrio Santa Cruz, Seville","구 유대인 지구 골목 산책",37.3855,-5.9892],["Day 22 (1/2 토)",4,"플라멩코 춤 박물관","Museo del Baile Flamenco, Seville","관광/공연",37.3895,-5.992],["Day 22 (1/2 토)",5,"필라토의 집","Casa de Pilatos, Seville","안달루시아 양식 궁전",37.39,-5.9871],["Day 22 (1/2 토)",6,"디비노 살바도르 교회","Iglesia Colegial del Divino Salvador, Seville","통합권 연계 관람",37.3901,-5.9929],["Day 22 (1/2 토)",7,"세비야 미술관","Museum of Fine Arts of Seville","서쪽 방면 이동",37.3926,-5.9999],["Day 22 (1/2 토)",8,"메트로폴 파라솔","Metropol Parasol, Seville","라스 세타스 일몰/야경 명소 (동선상 마지막 배치 최적화)",37.3933,-5.9918],["Day 23 (1/3 일)",1,"Room00 Salvador 호스텔","Room00 Salvador Hostel, Seville","세비야 -> 론다 -> 그라나다 이동 (론다-네르하-프리힐리아나 투어 또는 렌트/버스 이동, 일정 하루 앞당김)",37.3917,-5.9926],["Day 23 (1/3 일)",2,"론다 투우장","Plaza de Toros de la Real Maestranza de Caballería de Ronda","론다 도보 시작",36.7423,-5.1671],["Day 23 (1/3 일)",3,"론다 구시가지","La Ciudad, Ronda","구시가지 산책",36.7376,-5.1656],["Day 23 (1/3 일)",4,"론다 전망대","Mirador de Ronda","협곡 전망",36.7417,-5.168],["Day 23 (1/3 일)",5,"누에보 다리","Puente Nuevo, Ronda","론다 대표 명소",36.7406,-5.1659],["Day 23 (1/3 일)",6,"아테나스 그라나다","Atenas Granada","그라나다 숙소 체크인",37.1782,-3.6001],["Day 24 (1/4 월)",1,"아테나스 그라나다","Atenas Granada","숙소 출발 (일정 하루 앞당김)",37.1782,-3.6001],["Day 24 (1/4 월)",2,"알함브라","Alhambra, Granada","사전 예약 티켓 필수",37.1761,-3.5881],["Day 24 (1/4 월)",3,"나스르 궁전","Nasrid Palaces, Granada","알함브라 내부 핵심 (입장 시간 엄수)",37.1771,-3.5895],["Day 24 (1/4 월)",4,"아테나스 그라나다","Atenas Granada","짐 찾기 후 그라나다 -> 마드리드 이동",37.1782,-3.6001],["Day 24 (1/4 월)",5,"톡 호스텔 마드리드","TOC Hostel Madrid","마드리드 1박차 체크인 (1/4~1/6 2박 일정 시작)",40.4173,-3.7052],["Day 25 (1/5 화)",1,"톡 호스텔 마드리드","TOC Hostel Madrid","마드리드 2일차 (기존 1/6 일정 하루 앞당김)",40.4173,-3.7052],["Day 25 (1/5 화)",2,"까사 밍고","Casa Mingo, Madrid","로스트 치킨 & 시드라 맛집",40.4244,-3.7238],["Day 25 (1/5 화)",3,"산 미구엘 시장","Mercado de San Miguel, Madrid","타파스 시장",40.4154,-3.7089],["Day 25 (1/5 화)",4,"프라도 미술관","Museo Nacional del Prado, Madrid","무료 입장 시간(18:00~20:00) 활용 추천",40.4138,-3.6921],["Day 25 (1/5 화)",5,"BYPILLOW 크로스타운","BYPILLOW Crosstown, Madrid","숙소 (기존 일정 반영)",40.4156,-3.7024],["Day 26 (1/6 수)",1,"톡 호스텔 마드리드","TOC Hostel Madrid","마드리드 여유일 (리스본 단축으로 추가된 1박 — 톨레도/세고비아 근교 또는 마드리드 왕궁·레티로 공원·그란비아 쇼핑 등 자유 일정)",40.4173,-3.7052],["Day 27 (1/7 목)",1,"톡 호스텔 마드리드","TOC Hostel Madrid","체크아웃 (BYPILLOW 크로스타운 병기)",40.4173,-3.7052],["Day 27 (1/7 목)",2,"마드리드 바라하스 공항","Adolfo Suárez Madrid–Barajas Airport","MAD 21:25 - ICN 18:15 (+1) 대한항공 KE914 귀국",40.4839,-3.568]]</script>
+
 <script>
 (function() {
   const API = "https://script.google.com/macros/s/AKfycbxnsNrXANrjEXfquUcYSaaXUqXzTFMljh2PvJv21WaBoVtUhvYBTI4uYTNJYX2xyE0j/exec";
+  let RAW_ROWS = [];
+  try {
+    RAW_ROWS = JSON.parse(document.getElementById("raw-rows-data").textContent || "[]");
+  } catch(e) {}
 
   const DAY_META = [
     ["Day 1 (12/12 토)", "로마", [41.895, 12.482]], ["Day 2 (12/13 일)", "로마", [41.898, 12.485]], ["Day 3 (12/14 월)", "로마", [41.898, 12.468]],
@@ -167,196 +173,17 @@ input { background: var(--sunk); color: var(--ink); width: 100%; }
     ["Day 25 (1/5 화)", "마드리드", [40.417, -3.705]], ["Day 26 (1/6 수)", "마드리드", [40.417, -3.705]], ["Day 27 (1/7 목)", "마드리드", [40.445, -3.640]]
   ];
 
-  const INITIAL_ITINERARY = {
-    "Day 1 (12/12 토)": [
-      {n: "로마 피우미치노 공항", m: "ICN 14:05 - FCO 19:35 (대한항공 KE931) / 택시 55유로", lat: 41.8003, lng: 12.2389},
-      {n: "테르미니 역", m: "공항에서 약 23.4km 이동", lat: 41.901, lng: 12.5018},
-      {n: "윈드로제 호텔", m: "숙소 (테르미니 역 도보 402m)", lat: 41.9032, lng: 12.5005}
-    ],
-    "Day 2 (12/13 일)": [
-      {n: "윈드로제 호텔", m: "숙소 출발", lat: 41.9032, lng: 12.5005},
-      {n: "산타 마리아 마조레 대성당", m: "784m 이동", lat: 41.8976, lng: 12.4984},
-      {n: "콜로세움", m: "968m 이동", lat: 41.8902, lng: 12.4922},
-      {n: "콘스탄티누스 개선문", m: "143m 이동", lat: 41.8898, lng: 12.4907},
-      {n: "팔라티노 언덕", m: "263m 이동", lat: 41.8894, lng: 12.4875},
-      {n: "포로 로마노", m: "385m 이동", lat: 41.8925, lng: 12.4853},
-      {n: "포리 임페리알리", m: "167m 이동", lat: 41.8938, lng: 12.4862},
-      {n: "캄피돌리오 광장", m: "328m 이동", lat: 41.8933, lng: 12.4829},
-      {n: "베네치아 광장", m: "269m 이동", lat: 41.8958, lng: 12.4825},
-      {n: "트레비 분수", m: "578m 이동", lat: 41.9009, lng: 12.4833},
-      {n: "스페인 광장", m: "536m 이동", lat: 41.9057, lng: 12.4823},
-      {n: "콘도티 거리", m: "명품 거리", lat: 41.9054, lng: 12.4804},
-      {n: "코르소 거리", m: "232m 이동", lat: 41.9035, lng: 12.4789},
-      {n: "포폴로 광장", m: "873m 이동", lat: 41.9107, lng: 12.4763},
-      {n: "핀치오 언덕", m: "137m 이동", lat: 41.9112, lng: 12.4783},
-      {n: "보르게세 공원", m: "690m 이동", lat: 41.9142, lng: 12.4852}
-    ],
-    "Day 3 (12/14 월)": [
-      {n: "윈드로제 호텔", m: "숙소 출발", lat: 41.9032, lng: 12.5005},
-      {n: "바티칸 박물관", m: "예약 필수", lat: 41.9065, lng: 12.4536},
-      {n: "시스티나 성당", m: "내부 연결 코스", lat: 41.9029, lng: 12.4545},
-      {n: "성 베드로 대성당", m: "481m 이동", lat: 41.9022, lng: 12.4539},
-      {n: "성 베드로 광장", m: "231m 이동", lat: 41.9022, lng: 12.4568},
-      {n: "비아 델라 콘칠리아치오네", m: "627m 이동", lat: 41.9022, lng: 12.4616},
-      {n: "산탄젤로 성", m: "전망 좋음", lat: 41.9031, lng: 12.4663},
-      {n: "나보나 광장", m: "710m 이동", lat: 41.8992, lng: 12.4731},
-      {n: "판테온", m: "320m 이동", lat: 41.8986, lng: 12.4769},
-      {n: "캄포 데 피오리", m: "524m 이동", lat: 41.8956, lng: 12.4722},
-      {n: "빌라 파르네시나", m: "트라스테베레 방면", lat: 41.8936, lng: 12.4673},
-      {n: "트릴루사 광장", m: "339m 이동", lat: 41.8919, lng: 12.4694},
-      {n: "자니콜로 언덕", m: "539m 이동", lat: 41.8913, lng: 12.4614},
-      {n: "가리발디 다리", m: "1.1km 이동", lat: 41.8902, lng: 12.4738},
-      {n: "파브리치오 다리", m: "308m 이동", lat: 41.8913, lng: 12.4782},
-      {n: "마르첼로 원형극장", m: "169m 이동", lat: 41.8919, lng: 12.4799}
-    ],
-    "Day 4 (12/15 화)": [
-      {n: "산타 마리아 노벨라 역", m: "로마→피렌체 이동 도착", lat: 43.7764, lng: 11.2478},
-      {n: "플러스 플로렌스 호스텔", m: "숙소", lat: 43.7815, lng: 11.2558},
-      {n: "산타 마리아 노벨라 성당", m: "역에서 236m", lat: 43.7746, lng: 11.2494},
-      {n: "산타 마리아 노벨라 약국", m: "쇼핑", lat: 43.7742, lng: 11.2475},
-      {n: "피렌체 산 로렌초 성당", m: "메디치가 묘지", lat: 43.775, lng: 11.2538},
-      {n: "라우렌치아나 도서관", m: "미켈란젤로 설계", lat: 43.7746, lng: 11.2535},
-      {n: "피렌체 중앙시장", m: "2층 푸드코트 & 가죽시장", lat: 43.7767, lng: 11.2531}
-    ],
-    "Day 5 (12/16 수)": [
-      {n: "호텔 아론", m: "피렌체→베네치아 메스트레 숙소", lat: 45.4839, lng: 12.2355}
-    ],
-    "Day 6 (12/17 목)": [
-      {n: "호텔 아론", m: "숙소 출발 → 베네치아 본섬 이동", lat: 45.4839, lng: 12.2355},
-      {n: "리알토 다리", m: "대운하 중심 포토 스팟", lat: 45.4380, lng: 12.3358},
-      {n: "산 마르코 광장 & 대성당", m: "베네치아 핵심 광장 및 종탑 전망", lat: 45.4342, lng: 12.3385},
-      {n: "탄식의 다리", m: "두칼레 궁전 인접 명소", lat: 45.4340, lng: 12.3409},
-      {n: "부라노 섬 (선택)", m: "알록달록 아이유 뮤비 촬영지 섬 투어", lat: 45.4854, lng: 12.4167}
-    ],
-    "Day 7 (12/18 금)": [
-      {n: "바라바스 루체른", m: "베네치아→루체른 숙소", lat: 47.0542, lng: 8.3032}
-    ],
-    "Day 8 (12/19 토)": [
-      {n: "바라바스 루체른", m: "숙소 출발", lat: 47.0542, lng: 8.3032},
-      {n: "카펠교", m: "루체른 상징 목조 다리", lat: 47.0516, lng: 8.3075},
-      {n: "빈사의 사자상", m: "암벽 조각 기념비", lat: 47.0584, lng: 8.3106},
-      {n: "리기산 또는 필라투스 전망대", m: "유람선 + 산악열차 설산 파노라마", lat: 47.0567, lng: 8.4853}
-    ],
-    "Day 9 (12/20 일)": [
-      {n: "스트라스부르 역", m: "루체른→스트라스부르 도착", lat: 48.5851, lng: 7.7345},
-      {n: "쁘띠 프랑스", m: "관광명소", lat: 48.5806, lng: 7.7408},
-      {n: "스트라스부르 노트르담 대성당", m: "관광명소", lat: 48.5818, lng: 7.7509},
-      {n: "오 브리셀", m: "음식점", lat: 48.5829, lng: 7.7554},
-      {n: "학자들의 연회장", m: "음식점", lat: 48.5821, lng: 7.7501},
-      {n: "레지던스 세리즈 스트라스부르", m: "숙소 체크인", lat: 48.5593, lng: 7.7538}
-    ],
-    "Day 10 (12/21 월)": [
-      {n: "레지던스 세리즈 스트라스부르", m: "스트라스부르→파리 이동", lat: 48.5593, lng: 7.7538},
-      {n: "몽마르뜨", m: "파리 도착 후 첫 코스", lat: 48.8867, lng: 2.3431},
-      {n: "트로카데로 광장", m: "에펠탑 뷰포인트", lat: 48.8628, lng: 2.2873},
-      {n: "에펠탑", m: "관광명소", lat: 48.8584, lng: 2.2945},
-      {n: "샹 드 마르스 공원", m: "에펠탑 남쪽 공원", lat: 48.8556, lng: 2.2986},
-      {n: "개선문", m: "샹젤리제 방면 이동", lat: 48.8738, lng: 2.295},
-      {n: "르 봉 마르셰", m: "쇼핑", lat: 48.8511, lng: 2.3245},
-      {n: "더 피플 파리 마레", m: "숙소 체크인", lat: 48.8505, lng: 2.3622}
-    ],
-    "Day 11 (12/22 화)": [
-      {n: "더 피플 파리 마레", m: "숙소 출발", lat: 48.8505, lng: 2.3622},
-      {n: "몽파르나스 역", m: "몽생미셸행 기차 출발", lat: 48.8414, lng: 2.3209},
-      {n: "렌 역", m: "환승역", lat: 48.1035, lng: -1.6725},
-      {n: "몽생미셸 수도원", m: "당일치기 투어", lat: 48.636, lng: -1.5114}
-    ],
-    "Day 12 (12/23 수)": [
-      {n: "더 피플 파리 마레", m: "숙소 출발", lat: 48.8505, lng: 2.3622},
-      {n: "루브르 박물관", m: "관광명소", lat: 48.8606, lng: 2.3376},
-      {n: "앙젤리나 리볼리 점", m: "카페/디저트", lat: 48.8651, lng: 2.3284},
-      {n: "튈르리 정원", m: "산책", lat: 48.8635, lng: 2.3275},
-      {n: "콩코르드 광장", m: "일직선 연결", lat: 48.8656, lng: 2.3212},
-      {n: "라뒤레 파리 로얄 점", m: "카페/디저트", lat: 48.8678, lng: 2.3227},
-      {n: "샹젤리제 거리", m: "쇼핑/산책", lat: 48.8698, lng: 2.3075},
-      {n: "알렉상드르 3세 다리", m: "도보 건넘", lat: 48.8639, lng: 2.3136},
-      {n: "오르세 미술관", m: "미술관", lat: 48.86, lng: 2.3266},
-      {n: "바토 파리지앵", m: "유람선", lat: 48.8604, lng: 2.2932}
-    ],
-    "Day 13 (12/24 목)": [
-      {n: "더 피플 파리 마레", m: "숙소 출발", lat: 48.8505, lng: 2.3622},
-      {n: "베르사유 궁전", m: "오전 관람", lat: 48.8049, lng: 2.1204},
-      {n: "노트르담 대성당", m: "파리 시내 복귀 후 관람", lat: 48.853, lng: 2.3499},
-      {n: "베르시 버스 정류장", m: "파리→바르셀로나 야간버스", lat: 48.8364, lng: 2.3806}
-    ],
-    "Day 14 (12/25 금)": [
-      {n: "북 역 버스 터미널", m: "야간버스 도착", lat: 41.3946, lng: 2.1833},
-      {n: "호텔 기네브라", m: "짐 보관", lat: 41.3868, lng: 2.1691},
-      {n: "람블라스 거리", m: "거리 구경", lat: 41.3809, lng: 2.1733},
-      {n: "바르셀로네타 해변", m: "산책 및 점심", lat: 41.3784, lng: 2.1925},
-      {n: "시우타데야 공원 & 개선문", m: "북상하며 산책", lat: 41.3911, lng: 2.1806},
-      {n: "카르멜 벙커", m: "16:40 일몰 뷰", lat: 41.4193, lng: 2.1616},
-      {n: "바르셀로나 대성당 & 고딕지구", m: "야경 산책", lat: 41.384, lng: 2.1762}
-    ],
-    "Day 15 (12/26 토)": [
-      {n: "호텔 기네브라", m: "숙소 출발", lat: 41.3868, lng: 2.1691},
-      {n: "카탈루냐 음악당 & 호프만 빵집", m: "디저트", lat: 41.3876, lng: 2.1753},
-      {n: "보케리아 시장 & 추레리아", m: "점심/간식", lat: 41.3817, lng: 2.1716},
-      {n: "몬주익 성 & 국립 미술관", m: "몬주익 언덕 코스", lat: 41.3636, lng: 2.1651},
-      {n: "매직 분수", m: "분수쇼 관람", lat: 41.3712, lng: 2.1517}
-    ],
-    "Day 16 (12/27 일)": [
-      {n: "호텔 기네브라", m: "가우디 투어 출발", lat: 41.3868, lng: 2.1691},
-      {n: "카사 바트요 & 카사 밀라", m: "가우디 투어 1~2", lat: 41.3917, lng: 2.1649},
-      {n: "구엘 공원", m: "가우디 투어 3", lat: 41.4145, lng: 2.1527},
-      {n: "사그라다 파밀리아 성당", m: "가우디 투어 4", lat: 40.4036, lng: -3.7],
-      {n: "그라시아 거리 & 비니투스", m: "타파스 저녁", lat: 41.3905, lng: 2.1636}
-    ],
-    "Day 17 (12/28 월)": [
-      {n: "엘프라트 공항", m: "부엘링 VY1178 (13:00-13:55)", lat: 41.2974, lng: 2.0833},
-      {n: "스팟 패밀리 아파트먼트", m: "포르투 숙소", lat: 41.1502, lng: -8.6095},
-      {n: "상 벤투 기차역 & 포르투 대성당", m: "아줄레주 벽화", lat: 41.1456, lng: -8.6104},
-      {n: "가이아 와이너리 지구", m: "그라함/테일러/칼렘 택1", lat: 41.1372, lng: -8.6143},
-      {n: "모후 정원", m: "일몰 및 야경", lat: 41.1374, lng: -8.6094}
-    ],
-    "Day 18 (12/29 화)": [
-      {n: "볼량 시장 & 마제스틱 카페", m: "시내 투어", lat: 41.1494, lng: -8.6069},
-      {n: "클레리구스 성당 & 렐루 서점", m: "예약 필수", lat: 41.1458, lng: -8.6146},
-      {n: "볼사 궁전 & 상 프란시스코 성당", m: "황금 내부", lat: 41.1414, lng: -8.6156},
-      {n: "동 루이스 1세 다리", m: "도보 횡단 야경", lat: 41.1399, lng: -8.6094}
-    ],
-    "Day 19 (12/30 수)": [
-      {n: "더 센트럴 하우스 리스본 바이샤", m: "포르투→리스본 숙소", lat: 38.7115, lng: -9.1378},
-      {n: "파스테이스 드 벨렘 & 제로니무스 수도원", m: "원조 에그타르트", lat: 38.6975, lng: -9.2032},
-      {n: "벨렘 탑 & 발견기념비", m: "강변 기념비", lat: 38.6936, lng: -9.2057},
-      {n: "산타 주스타 엘리베이터", m: "야경 뷰포인트", lat: 38.7121, lng: -9.1394}
-    ],
-    "Day 20 (12/31 목)": [
-      {n: "호시우 광장 & 카르모 수녀원", m: "시내 투어", lat: 38.7139, lng: -9.1394},
-      {n: "상 조르제 성 & 리스본 대성당", m: "28번 트램 스팟", lat: 38.7139, lng: -9.1335},
-      {n: "코메르시우 광장", m: "새해 카운트다운 불꽃놀이", lat: 38.7075, lng: -9.1364}
-    ],
-    "Day 21 (1/1 금)": [
-      {n: "오리엔트 역 → 세비야 아르마스", m: "플릭버스 07:20 이동", lat: 37.3924, lng: -6.0044},
-      {n: "Room00 Salvador 호스텔", m: "짐 보관", lat: 37.3917, lng: -5.9926},
-      {n: "세비야 알카사르", m: "궁전 관람", lat: 37.3831, lng: -5.9902},
-      {n: "스페인 광장 & 마리아 루이사 공원", m: "일몰 명소", lat: 37.3772, lng: -5.9869}
-    ],
-    "Day 22 (1/2 토)": [
-      {n: "세비야 대성당 & 히랄다 탑", m: "관광명소", lat: 37.3861, lng: -5.9926},
-      {n: "산타 크루즈 지구", m: "골목 산책", lat: 37.3855, lng: -5.9892},
-      {n: "메트로폴 파라솔", m: "라스 세타스 일몰/야경", lat: 37.3933, lng: -5.9918}
-    ],
-    "Day 23 (1/3 일)": [
-      {n: "론다 투우장 & 누에보 다리", m: "세비야→그라나다 경유지", lat: 36.7406, lng: -5.1659},
-      {n: "아테나스 그라나다", m: "그라나다 숙소", lat: 37.1782, lng: -3.6001}
-    ],
-    "Day 24 (1/4 월)": [
-      {n: "알함브라 궁전 & 나스르 궁전", m: "사전예약 필수", lat: 37.1761, lng: -3.5881},
-      {n: "톡 호스텔 마드리드", m: "마드리드 이동 후 체크인", lat: 40.4173, lng: -3.7052}
-    ],
-    "Day 25 (1/5 화)": [
-      {n: "까사 밍고", m: "로스트 치킨 & 시드라", lat: 40.4244, lng: -3.7238},
-      {n: "산 미구엘 시장", m: "타파스 시장", lat: 40.4154, lng: -3.7089},
-      {n: "프라도 미술관", m: "18-20시 무료입장", lat: 40.4138, lng: -3.6921}
-    ],
-    "Day 26 (1/6 수)": [
-      {n: "톡 호스텔 마드리드", m: "마드리드 여유일 (톨레도 근교 또는 시내 투어)", lat: 40.4173, lng: -3.7052}
-    ],
-    "Day 27 (1/7 목)": [
-      {n: "마드리드 바라하스 공항", m: "KE914 21:25 귀국편", lat: 40.4839, lng: -3.568}
-    ]
-  };
+  const EXTRA_ROWS = [
+    ["Day 6 (12/17 목)", 1, "호텔 아론", "Hotel Aaron, Venice Mestre", "숙소 출발 → 베네치아 본섬 이동", 45.4839, 12.2355],
+    ["Day 6 (12/17 목)", 2, "리알토 다리", "Rialto Bridge, Venice", "대운하 중심 포토 스팟", 45.4380, 12.3358],
+    ["Day 6 (12/17 목)", 3, "산 마르코 광장 & 대성당", "Piazza San Marco, Venice", "베네치아 핵심 광장 및 종탑 전망", 45.4342, 12.3385],
+    ["Day 6 (12/17 목)", 4, "탄식의 다리", "Bridge of Sighs, Venice", "두칼레 궁전 인접 명소", 45.4340, 12.3409],
+    ["Day 6 (12/17 목)", 5, "부라노 섬 (선택)", "Burano, Venice", "알록달록 아이유 뮤비 촬영지 섬 투어", 45.4854, 12.4167],
+    ["Day 8 (12/19 토)", 1, "바라바스 루체른", "Barabas Hotel Luzern", "숙소 출발", 47.0542, 8.3032],
+    ["Day 8 (12/19 토)", 2, "카펠교", "Chapel Bridge, Lucerne", "루체른 상징 목조 다리", 47.0516, 8.3075],
+    ["Day 8 (12/19 토)", 3, "빈사의 사자상", "Lion Monument, Lucerne", "암벽 조각 기념비", 47.0584, 8.3106],
+    ["Day 8 (12/19 토)", 4, "리기산 또는 필라투스 전망대", "Mount Rigi, Switzerland", "유람선 + 산악열차 설산 파노라마", 47.0567, 8.4853]
+  ];
 
   const GUIDES = {
     "로마": [
@@ -440,7 +267,19 @@ input { background: var(--sunk); color: var(--ink); width: 100%; }
     ["13", "1/7", "마드리드 → 인천", "대한항공 KE914 (21:25→18:15+1)", true]
   ];
 
-  let pw = "", itin = INITIAL_ITINERARY, bookings = {}, curIdx = 0, selStop = 0, mapMode = "osm", guideCat = "전체", map, layer;
+  let pw = "", itin = {}, bookings = {}, curIdx = 0, selStop = 0, mapMode = "osm", guideCat = "전체", map, layer;
+
+  function buildDefaultItinerary() {
+    const mapObj = {};
+    DAY_META.forEach(d => { mapObj[d[0]] = []; });
+    [...RAW_ROWS, ...EXTRA_ROWS].forEach(([day, order, name, query, memo, lat, lng]) => {
+      if (!mapObj[day]) mapObj[day] = [];
+      mapObj[day].push({ n: name, m: memo, q: query, lat, lng });
+    });
+    return mapObj;
+  }
+
+  itin = buildDefaultItinerary();
 
   async function api(body) {
     const r = await fetch(API, {method:"POST", headers:{"Content-Type":"text/plain;charset=utf-8"}, body:JSON.stringify(body)});
@@ -494,9 +333,9 @@ input { background: var(--sunk); color: var(--ink); width: 100%; }
 
   window.renderAll = function() {
     const dl = document.getElementById("day-list");
-    dl.innerHTML = DAY_META.map((d, i) => `<button class="day${i === window.curIdx ? ' active' : ''}" onclick="window.curIdx=${i}; window.selStop=0; window.renderAll()"><b>${d[0].split(' ')[0]} ${d[0].split(' ')[1]}</b><br><span class="sub">${d[1]} (${(itin[d[0]]||[]).length})</span></button>`).join("");
+    dl.innerHTML = DAY_META.map((d, i) => `<button class="day${i === window.curIdx ? ' active' : ''}" onclick="window.curIdx=${i}; window.selStop=0; window.renderAll()"><b>${d[0].split(' ')[0]} ${d[0].split(' ')[1]}</b><br><span class="sub">${d[1]} (${itin[d[0]].length})</span></button>`).join("");
     
-    const d = DAY_META[window.curIdx], stops = itin[d[0]] || [];
+    const d = DAY_META[window.curIdx], stops = itin[d[0]];
     document.getElementById("cur-day-title").textContent = d[0];
     document.getElementById("cur-day-sub").textContent = d[1] + " · 총 " + stops.length + "개 지점";
     
@@ -525,7 +364,7 @@ input { background: var(--sunk); color: var(--ink); width: 100%; }
   }
 
   function renderMap() {
-    const d = DAY_META[window.curIdx], stops = itin[d[0]] || [];
+    const d = DAY_META[window.curIdx], stops = itin[d[0]];
     const q = stops.map(s => encodeURIComponent(s.n + " " + d[1]));
     document.getElementById("gmap-link").href = q.length > 1 ? `https://www.google.com/maps/dir/?api=1&origin=${q[0]}&destination=${q[q.length - 1]}&waypoints=${q.slice(1, 9).join('|')}&travelmode=walking` : `https://www.google.com/maps/search/?api=1&query=${q[0] || encodeURIComponent(d[1])}`;
     
@@ -574,7 +413,6 @@ input { background: var(--sunk); color: var(--ink); width: 100%; }
   };
 
   window.addGuide = function(name, query, desc, lat, lng) {
-    if(!itin[DAY_META[window.curIdx][0]]) itin[DAY_META[window.curIdx][0]] = [];
     itin[DAY_META[window.curIdx][0]].push({n: name, m: "[추천] " + desc, q: query, lat, lng});
     window.selStop = itin[DAY_META[window.curIdx][0]].length - 1;
     window.renderAll();
@@ -585,7 +423,6 @@ input { background: var(--sunk); color: var(--ink); width: 100%; }
     e.preventDefault();
     const d = DAY_META[window.curIdx], n = document.getElementById("add-name").value.trim(), m = document.getElementById("add-memo").value.trim();
     if (!n) return;
-    if(!itin[d[0]]) itin[d[0]] = [];
     itin[d[0]].push({n, m, q: n + " " + d[1], lat: d[2][0], lng: d[2][1]});
     document.getElementById("add-name").value = ""; document.getElementById("add-memo").value = "";
     window.selStop = itin[d[0]].length - 1;
@@ -616,7 +453,6 @@ input { background: var(--sunk); color: var(--ink); width: 100%; }
     const ad = cmd.match(/^(?:Day\s*(\d+)(?:에|에서)?\s*)?(.+?)\s*(?:추가|넣어)/i);
     if (ad) {
       const d = ad[1] ? DAY_META.find(x => x[0].startsWith("Day " + ad[1] + " ")) : DAY_META[window.curIdx];
-      if(!itin[d[0]]) itin[d[0]] = [];
       itin[d[0]].push({n: ad[2].trim(), m: "비서 추가", q: ad[2].trim() + " " + d[1], lat: d[2][0], lng: d[2][1]});
       window.renderAll(); saveCloud(); msg.textContent = "✅ 추가했습니다."; return;
     }
