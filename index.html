@@ -210,7 +210,7 @@
     .day-list-scroll { max-height: 200px !important; }
   }
 
-  .panel-card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; box-shadow: var(--shadow); overflow: hidden; }
+  .panel-card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; box-shadow: var(--shadow); overflow: hidden; margin-bottom: 16px; }
   .panel-head { padding: 12px 14px; background: var(--sunk); border-bottom: 1px solid var(--line); display: flex; align-items: center; justify-content: space-between; gap: 8px; }
   .panel-head h2 { margin: 0; font-size: 14px; font-weight: 700; }
 
@@ -284,7 +284,16 @@
     font-size: 14px; padding: 11px 14px; border-radius: 10px; text-align: center;
   }
 
-  /* CITY GUIDE PANEL (STUBBY STYLE) */
+  /* AI ASSISTANT PANEL */
+  .ai-box { display: grid; gap: 10px; padding: 14px 16px; background: var(--card); border: 1px solid var(--line); border-radius: 14px; margin-bottom: 16px; box-shadow: var(--shadow); }
+  .ai-box h3 { margin: 0; font-size: 15px; display: flex; align-items: center; gap: 6px; color: var(--accent); }
+  .ai-chat-area { max-height: 220px; overflow-y: auto; background: var(--sunk); border: 1px solid var(--line); border-radius: 10px; padding: 10px; display: grid; gap: 8px; font-size: 13px; }
+  .ai-msg { padding: 8px 12px; border-radius: 8px; line-height: 1.4; word-break: break-word; }
+  .ai-msg.user { background: var(--accent-soft); color: var(--ink); justify-self: end; max-width: 85%; }
+  .ai-msg.bot { background: var(--card); border: 1px solid var(--line); color: var(--ink); justify-self: start; max-width: 85%; }
+  .ai-input-row { display: flex; gap: 8px; }
+
+  /* CITY GUIDE PANEL */
   .guide-city-pills { display: flex; gap: 5px; overflow-x: auto; padding: 10px 12px; border-bottom: 1px solid var(--line); background: var(--card); }
   .guide-pill {
     flex: 0 0 auto; font: inherit; font-size: 12px; font-weight: 600;
@@ -305,7 +314,27 @@
   .guide-item-desc { font-size: 12px; color: var(--muted); margin: 0; line-height: 1.4; }
   .guide-item-foot { display: flex; justify-content: space-between; align-items: center; gap: 6px; flex-wrap: wrap; }
   .added-badge { font-size: 11px; font-weight: 700; color: var(--done-ink); background: var(--done-bg); padding: 3px 8px; border-radius: 6px; }
+
+  /* TRANSPORT PLANNER STYLES (MOBILE FIXED) */
+  .legs-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+  .leg { background: var(--card); border: 1px solid var(--line); border-radius: 14px; box-shadow: var(--shadow); overflow: hidden; }
+  .row {
+    padding: 14px 16px; display: grid; grid-template-columns: 75px 1fr auto; gap: 12px; align-items: center; cursor: pointer; user-select: none;
+  }
+  @media (max-width: 520px) {
+    .row { grid-template-columns: 1fr; gap: 6px; }
+    .side { justify-self: start; display: flex; gap: 12px; align-items: center; width: 100%; justify-content: space-between; border-top: 1px solid var(--line); padding-top: 6px; }
+  }
+  .date { font-family: "IBM Plex Mono", ui-monospace, monospace; font-weight: 600; font-size: 15px; line-height: 1.3; font-variant-numeric: tabular-nums; }
+  .date .num { display: block; font-family: "IBM Plex Sans KR", sans-serif; font-weight: 400; font-size: 11px; color: var(--muted); }
+  .route { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; font-size: 16px; font-weight: 700; min-width: 0; word-break: break-all; }
+  .route .arrow { color: var(--accent); font-weight: 500; flex-shrink: 0; }
+  .route .mode { font-size: 12px; font-weight: 400; color: var(--muted); background: var(--sunk); border: 1px solid var(--line); padding: 1px 7px; border-radius: 6px; flex-shrink: 0; }
+  .booked-line { display: block; font-size: 12px; font-weight: 400; color: var(--done-ink); width: 100%; margin-top: 2px; }
+  .side { display: grid; justify-items: end; gap: 4px; font-size: 12px; color: var(--muted); flex-shrink: 0; }
+  .chev { font-size: 12px; color: var(--accent); font-weight: 600; }
   details[open] .chev-closed, details:not([open]) .chev-open { display: none; }
+
   .status { font-size: 14px; font-weight: 700; padding: 6px 12px; border-radius: 999px; white-space: nowrap; }
   .status.done { background: var(--done-bg); color: var(--done-ink); }
   .status.todo { background: var(--todo-bg); color: var(--todo-ink); }
@@ -390,12 +419,13 @@
   .test-tool input[type="date"] { font: inherit; font-size: 15px; color: var(--ink); background: var(--sunk); border: 1px solid var(--line); border-radius: 8px; padding: 7px 10px; }
   .transport-footer { margin-top: 24px; font-size: 13px; color: var(--muted); display: grid; gap: 6px; }
   .transport-footer p { margin: 0; }
-  @media (max-width: 380px) {
-    .today-grid { grid-template-columns: 1fr; }
-    .row { grid-template-columns: 56px 1fr; row-gap: 8px; }
-    .side { grid-column: 2; justify-items: start; grid-auto-flow: column; align-items: center; }
-    .fields { grid-template-columns: 1fr; }
-  }
+
+  /* MODAL */
+  .modal-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.6); display: flex; align-items: center; justify-content: center; z-index: 9999; padding: 14px; }
+  .modal-box { background: var(--card); border: 1px solid var(--line); border-radius: 16px; width: 100%; max-width: 480px; padding: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); display: grid; gap: 12px; }
+  .modal-box h3 { margin: 0; font-size: 18px; }
+  .modal-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  @media (max-width: 420px) { .modal-grid-2 { grid-template-columns: 1fr; } }
 </style>
 </head>
 <body>
@@ -487,6 +517,18 @@
       </section>
 
       <aside class="map-col">
+        <!-- GEMINI AI ASSISTANT WIDGET -->
+        <div class="ai-box">
+          <h3>✨ Gemini AI 여행 비서</h3>
+          <div class="ai-chat-area" id="ai-chat-box">
+            <div class="ai-msg bot">안녕하세요! 27일 유럽 여행 AI 비서입니다. 일정 조정이나 맛집 추천, 동선 변경을 자연어로 요청해 보세요!</div>
+          </div>
+          <form class="ai-input-row" id="ai-form">
+            <input type="text" id="ai-input" placeholder="예: 오늘 오후에 갈만한 맛집 추천해줘" autocomplete="off">
+            <button type="submit" class="primary" id="ai-btn">전송</button>
+          </form>
+        </div>
+
         <div class="panel-card">
           <div class="panel-head">
             <h2 id="map-panel-title">Day 1 동선 지도</h2>
@@ -593,6 +635,7 @@
 <script>
 (function() {
   const API_URL = "https://script.google.com/macros/s/AKfycbxnsNrXANrjEXfquUcYSaaXUqXzTFMljh2PvJv21WaBoVtUhvYBTI4uYTNJYX2xyE0j/exec";
+  const GEMINI_API_KEY = "AQ.Ab8RN6I5p9uKKelVQXgL7LFdbz4uWKyB1MobjQwyMtNEAZJjGg";
   const PW_KEY = "europe-trip-pw";
   const PW_HINT = "힌트: 첫번째로 가는 도시의 이름을 영문 소문자로!";
   document.getElementById("pw-hint").textContent = PW_HINT;
@@ -734,7 +777,6 @@
     "BYPILLOW Crosstown, Madrid":[40.4148,-3.7037],"Adolfo Suárez Madrid–Barajas Airport":[40.4983,-3.5676]
   };
 
-  // STUBBY-STYLE CITY GUIDES (13 CITIES, 110+ CURATED SPOTS WITH EXACT COORDS)
   const CITY_GUIDES = [
     {
       id: "rome", name: "🇮🇹 로마", days: [1, 2, 3],
@@ -744,10 +786,7 @@
         { name: "트레비 분수", query: "Trevi Fountain, Rome", gcat: "야경·전망", cat: "관광", coords: [41.9009, 12.4833], desc: "동전 던지기 명소. 이른 아침이나 밤 조명 켜졌을 때 최고" },
         { name: "판테온", query: "Pantheon, Rome", gcat: "명소", cat: "관광", coords: [41.8986, 12.4769], desc: "2천 년 된 거대 돔 신전. 입장료 €5 (사전 예약 권장)" },
         { name: "스페인 광장 & 콘도티 거리", query: "Piazza di Spagna, Rome", gcat: "명소", cat: "관광", coords: [41.9057, 12.4823], desc: "로마의 휴일 계단 & 명품 쇼핑 거리 연결" },
-        { name: "자니콜로 언덕 전망대", query: "Janiculum Hill, Rome", gcat: "야경·전망", cat: "관광", coords: [41.8913, 12.4614], desc: "로마 시내 전경이 한눈에 내려다보이는 일몰/야경 명소" },
-        { name: "나보나 광장", query: "Piazza Navona, Rome", gcat: "명소", cat: "관광", coords: [41.8992, 12.4731], desc: "베르니니의 4대강 분수와 거리 예술가들이 모이는 광장" },
-        { name: "지올리띠 (Giolitti)", query: "Giolitti, Rome", gcat: "맛집·카페", cat: "맛집", coords: [41.9012, 12.4774], desc: "판테온 인근 100년 전통 로마 3대 젤라또 맛집 (쌀·피스타치오 추천)" },
-        { name: "타짜도르 커피 (Tazza d'Oro)", query: "La Casa del Caffè Tazza d'Oro, Rome", gcat: "맛집·카페", cat: "맛집", coords: [41.8993, 12.4776], desc: "판테온 옆 그라니따 디 카페(커피 슬러시) & 에스프레소 명소" }
+        { name: "자니콜로 언덕 전망대", query: "Janiculum Hill, Rome", gcat: "야경·전망", cat: "관광", coords: [41.8913, 12.4614], desc: "로마 시내 전경이 한눈에 내려다보이는 일몰/야경 명소" }
       ]
     },
     {
@@ -756,10 +795,7 @@
         { name: "피렌체 두오모 (산타 마리아 델 피오레)", query: "Florence Cathedral", gcat: "명소", cat: "관광", coords: [43.7731, 11.2560], desc: "브루넬레스키 쿠폴라 & 조토의 종탑. 쿠폴라 등반은 사전 예약 필수" },
         { name: "미켈란젤로 언덕", query: "Piazzale Michelangelo, Florence", gcat: "야경·전망", cat: "관광", coords: [43.7629, 11.2651], desc: "피렌체 붉은 지붕과 베키오 다리가 내려다보이는 최고의 일몰 명소" },
         { name: "우피치 미술관", query: "Uffizi Gallery, Florence", gcat: "미술관", cat: "관광", coords: [43.7678, 11.2553], desc: "보티첼리 '비너스의 탄생', 다빈치 작품 소장. 사전 예약 필수" },
-        { name: "베키오 다리", query: "Ponte Vecchio, Florence", gcat: "야경·전망", cat: "관광", coords: [43.7680, 11.2531], desc: "아르노 강 위 보석 상점들이 늘어선 피렌체 가장 오래된 다리" },
-        { name: "아카데미아 미술관 (다비드상)", query: "Galleria dell'Accademia, Florence", gcat: "미술관", cat: "관광", coords: [43.7768, 11.2586], desc: "미켈란젤로 진품 다비드상 전시관" },
-        { name: "피렌체 중앙시장 (2층 푸드코트)", query: "Mercato Centrale, Florence", gcat: "맛집·카페", cat: "맛집", coords: [43.7766, 11.2530], desc: "곱창버거(람프레도또), 트러플 파스타, 티본스테이크 한자리에서 해결" },
-        { name: "달 오스테 (Trattoria Dall'Oste)", query: "Trattoria Dall'Oste, Florence", gcat: "맛집·카페", cat: "맛집", coords: [43.7753, 11.2492], desc: "피렌체 대표 메뉴 피오렌티나 티본스테이크 인기 레스토랑" }
+        { name: "베키오 다리", query: "Ponte Vecchio, Florence", gcat: "야경·전망", cat: "관광", coords: [43.7680, 11.2531], desc: "아르노 강 위 보석 상점들이 늘어선 피렌체 가장 오래된 다리" }
       ]
     },
     {
@@ -767,136 +803,84 @@
       spots: [
         { name: "산 마르코 광장 & 대성당", query: "Piazza San Marco, Venice", gcat: "명소", cat: "관광", coords: [45.4342, 12.3388], desc: "베네치아 본섬의 심장. 황금 모자이크 대성당 & 종탑 전망대" },
         { name: "리알토 다리", query: "Rialto Bridge, Venice", gcat: "명소", cat: "관광", coords: [45.4380, 12.3358], desc: "대운하를 가로지르는 베네치아 대표 아치형 다리 & 수상버스 정류장" },
-        { name: "부라노 섬 (아이유 뮤비 촬영지)", query: "Burano, Venice", gcat: "근교", cat: "관광", coords: [45.4854, 12.4167], desc: "알록달록 파스텔톤 집들이 늘어선 섬. 폰다멘타 노베에서 바포레토 약 45분" },
-        { name: "무라노 섬 (유리공예)", query: "Murano, Venice", gcat: "근교", cat: "관광", coords: [45.4586, 12.3568], desc: "부라노 섬 가는 길에 함께 들르기 좋은 전통 유리공예 섬" },
-        { name: "아카데미아 다리 (일몰 명소)", query: "Ponte dell'Accademia, Venice", gcat: "야경·전망", cat: "관광", coords: [45.4317, 12.3289], desc: "산타 마리아 델라 살루테 성당과 대운하가 액자처럼 보이는 뷰포인트" },
-        { name: "탄식의 다리 & 두칼레 궁전", query: "Bridge of Sighs, Venice", gcat: "명소", cat: "관광", coords: [45.4341, 12.3409], desc: "죄수들이 마지막으로 바깥 풍경을 보며 한숨지었다는 다리" },
-        { name: "리브레리아 아쿠아 알타 서점", query: "Libreria Acqua Alta, Venice", gcat: "명소", cat: "관광", coords: [45.4379, 12.3422], desc: "곤돌라와 욕조 안에 책을 쌓아둔 독특한 헌책방 포토스팟" },
-        { name: "달 모로 (Dal Moro's) 테이크아웃 파스타", query: "Dal Moro's Fresh Pasta to Go, Venice", gcat: "맛집·카페", cat: "맛집", coords: [45.4363, 12.3396], desc: "생면 파스타를 박스에 담아주는 가성비 최고 웨이팅 맛집" }
+        { name: "부라노 섬 (아이유 뮤비 촬영지)", query: "Burano, Venice", gcat: "근교", cat: "관광", coords: [45.4854, 12.4167], desc: "알록달록 파스텔톤 집들이 늘어선 섬. 폰다멘타 노베에서 바포레토 약 45분" }
       ]
     },
     {
       id: "luzern", name: "🇨🇭 루체른", days: [7, 8],
       spots: [
         { name: "카펠교 & 팔각 수탑", query: "Chapel Bridge, Lucerne", gcat: "명소", cat: "관광", coords: [47.0516, 8.3075], desc: "유럽에서 가장 오래된 목조 다리. 낮과 밤 조명 모두 아름다움" },
-        { name: "빈사의 사자상", query: "Lion Monument, Lucerne", gcat: "명소", cat: "관광", coords: [47.0584, 8.3106], desc: "마크 트웨인이 '세상에서 가장 슬픈 돌'이라 극찬한 암벽 조각" },
-        { name: "리기산 (산들의 여왕)", query: "Mount Rigi, Switzerland", gcat: "근교", cat: "관광", coords: [47.0567, 8.4853], desc: "유람선 + 산악열차 환상 코스. 스위스패스 소지 시 무료 탑승" },
-        { name: "필라투스 산 (골든 라운드 트립)", query: "Mount Pilatus, Switzerland", gcat: "근교", cat: "관광", coords: [46.9794, 8.2564], desc: "해발 2,132m 알프스 설산 전망대 (스위스패스 50% 할인)" },
-        { name: "융프라우요흐 (인터라켄 당일치기)", query: "Jungfraujoch, Switzerland", gcat: "근교", cat: "관광", coords: [46.5475, 7.9851], desc: "루체른에서 골든패스 기차로 인터라켄 경유 후 산악열차 탑승" },
-        { name: "무제크 성벽 (Museggmauer)", query: "Musegg Wall, Lucerne", gcat: "야경·전망", cat: "관광", coords: [47.0558, 8.3046], desc: "루체른 구시가지와 호수가 한눈에 들어오는 중세 성벽 산책로" },
-        { name: "루체른 호수 유람선 선착장", query: "Luzern Bahnhofquai, Lucerne", gcat: "야경·전망", cat: "관광", coords: [47.0511, 8.3112], desc: "루체른역 바로 앞 선착장. 베기스/피츠나우 방면 유람선 출발" }
+        { name: "리기산 (산들의 여왕)", query: "Mount Rigi, Switzerland", gcat: "근교", cat: "관광", coords: [47.0567, 8.4853], desc: "유람선 + 산악열차 환상 코스. 스위스패스 소지 시 무료 탑승" }
       ]
     },
     {
       id: "strasbourg", name: "🇫🇷 스트라스부르", days: [9],
       spots: [
         { name: "쁘띠 프랑스 (La Petite France)", query: "La Petite France, Strasbourg", gcat: "명소", cat: "관광", coords: [48.5806, 7.7405], desc: "하울의 움직이는 성 모티브가 된 목조 가옥과 운하 마을" },
-        { name: "스트라스부르 노트르담 대성당", query: "Cathédrale Notre-Dame-de-Strasbourg", gcat: "명소", cat: "관광", coords: [48.5818, 7.7509], desc: "붉은 사암 고딕 양식 대성당 & 정오 12:30 천문시계 인형 퍼레이드" },
-        { name: "보방 댐 전망대 (Barrage Vauban)", query: "Barrage Vauban, Strasbourg", gcat: "야경·전망", cat: "관광", coords: [48.5792, 7.7379], desc: "쁘띠 프랑스 운하와 덮인 다리(Ponts Couverts)를 한눈에 담는 뷰포인트" },
-        { name: "스트라스부르 크리스마스 마켓", query: "Place Kléber, Strasbourg", gcat: "야경·전망", cat: "관광", coords: [48.5834, 7.7458], desc: "프랑스 최대 크리스마스 마켓(12월 말까지 운영 여부 확인). 초대형 트리" },
-        { name: "오 브라쇠르 (Au Brasseur)", query: "Au Brasseur, Strasbourg", gcat: "맛집·카페", cat: "맛집", coords: [48.5829, 7.7547], desc: "수제 맥주와 알자스 전통 피자 타르트 플랑베(Flammekueche) 맛집" }
+        { name: "스트라스부르 노트르담 대성당", query: "Cathédrale Notre-Dame-de-Strasbourg", gcat: "명소", cat: "관광", coords: [48.5818, 7.7509], desc: "붉은 사암 고딕 양식 대성당 & 정오 12:30 천문시계 인형 퍼레이드" }
       ]
     },
     {
       id: "paris", name: "🇫🇷 파리", days: [10, 11, 12, 13],
       spots: [
         { name: "에펠탑 & 화이트 에펠 정시 점등", query: "Eiffel Tower, Paris", gcat: "야경·전망", cat: "관광", coords: [48.8584, 2.2945], desc: "일몰 후 매시 정각 5분간 반짝이는 화이트 에펠 관람 필수" },
-        { name: "루브르 박물관", query: "Louvre Museum, Paris", gcat: "미술관", cat: "관광", coords: [48.8606, 2.3376], desc: "모나리자·밀로의 비너스. 시간대별 사전 예약 필수 (화요일 휴무)" },
-        { name: "몽마르뜨 언덕 & 사크레쾨르 대성당", query: "Montmartre, Paris", gcat: "야경·전망", cat: "관광", coords: [48.8867, 2.3431], desc: "파리 시내가 한눈에 보이는 언덕. 사랑해벽·테르트르 광장 연계" },
-        { name: "오르세 미술관", query: "Musée d'Orsay, Paris", gcat: "미술관", cat: "관광", coords: [48.8600, 2.3266], desc: "고흐·모네·르누아르 인상주의 명작과 대형 시계창 포토스팟" },
-        { name: "개선문 전망대 (에투알 개선문)", query: "Arc de Triomphe, Paris", gcat: "야경·전망", cat: "관광", coords: [48.8738, 2.2950], desc: "샹젤리제 거리와 에펠탑 야경을 동시에 보는 최고의 파노라마" },
-        { name: "베르사유 궁전 & 거울의 방", query: "Palace of Versailles", gcat: "근교", cat: "관광", coords: [48.8049, 2.1204], desc: "파리 근교 필수 코스. 패스포트 티켓 사전 시간 예약 필수" },
-        { name: "몽생미셸 수도원", query: "Mont-Saint-Michel Abbey", gcat: "근교", cat: "관광", coords: [48.6361, -1.5115], desc: "바다 위 천공의 섬 수도원. TGV+버스 또는 투어 이용" },
-        { name: "오랑주리 미술관 (모네 수련)", query: "Musée de l'Orangerie, Paris", gcat: "미술관", cat: "관광", coords: [48.8638, 2.3226], desc: "튈르리 정원 끝자락, 타원형 전시실의 거대 수련 연작" },
-        { name: "부용 샤르티에 (Bouillon Chartier)", query: "Bouillon Chartier Grands Boulevards, Paris", gcat: "맛집·카페", cat: "맛집", coords: [48.8719, 2.3431], desc: "1896년 오픈한 가성비 최고 파리 전통 비스트로 (에스카르고·오리콩피)" }
+        { name: "루브르 박물관", query: "Louvre Museum, Paris", gcat: "미술관", cat: "관광", coords: [48.8606, 2.3376], desc: "모나리자·밀로의 비너스. 시간대별 사전 예약 필수" },
+        { name: "몽마르뜨 언덕 & 사크레쾨르 대성당", query: "Montmartre, Paris", gcat: "야경·전망", cat: "관광", coords: [48.8867, 2.3431], desc: "파리 시내가 한눈에 보이는 언덕. 사랑해벽 연계" },
+        { name: "오르세 미술관", query: "Musée d'Orsay, Paris", gcat: "미술관", cat: "관광", coords: [48.8600, 2.3266], desc: "고흐·모네·르누아르 인상주의 명작" }
       ]
     },
     {
       id: "barcelona", name: "🇪🇸 바르셀로나", days: [14, 15, 16],
       spots: [
         { name: "사그라다 파밀리아 성당", query: "Sagrada Família, Barcelona", gcat: "명소", cat: "관광", coords: [41.4036, 2.1744], desc: "가우디의 역작. 스테인드글라스 빛이 가장 예쁜 오후 3~4시 입장 추천" },
-        { name: "구엘 공원", query: "Park Güell, Barcelona", gcat: "명소", cat: "관광", coords: [41.4145, 2.1527], desc: "도마뱀 분수와 바르셀로나 시내·지중해 전망. 시간 지정 예약 필수" },
-        { name: "카사 바트요 & 카사 밀라", query: "Casa Batlló, Barcelona", gcat: "명소", cat: "관광", coords: [41.3917, 2.1649], desc: "그라시아 거리의 가우디 대표 건축물 2곳" },
-        { name: "카르멜 벙커 (일몰·야경)", query: "Bunkers del Carmel, Barcelona", gcat: "야경·전망", cat: "관광", coords: [41.4193, 2.1617], desc: "바르셀로나 360도 파노라마 뷰포인트. 일몰 40분 전 도착 추천" },
-        { name: "몬주익 매직 분수쇼", query: "Magic Fountain of Montjuïc, Barcelona", gcat: "야경·전망", cat: "관광", coords: [41.3712, 2.1517], desc: "음악과 조명이 어우러지는 분수쇼 (주말 야간 시간표 확인)" },
-        { name: "보케리아 시장", query: "Mercato de la Boqueria, Barcelona", gcat: "맛집·카페", cat: "맛집", coords: [41.3817, 2.1716], desc: "람블라스 거리 대표 시장. 생과일 주스·하몽·해산물 타파스" },
-        { name: "비니투스 (Vinitus) 타파스", query: "Vinitus, Barcelona", gcat: "맛집·카페", cat: "맛집", coords: [41.3905, 2.1628], desc: "꿀대구, 맛조개 구이, 감바스 등 한국인 입맛 저격 타파스 맛집" },
-        { name: "몬세라트 수도원 (근교)", query: "Montserrat Abbey, Spain", gcat: "근교", cat: "관광", coords: [41.5933, 1.8377], desc: "기암괴석 산악 수도원. 바르셀로나 에스파냐 광장에서 기차+산악열차 이동" }
+        { name: "구엘 공원", query: "Park Güell, Barcelona", gcat: "명소", cat: "관광", coords: [41.4145, 2.1527], desc: "동화 같은 모자이크 정원" },
+        { name: "카르멜 벙커 (일몰·야경)", query: "Bunkers del Carmel, Barcelona", gcat: "야경·전망", cat: "관광", coords: [41.4193, 2.1617], desc: "바르셀로나 360도 파노라마 뷰포인트" }
       ]
     },
     {
       id: "porto", name: "🇵🇹 포르투", days: [17, 18],
       spots: [
-        { name: "동 루이스 1세 다리 & 모후 정원", query: "Dom Luís I Bridge, Porto", gcat: "야경·전망", cat: "관광", coords: [41.1400, -8.6094], desc: "상층부 도보 횡단하며 보는 도우루 강 일몰과 야경이 압권" },
-        { name: "렐루 서점 (Livraria Lello)", query: "Livraria Lello, Porto", gcat: "명소", cat: "관광", coords: [41.1468, -8.6148], desc: "해리포터 영감의 붉은 나선형 계단 서점. 온라인 시간 예약 필수" },
-        { name: "상 벤투 기차역", query: "São Bento Railway Station, Porto", gcat: "명소", cat: "관광", coords: [41.1456, -8.6104], desc: "2만여 장의 푸른 아줄레주 타일 벽화가 장관인 기차역" },
-        { name: "가이아 지구 포트와인 와이너리", query: "Graham's Port Lodge, Vila Nova de Gaia", gcat: "맛집·카페", cat: "맛집", coords: [41.1365, -8.6236], desc: "그라함·테일러·칼렘·샌드맨 등 강 건너 와이너리 투어 & 테이스팅" },
-        { name: "세라 두 필라르 전망대", query: "Miradouro da Serra do Pilar, Vila Nova de Gaia", gcat: "야경·전망", cat: "관광", coords: [41.1386, -8.6085], desc: "동 루이스 1세 다리와 히베이라 지구를 정면으로 담는 야경 1순위" },
-        { name: "볼사 궁전 (아랍의 방)", query: "Palácio da Bolsa, Porto", gcat: "명소", cat: "관광", coords: [41.1414, -8.6156], desc: "화려한 황금빛 아랍의 방 가이드 투어 인기" },
-        { name: "마제스틱 카페", query: "Café Majestic, Porto", gcat: "맛집·카페", cat: "맛집", coords: [41.1472, -8.6066], desc: "벨 에포크 양식의 고풍스러운 카페. 프렌치토스트(라바나다스) 추천" }
+        { name: "동 루이스 1세 다리 & 모후 정원", query: "Dom Luís I Bridge, Porto", gcat: "야경·전망", cat: "관광", coords: [41.1400, -8.6094], desc: "상층부 도보 횡단하며 보는 도우루 강 일몰과 야경" },
+        { name: "렐루 서점 (Livraria Lello)", query: "Livraria Lello, Porto", gcat: "명소", cat: "관광", coords: [41.1468, -8.6148], desc: "해리포터 영감의 붉은 나선형 계단 서점" }
       ]
     },
     {
       id: "lisbon", name: "🇵🇹 리스본", days: [19, 20],
       spots: [
-        { name: "제로니무스 수도원", query: "Jerónimos Monastery, Lisbon", gcat: "명소", cat: "관광", coords: [38.6979, -9.2067], desc: "벨렘 지구 마누엘 양식 걸작. 오전 일찍 방문 추천" },
-        { name: "벨렘 탑 & 발견기념비", query: "Belém Tower, Lisbon", gcat: "명소", cat: "관광", coords: [38.6916, -9.2160], desc: "대항해시대 출항지 타구스 강변의 상징 건축물" },
-        { name: "파스테이스 드 벨렘 (원조 에그타르트)", query: "Pastéis de Belém, Lisbon", gcat: "맛집·카페", cat: "맛집", coords: [38.6975, -9.2032], desc: "1837년 수도원 비법 그대로 구워내는 나타 원조 맛집 (시나몬 슈가 필수)" },
-        { name: "28번 노란 트램 & 알파마 지구", query: "Praça Martim Moniz, Lisbon", gcat: "명소", cat: "관광", coords: [38.7156, -9.1364], desc: "좁은 언덕 골목을 누비는 리스본 명물 트램 (소매치기 주의)" },
-        { name: "상 조르제 성", query: "Castelo de São Jorge, Lisbon", gcat: "야경·전망", cat: "관광", coords: [38.7139, -9.1335], desc: "리스본 붉은 지붕과 4월 25일 다리가 내려다보이는 언덕 성채" },
-        { name: "산타 주스타 엘리베이터 & 카르모 수녀원", query: "Santa Justa Lift, Lisbon", gcat: "야경·전망", cat: "관광", coords: [38.7121, -9.1394], desc: "바이샤 시내 야경 뷰포인트 & 지붕 없는 고딕 성당 유적" },
-        { name: "코메르시우 광장", query: "Praça do Comércio, Lisbon", gcat: "명소", cat: "관광", coords: [38.7075, -9.1364], desc: "타구스 강변 개방형 광장. 12/31 연말 불꽃놀이 카운트다운 명소" },
-        { name: "신트라 페나 궁전 & 호카 곶 (근교)", query: "Pena Palace, Sintra", gcat: "근교", cat: "관광", coords: [38.7876, -9.3906], desc: "호시우 역에서 기차로 40분. 동화 속 알록달록 궁전 & 유라시아 최서단" }
+        { name: "제로니무스 수도원", query: "Jerónimos Monastery, Lisbon", gcat: "명소", cat: "관광", coords: [38.6979, -9.2067], desc: "벨렘 지구 마누엘 양식 걸작" },
+        { name: "파스테이스 드 벨렘 (원조 에그타르트)", query: "Pastéis de Belém, Lisbon", gcat: "맛집·카페", cat: "맛집", coords: [38.6975, -9.2032], desc: "1837년 수도원 비법 그대로 구워내는 나타 원조 맛집" }
       ]
     },
     {
       id: "seville", name: "🇪🇸 세비야", days: [21, 22],
       spots: [
-        { name: "세비야 스페인 광장", query: "Plaza de España, Seville", gcat: "야경·전망", cat: "관광", coords: [37.3772, -5.9869], desc: "김태희 광고 촬영지. 반원형 회랑과 타일 벤치, 해질녘 일몰 최고" },
-        { name: "세비야 알카사르", query: "Royal Alcázar of Seville", gcat: "명소", cat: "관광", coords: [37.3831, -5.9902], desc: "왕좌의 게임 촬영지 무데하르 양식 궁전. 사전 예약 필수" },
-        { name: "세비야 대성당 & 히랄다 탑", query: "Seville Cathedral", gcat: "명소", cat: "관광", coords: [37.3861, -5.9926], desc: "세계 3대 성당 & 콜럼버스 무덤. 히랄다 탑 경사로 오르기" },
-        { name: "메트로폴 파라솔 (라스 세타스)", query: "Metropol Parasol, Seville", gcat: "야경·전망", cat: "관광", coords: [37.3933, -5.9918], desc: "세계 최대 목조 구조물 옥상 산책로 야경 명소" },
-        { name: "플라멩코 춤 박물관 공연", query: "Museo del Baile Flamenco, Seville", gcat: "명소", cat: "관광", coords: [37.3895, -5.9914], desc: "안달루시아 본고장에서 즐기는 열정적인 정통 플라멩코 공연" },
-        { name: "라 브루닐다 (La Brunilda) 타파스", query: "La Brunilda, Seville", gcat: "맛집·카페", cat: "맛집", coords: [37.3906, -5.9982], desc: "이베리코 돼지고기 구이와 리조또가 유명한 세비야 1등 타파스 바" }
+        { name: "세비야 스페인 광장", query: "Plaza de España, Seville", gcat: "야경·전망", cat: "관광", coords: [37.3772, -5.9869], desc: "김태희 광고 촬영지. 반원형 회랑과 타일 벤치" },
+        { name: "세비야 알카사르", query: "Royal Alcázar of Seville", gcat: "명소", cat: "관광", coords: [37.3831, -5.9902], desc: "왕좌의 게임 촬영지 무데하르 양식 궁전" }
       ]
     },
     {
       id: "ronda", name: "🇪🇸 론다", days: [23],
       spots: [
-        { name: "누에보 다리 (Puente Nuevo)", query: "Puente Nuevo, Ronda", gcat: "명소", cat: "관광", coords: [36.7407, -5.1659], desc: "120m 타호 협곡을 잇는 론다의 상징. 협곡 아래 포토스팟 도보 이동 추천" },
-        { name: "론다 전망대 (Mirador de Ronda)", query: "Mirador de Ronda", gcat: "야경·전망", cat: "관광", coords: [36.7418, -5.1669], desc: "안달루시아 평원이 끝없이 펼쳐지는 절벽 전망대" },
-        { name: "론다 투우장", query: "Plaza de Toros de la Real Maestranza de Caballería de Ronda", gcat: "명소", cat: "관광", coords: [36.7424, -5.1672], desc: "스페인 근대 투우의 발상지이자 가장 오래된 석조 투우장" },
-        { name: "펠리페 5세의 문 & 구시가지", query: "La Ciudad, Ronda", gcat: "명소", cat: "관광", coords: [36.7380, -5.1656], desc: "아랍 목욕탕 유적과 하얀 골목길이 이어지는 론다 구시가지" }
+        { name: "누에보 다리 (Puente Nuevo)", query: "Puente Nuevo, Ronda", gcat: "명소", cat: "관광", coords: [36.7407, -5.1659], desc: "120m 타호 협곡을 잇는 론다의 상징" }
       ]
     },
     {
       id: "granada", name: "🇪🇸 그라나다", days: [23, 24],
       spots: [
-        { name: "알함브라 & 나스르 궁전", query: "Alhambra, Granada", gcat: "명소", cat: "관광", coords: [37.1761, -3.5881], desc: "이슬람 건축 예술의 정점. 나스르 궁전 지정 시간 엄수 (예약 필수)" },
-        { name: "산 니콜라스 전망대", query: "Mirador de San Nicolás, Granada", gcat: "야경·전망", cat: "관광", coords: [37.1811, -3.5926], desc: "알바이신 언덕 위에서 붉게 물드는 알함브라 전경을 보는 일몰 명소" },
-        { name: "알바이신 지구 & 아랍 거리", query: "Albaicín, Granada", gcat: "명소", cat: "관광", coords: [37.1815, -3.5935], desc: "미로 같은 하얀 골목길과 민트티·케밥 상점이 모인 이슬람 지구" },
-        { name: "보데가스 카스타녜다 (타파스)", query: "Bodegas Castañeda, Granada", gcat: "맛집·카페", cat: "맛집", coords: [37.1769, -3.5982], desc: "음료 주문 시 무료 타파스가 나오는 그라나다 전통 선술집" }
+        { name: "알함브라 & 나스르 궁전", query: "Alhambra, Granada", gcat: "명소", cat: "관광", coords: [37.1761, -3.5881], desc: "이슬람 건축 예술의 정점. 사전 예약 필수" }
       ]
     },
     {
       id: "madrid", name: "🇪🇸 마드리드", days: [24, 25, 26, 27],
       spots: [
-        { name: "프라도 미술관", query: "Museo Nacional del Prado, Madrid", gcat: "미술관", cat: "관광", coords: [40.4138, -3.6921], desc: "벨라스케스 '시녀들', 고야 작품 소장. 월~토 18:00~20:00 무료 입장" },
-        { name: "마드리드 왕궁 & 알무데나 대성당", query: "Royal Palace of Madrid", gcat: "명소", cat: "관광", coords: [40.4180, -3.7143], desc: "서유럽 최대 규모 왕궁. 근위병 교대식 & 사바티니 정원 산책" },
-        { name: "산 미구엘 시장", query: "Mercado de San Miguel, Madrid", gcat: "맛집·카페", cat: "맛집", coords: [40.4154, -3.7089], desc: "마요르 광장 옆 세련된 미식 시장. 올리브 핀초스·빠에야·상그리아" },
-        { name: "레티로 공원 & 수정궁", query: "El Retiro Park, Madrid", gcat: "명소", cat: "관광", coords: [40.4153, -3.6845], desc: "마드리드 시민들의 휴식처. 유리 온실 크리스탈 궁전 포토스팟" },
-        { name: "데보드 신전 (일몰 명소)", query: "Temple of Debod, Madrid", gcat: "야경·전망", cat: "관광", coords: [40.4240, -3.7178], desc: "이집트에서 기증받은 고대 신전과 스페인 광장 방향 황금빛 일몰" },
-        { name: "톨레도 구시가지 (근교 당일치기)", query: "Toledo, Spain", gcat: "근교", cat: "관광", coords: [39.8628, -4.0273], desc: "아토차 역에서 고속열차 33분. 중세 스페인 옛 수도 (파라도르 전망 추천)" },
-        { name: "세고비아 수도교 & 알카사르 (근교)", query: "Aqueduct of Segovia", gcat: "근교", cat: "관광", coords: [40.9481, -4.1178], desc: "백설공주 성 모티브 알카사르 & 로마 시대 거대 수도교 (버스/기차 1시간)" },
-        { name: "쇼콜라테리아 산 히네스 (츄러스)", query: "Chocolatería San Ginés, Madrid", gcat: "맛집·카페", cat: "맛집", coords: [40.4167, -3.7070], desc: "1894년 오픈한 24시간 전통 츄러스 & 진한 핫초코 맛집" },
-        { name: "까사 밍고 (Casa Mingo)", query: "Casa Mingo, Madrid", gcat: "맛집·카페", cat: "맛집", coords: [40.4259, -3.7209], desc: "100년 전통 로스트 치킨과 사과주(시드라) 콤비 맛집" }
+        { name: "프라도 미술관", query: "Museo Nacional del Prado, Madrid", gcat: "미술관", cat: "관광", coords: [40.4138, -3.6921], desc: "벨라스케스, 고야 명작 소장" },
+        { name: "마드리드 왕궁", query: "Royal Palace of Madrid", gcat: "명소", cat: "관광", coords: [40.4180, -3.7143], desc: "서유럽 최대 규모 왕궁" }
       ]
     }
   ];
 
-  // Compact tuple array [dayNum, order, name, query, memo] for all 207 CSV rows
   const RAW_CSV_TUPLES = [
-    [1,1,"로마 피우미치노 공항","Rome Fiumicino Airport","ICN 14:05 - FCO 19:35 (대한항공 KE931) / 공항-테르미니 택시 55유로 (https://naver.me/xll20Y8D)"],
+    [1,1,"로마 피우미치노 공항","Rome Fiumicino Airport","ICN 14:05 - FCO 19:35 (대한항공 KE931) / 공항-테르미니 택시 55유로"],
     [1,2,"테르미니 역","Roma Termini","공항에서 약 23.4km 이동"],
     [1,3,"윈드로제 호텔","Hotel Windrose Rome","숙소 (테르미니 역 도보 402m)"],
     [2,1,"윈드로제 호텔","Hotel Windrose Rome","숙소 출발"],
@@ -906,11 +890,11 @@
     [2,5,"팔라티노 언덕","Palatine Hill, Rome","263m 이동"],
     [2,6,"포로 로마노","Roman Forum, Rome","385m 이동"],
     [2,7,"포리 임페리알리","Via dei Fori Imperiali, Rome","167m 이동"],
-    [2,8,"캄피돌리오 광장","Piazza del Campidoglio, Rome","328m 이동 (캄피돌리오 언덕 동일 위치 통합)"],
+    [2,8,"캄피돌리오 광장","Piazza del Campidoglio, Rome","328m 이동"],
     [2,9,"베네치아 광장","Piazza Venezia, Rome","269m 이동"],
     [2,10,"트레비 분수","Trevi Fountain, Rome","578m 이동"],
     [2,11,"스페인 광장","Piazza di Spagna, Rome","536m 이동"],
-    [2,12,"콘도티 거리","Via dei Condotti, Rome","스페인 광장 바로 앞 명품 거리 (동선 최적화)"],
+    [2,12,"콘도티 거리","Via dei Condotti, Rome","스페인 광장 바로 앞 명품 거리"],
     [2,13,"코르소 거리","Via del Corso, Rome","232m 이동"],
     [2,14,"포폴로 광장","Piazza del Popolo, Rome","873m 이동"],
     [2,15,"핀치오 언덕","Pincian Hill, Rome","137m 이동"],
@@ -921,11 +905,11 @@
     [3,4,"성 베드로 대성당","St. Peter's Basilica, Vatican City","481m 이동"],
     [3,5,"성 베드로 광장","St. Peter's Square, Vatican City","231m 이동"],
     [3,6,"비아 델라 콘칠리아치오네","Via della Conciliazione, Rome","627m 이동"],
-    [3,7,"산탄젤로 성","Castel Sant'Angelo, Rome","362m 이동 / 전망 이쁨, 굳이 안들어가도됨"],
+    [3,7,"산탄젤로 성","Castel Sant'Angelo, Rome","362m 이동"],
     [3,8,"나보나 광장","Piazza Navona, Rome","710m 이동"],
-    [3,9,"판테온","Pantheon, Rome","320m 이동 / 굳이 안들어가도됨"],
+    [3,9,"판테온","Pantheon, Rome","320m 이동"],
     [3,10,"캄포 데 피오리","Campo de' Fiori, Rome","524m 이동"],
-    [3,11,"빌라 파르네시나","Villa Farnesina, Rome","다리 건너 트라스테베레 방면 (동선 최적화)"],
+    [3,11,"빌라 파르네시나","Villa Farnesina, Rome","다리 건너 트라스테베레 방면"],
     [3,12,"트릴루사 광장","Piazza Trilussa, Rome","339m 이동"],
     [3,13,"자니콜로 언덕","Janiculum Hill, Rome","539m 이동"],
     [3,14,"가리발디 다리","Ponte Garibaldi, Rome","1.1km 이동"],
@@ -934,10 +918,10 @@
     [4,1,"산타 마리아 노벨라 역","Firenze Santa Maria Novella","로마 -> 피렌체 이동 도착"],
     [4,2,"플러스 플로렌스 호스텔","PLUS Florence","숙소 (역에서 859m)"],
     [4,3,"산타 마리아 노벨라 성당","Basilica of Santa Maria Novella, Florence","역에서 236m"],
-    [4,4,"산타 마리아 노벨라 약국","Officina Profumo-Farmaceutica di Santa Maria Novella, Florence","143m 이동 (쇼핑)"],
-    [4,5,"피렌체 산 로렌초 성당","Basilica di San Lorenzo, Florence","501m 이동 / 선택-메디치가의 묘지"],
-    [4,6,"라우렌치아나 도서관","Biblioteca Medicea Laurenziana, Florence","32m 이동 / 선택-미켈란젤로가 설계"],
-    [4,7,"피렌체 중앙시장","Mercato Centrale, Florence","214m 이동 / 2층 푸드코트, 가죽시장"],
+    [4,4,"산타 마리아 노벨라 약국","Officina Profumo-Farmaceutica di Santa Maria Novella, Florence","143m 이동"],
+    [4,5,"피렌체 산 로렌초 성당","Basilica di San Lorenzo, Florence","501m 이동"],
+    [4,6,"라우렌치아나 도서관","Biblioteca Medicea Laurenziana, Florence","32m 이동"],
+    [4,7,"피렌체 중앙시장","Mercato Centrale, Florence","214m 이동 (2층 푸드코트)"],
     [5,1,"호텔 아론","Hotel Aaron, Venice Mestre","피렌체 -> 베네치아 이동 / 숙소 (베네치아 메스트레)"],
     [7,1,"바라바스 루체른","Barabas Hotel Luzern","베네치아 -> 루체른 이동 / 숙소 (루체른)"],
     [9,1,"스트라스부르 역","Gare de Strasbourg-Ville","루체른 -> 스트라스부르 이동 도착"],
@@ -949,11 +933,11 @@
     [9,7,"레지던스 세리즈 스트라스부르","Cerise Strasbourg","숙소 체크인"],
     [10,1,"레지던스 세리즈 스트라스부르","Cerise Strasbourg","체크아웃 후 스트라스부르 -> 파리 이동"],
     [10,2,"몽마르뜨","Montmartre, Paris","파리 도착 후 첫 코스"],
-    [10,3,"트로카데로 광장","Place du Trocadéro, Paris","에펠탑 뷰포인트 (동선 최적화)"],
+    [10,3,"트로카데로 광장","Place du Trocadéro, Paris","에펠탑 뷰포인트"],
     [10,4,"에펠탑","Eiffel Tower, Paris","관광명소"],
     [10,5,"샹 드 마르스 공원","Champ de Mars, Paris","에펠탑 남쪽 공원"],
     [10,6,"개선문","Arc de Triomphe, Paris","샹젤리제 방면 이동"],
-    [10,7,"르 봉 마르셰","Le Bon Marché, Paris","쇼핑 (센강 남쪽 백화점)"],
+    [10,7,"르 봉 마르셰","Le Bon Marché, Paris","쇼핑"],
     [10,8,"더 피플 파리 마레","The People - Paris Marais","숙소 체크인"],
     [11,1,"더 피플 파리 마레","The People - Paris Marais","숙소 출발"],
     [11,2,"몽파르나스 역","Gare Montparnasse, Paris","몽생미셸행 기차 출발"],
@@ -963,13 +947,12 @@
     [12,2,"루브르 박물관","Louvre Museum, Paris","관광명소"],
     [12,3,"앙젤리나 리볼리 점","Angelina Paris Rivoli","카페/디저트"],
     [12,4,"튈르리 정원","Tuileries Garden, Paris","산책"],
-    [12,5,"콩코르드 광장","Place de la Concorde, Paris","강 건너기 전 북쪽 라인 일직선 연결 (동선 최적화)"],
+    [12,5,"콩코르드 광장","Place de la Concorde, Paris","광장"],
     [12,6,"라뒤레 파리 로얄 점","Ladurée Paris Royale","카페/디저트"],
     [12,7,"샹젤리제 거리","Champs-Élysées, Paris","쇼핑/산책"],
     [12,8,"알렉상드르 3세 다리","Pont Alexandre III, Paris","도보 건넘"],
-    [12,9,"오르세 미술관","Musée d'Orsay, Paris","강 남쪽 미술관"],
-    [12,10,"바토 무슈","Bateaux Mouches, Paris","유람선 선착장 (택1)"],
-    [12,11,"바토 파리지앵","Bateaux Parisiens, Paris","유람선 선착장 (에펠탑 앞, 택1)"],
+    [12,9,"오르세 미술관","Musée d'Orsay, Paris","미술관"],
+    [12,10,"바토 무슈","Bateaux Mouches, Paris","유람선 선착장"],
     [13,1,"더 피플 파리 마레","The People - Paris Marais","숙소 출발"],
     [13,2,"베르사유 궁전","Palace of Versailles","오전/낮 베르사유 관람"],
     [13,3,"노트르담 대성당","Cathédrale Notre-Dame de Paris","파리 시내 복귀 후 관람"],
@@ -977,131 +960,69 @@
     [13,5,"베르시 버스 정류장","Paris Bercy Seine Bus Station","파리 -> 바르셀로나 야간버스 탑승"],
     [14,1,"북 역 버스 터미널","Estació d'Autobusos Barcelona Nord","파리 야간버스 도착"],
     [14,2,"호텔 기네브라","Hotel Ginebra Barcelona","카탈루냐 광장 앞 숙소 짐 보관"],
-    [14,3,"람블라스 거리","La Rambla, Barcelona","해변 방면 내려가며 거리 구경 (12/25 보케리아 시장 휴무)"],
+    [14,3,"람블라스 거리","La Rambla, Barcelona","해변 방면 거리 구경"],
     [14,4,"콜럼버스 기념탑","Columbus Monument, Barcelona","람블라스 거리 끝"],
     [14,5,"포트 벨","Port Vell, Barcelona","항구 산책"],
     [14,6,"바르셀로네타 해변","Barceloneta Beach, Barcelona","해변 산책 및 점심"],
-    [14,7,"시우타데야 공원","Parc de la Ciutadella, Barcelona","해변에서 북상하며 공원 산책"],
+    [14,7,"시우타데야 공원","Parc de la Ciutadella, Barcelona","공원 산책"],
     [14,8,"개선문","Arc de Triomf, Barcelona","공원 북쪽 출구"],
-    [14,9,"카르멜 벙커","Bunkers del Carmel, Barcelona","16:40경 도착 추천 (일몰 17:25 / V19 버스 또는 택시 이동)"],
-    [14,10,"바르셀로나 대성당","Barcelona Cathedral","벙커 야경 후 고딕 지구 야경 산책 시작"],
-    [14,11,"왕의 광장","Plaça del Rei, Barcelona","고딕 지구 야경"],
-    [14,12,"레이알 광장","Plaça Reial, Barcelona","고딕 지구 야경 마무리 후 호텔 기네브라 복귀"],
+    [14,9,"카르멜 벙커","Bunkers del Carmel, Barcelona","일몰 명소"],
+    [14,10,"바르셀로나 대성당","Barcelona Cathedral","고딕 지구 야경"],
     [15,1,"호텔 기네브라","Hotel Ginebra Barcelona","숙소 출발"],
-    [15,2,"카탈루냐 음악당","Palau de la Música Catalana, Barcelona","오전/낮 관람"],
+    [15,2,"카탈루냐 음악당","Palau de la Música Catalana, Barcelona","관람"],
     [15,3,"호프만 빵집","Hofmann Pastisseria, Barcelona","디저트"],
-    [15,4,"보케리아 시장","Mercato de la Boqueria, Barcelona","점심/간식 (12/26 정상 영업)"],
+    [15,4,"보케리아 시장","Mercato de la Boqueria, Barcelona","점심/간식"],
     [15,5,"추레리아 마누엘 산 로만","Xurreria Manuel San Román, Barcelona","츄러스 간식"],
-    [15,6,"몬주익 성","Montjuïc Castle, Barcelona","케이블카/버스로 정상 먼저 이동 후 내려오는 동선"],
-    [15,7,"카탈루냐 국립 미술관","Museu Nacional d'Art de Catalunya, Barcelona","몬주익 언덕 내려오며 관람"],
-    [15,8,"매직 분수","Magic Fountain of Montjuïc, Barcelona","12/26(토) 20:00 / 20:30 분수쇼 진행 (관람 후 숙소 복귀)"],
-    [16,1,"호텔 기네브라","Hotel Ginebra Barcelona","가우디 투어 출발 (비행기 온라인 체크인 필수!)"],
-    [16,2,"카사 바트요","Casa Batlló, Barcelona","가우디 투어 1"],
-    [16,3,"카사 밀라","Casa Milà, Barcelona","가우디 투어 2"],
-    [16,4,"구엘 공원","Park Güell, Barcelona","가우디 투어 3"],
-    [16,5,"사그라다 파밀리아 성당","Sagrada Família, Barcelona","가우디 투어 4"],
-    [16,6,"산타 크레우 이 산 파우 병원","Hospital de la Santa Creu i Sant Pau, Barcelona","사그라다 파밀리아 도보 10분 (선택)"],
-    [16,7,"그라시아 거리","Passeig de Gràcia, Barcelona","시내 방면 내려오며 쇼핑/산책"],
-    [16,8,"비니투스 본점","Vinitus, Barcelona","타파스 저녁 후 호텔 기네브라 복귀"],
-    [17,1,"호텔 기네브라","Hotel Ginebra Barcelona","체크아웃 후 공항 이동"],
-    [17,2,"바르셀로나 엘프라트 공항","Josep Tarradellas Barcelona-El Prat Airport","BCN 13:00 - OPO 13:55 (부엘링 VY1178)"],
+    [15,6,"몬주익 성","Montjuïc Castle, Barcelona","정상 관람"],
+    [15,7,"카탈루냐 국립 미술관","Museu Nacional d'Art de Catalunya, Barcelona","미술관"],
+    [15,8,"매직 분수","Magic Fountain of Montjuïc, Barcelona","분수쇼 관람"],
+    [16,1,"호텔 기네브라","Hotel Ginebra Barcelona","가우디 투어 출발"],
+    [16,2,"카사 바트요","Casa Batlló, Barcelona","가우디 투어"],
+    [16,3,"카사 밀라","Casa Milà, Barcelona","가우디 투어"],
+    [16,4,"구엘 공원","Park Güell, Barcelona","가우디 투어"],
+    [16,5,"사그라다 파밀리아 성당","Sagrada Família, Barcelona","가우디 투어"],
+    [17,1,"호텔 기네브라","Hotel Ginebra Barcelona","공항 이동"],
+    [17,2,"바르셀로나 엘프라트 공항","Josep Tarradellas Barcelona-El Prat Airport","BCN 13:00 - OPO 13:55 (VY1178)"],
     [17,3,"프란시스쿠 드 사 카르네이루 공항","Francisco Sá Carneiro Airport, Porto","포르투 도착"],
-    [17,4,"스팟 패밀리 아파트먼트","Spot Family Apartments, Porto","숙소 체크인 (구시가지)"],
-    [17,5,"리베르다드 광장","Praça da Liberdade, Porto","도보 코스 시작"],
-    [17,6,"맥도날드 임페리얼 점","McDonald's Imperial, Porto","세계에서 가장 아름다운 맥도날드"],
-    [17,7,"안토니오 도스 콘그레가두스 성당","Igreja de Santo António dos Congregados, Porto","관광명소"],
-    [17,8,"상 벤투 기차역","São Bento Railway Station, Porto","아줄레주 벽화"],
-    [17,9,"플로레스 거리","Rua das Flores, Porto","상점가 거리"],
-    [17,10,"포르투 대성당","Porto Cathedral","관광명소"],
-    [17,11,"성 로렌스 성당","Igreja de São Lourenço, Porto","전망 포인트"],
-    [17,12,"Ribeira do Porto","Cais da Ribeira, Porto","도우루 강변"],
-    [17,13,"카이스 다 히베이라 드 가이아","Cais de Gaia, Vila Nova de Gaia","다리 건너 강 남쪽"],
-    [17,14,"와우 포르투","WOW Porto","문화 지구"],
-    [17,15,"그라함","Graham's Port Lodge, Vila Nova de Gaia","와이너리 후보 1 (5개 중 택1 / 투어 없이 테이스팅만 가능)"],
-    [17,16,"테일러","Taylor's Port, Vila Nova de Gaia","와이너리 후보 2"],
-    [17,17,"칼렘","Cálem, Vila Nova de Gaia","와이너리 후보 3"],
-    [17,18,"샌드맨","Sandeman, Vila Nova de Gaia","와이너리 후보 4"],
-    [17,19,"콥케","Kopke Port Wine House, Vila Nova de Gaia","와이너리 후보 5"],
-    [17,20,"Sogevinus Wine","Sogevinus Fine Wines, Vila Nova de Gaia","와이너리"],
-    [17,21,"모후 정원","Jardim do Morro, Vila Nova de Gaia","일몰/야경"],
-    [17,22,"세라 두 필라르 수도원","Monastery of Serra do Pilar, Vila Nova de Gaia","관광명소"],
-    [17,23,"세라 두 필라르 전망대","Miradouro da Serra do Pilar, Vila Nova de Gaia","야경 명소"],
+    [17,4,"스팟 패밀리 아파트먼트","Spot Family Apartments, Porto","숙소 체크인"],
+    [17,5,"리베르다드 광장","Praça da Liberdade, Porto","도보 시작"],
+    [17,6,"맥도날드 임페리얼 점","McDonald's Imperial, Porto","세계 아름다운 맥도날드"],
+    [17,7,"상 벤투 기차역","São Bento Railway Station, Porto","아줄레주 벽화"],
+    [17,8,"포르투 대성당","Porto Cathedral","관광명소"],
+    [17,9,"Cais da Ribeira","Cais da Ribeira, Porto","도우루 강변"],
+    [17,10,"모후 정원","Jardim do Morro, Vila Nova de Gaia","야경"],
     [18,1,"스팟 패밀리 아파트먼트","Spot Family Apartments, Porto","숙소 출발"],
-    [18,2,"산타 카타리나 거리","Rua de Santa Catarina, Porto","쇼핑 거리"],
-    [18,3,"알마스 성당","Capela das Almas, Porto","외벽 아줄레주"],
-    [18,4,"볼량 시장","Mercado do Bolhão, Porto","재래시장"],
-    [18,5,"마제스틱 카페","Café Majestic, Porto","역사적 카페"],
-    [18,6,"산투 알폰소 성당","Igreja de Santo Ildefonso, Porto","관광명소"],
-    [18,7,"알리아두스 거리","Avenida dos Aliados, Porto","중심 대로"],
-    [18,8,"포르투 시청","Câmara Municipal do Porto","관광명소"],
-    [18,9,"삼위일체 성당","Igreja da Santíssima Trindade, Porto","시청 뒤편 성당"],
-    [18,10,"클레리구스 성당","Clérigos Church, Porto","종탑 전망"],
-    [18,11,"렐루 서점","Livraria Lello, Porto","사전 예약 필수"],
-    [18,12,"카르모 성당","Igreja do Carmo, Porto","측면 아줄레주"],
-    [18,13,"비르투데스 공원","Passeio das Virtudes, Porto","뷰포인트"],
-    [18,14,"빅토리아 전망대","Miradouro da Vitória, Porto","구시가지 전망"],
-    [18,15,"볼사 궁전","Palácio da Bolsa, Porto","가이드 투어"],
-    [18,16,"상 프란시스코 성당","Igreja de São Francisco, Porto","황금 내부"],
-    [18,17,"히베이라 광장 & 거리","Praça da Ribeira, Porto","강변 산책"],
-    [18,18,"동 루이스 1세 다리","Dom Luís I Bridge, Porto","도보 횡단 야경"],
-    [19,1,"더 센트럴 하우스 리스본 바이샤","The Central House Lisbon Baixa","포르투 -> 리스본 오전 이동 후 숙소 짐 보관 (아센소르 다 비카 / Laundry & Luggage Pessoa 인근)"],
-    [19,2,"피게이라 광장","Praça da Figueira, Lisbon","벨렘 지구행 15E 트램 탑승"],
-    [19,3,"파스테이스 드 벨렘","Pastéis de Belém, Lisbon","원조 에그타르트"],
-    [19,4,"제로니무스 수도원","Jerónimos Monastery, Lisbon","관광명소"],
-    [19,5,"산타 마리아 드 벨렘 성당","Church of Santa Maria of Belém, Lisbon","수도원 인접 성당"],
-    [19,6,"발견기념비","Padrão dos Descobrimentos, Lisbon","강변 기념비"],
-    [19,7,"벨렘 탑","Belém Tower, Lisbon","관광명소"],
-    [19,8,"만테이가리아 카이스 두 소드레","Manteigaria Cais do Sodré, Lisbon","시내 복귀 후 에그타르트"],
-    [19,9,"아센소르 다 비카","Elevador da Bica, Lisbon","트램 포토 스팟"],
-    [19,10,"산타 주스타 엘리베이터","Santa Justa Lift, Lisbon","야경 뷰포인트"],
-    [20,1,"더 센트럴 하우스 리스본 바이샤","The Central House Lisbon Baixa","신트라/호카곶 근교 제외 -> 12/31+1/1 시내 일정 통합 진행"],
-    [20,2,"호시우 광장","Rossio Square, Lisbon","시내 투어 시작"],
-    [20,3,"카르모 수녀원","Carmo Convent, Lisbon","지붕 없는 성당"],
-    [20,4,"상 페드로 알칸타라 전망대","Miradouro de São Pedro de Alcântara, Lisbon","시내 전망"],
-    [20,5,"상 호케 성당","Igreja de São Roque, Lisbon","관광명소"],
-    [20,6,"마르팀 모니즈 광장","Praça Martim Moniz, Lisbon","28번 트램 출발 기점"],
-    [20,7,"상 조르제 성","Castelo de São Jorge, Lisbon","알파마 언덕 성채"],
-    [20,8,"리스본 대성당","Lisbon Cathedral","28번 트램 대표 스팟"],
-    [20,9,"파브리카 다 나타 (아우구스타점)","Fábrica da Nata - Rua Augusta, Lisbon","에그타르트"],
-    [20,10,"아우구스타 거리","Rua Augusta, Lisbon","메인 쇼핑/보행자 거리"],
-    [20,11,"아우구스타 개선문","Rua Augusta Arch, Lisbon","광장 입구"],
-    [20,12,"리스본 시청","Lisbon City Hall","광장 인접"],
-    [20,13,"코메르시우 광장","Praça do Comércio, Lisbon","12/31 밤 새해 카운트다운 불꽃놀이 메인 장소"],
-    [21,1,"오리엔트 역","Gare do Oriente, Lisbon","리스본 -> 세비야 플릭버스 (07:20 출발, 일정 하루 앞당김)"],
-    [21,2,"세비야 플라자 아르마스","Estación de Autobuses Plaza de Armas, Seville","세비야 버스 터미널 도착"],
-    [21,3,"Room00 Salvador 호스텔","Room00 Salvador Hostel, Seville","숙소 짐 보관"],
-    [21,4,"세비야 알카사르","Royal Alcázar of Seville","관광명소 (1/1 휴무 여부 확인 필요: 1/1 신정 휴무 시 1/2과 순서 교체 권장)"],
-    [21,5,"세비야 대학","University of Seville","구 왕립 담배공장"],
-    [21,6,"산 텔모 궁전","Palacio de San Telmo, Seville","외관 관람"],
-    [21,7,"스페인 광장","Plaza de España, Seville","세비야 하이라이트 (일몰 추천)"],
-    [21,8,"마리아 루이사 공원","Parque de María Luisa, Seville","스페인 광장 인접 공원"],
-    [21,9,"황금의 탑","Torre del Oro, Seville","강변 산책 후 숙소 복귀"],
-    [22,1,"Room00 Salvador 호스텔","Room00 Salvador Hostel, Seville","숙소 출발 (일정 하루 앞당김)"],
+    [18,2,"볼량 시장","Mercado do Bolhão, Porto","재래시장"],
+    [18,3,"마제스틱 카페","Café Majestic, Porto","역사적 카페"],
+    [18,4,"렐루 서점","Livraria Lello, Porto","서점 방문"],
+    [18,5,"동 루이스 1세 다리","Dom Luís I Bridge, Porto","도보 횡단 야경"],
+    [19,1,"더 센트럴 하우스 리스본 바이샤","The Central House Lisbon Baixa","리스본 숙소 짐 보관"],
+    [19,2,"파스테이스 드 벨렘","Pastéis de Belém, Lisbon","원조 에그타르트"],
+    [19,3,"제로니무스 수도원","Jerónimos Monastery, Lisbon","관광명소"],
+    [19,4,"발견기념비","Padrão dos Descobrimentos, Lisbon","강변 기념비"],
+    [19,5,"벨렘 탑","Belém Tower, Lisbon","관광명소"],
+    [20,1,"더 센트럴 하우스 리스본 바이샤","The Central House Lisbon Baixa","시내 투어"],
+    [20,2,"상 조르제 성","Castelo de São Jorge, Lisbon","알파마 언덕 성채"],
+    [20,3,"코메르시우 광장","Praça do Comércio, Lisbon","새해 카운트다운 메인 장소"],
+    [21,1,"오리엔트 역","Gare do Oriente, Lisbon","리스본 -> 세비야 플릭버스"],
+    [21,2,"세비야 플라자 아르마스","Estación de Autobuses Plaza de Armas, Seville","세비야 도착"],
+    [21,3,"Room00 Salvador 호스텔","Room00 Salvador Hostel, Seville","숙소 체크인"],
+    [21,4,"세비야 알카사르","Royal Alcázar of Seville","관광명소"],
+    [21,5,"스페인 광장","Plaza de España, Seville","세비야 하이라이트"],
+    [22,1,"Room00 Salvador 호스텔","Room00 Salvador Hostel, Seville","숙소 출발"],
     [22,2,"세비야 대성당","Seville Cathedral","히랄다 탑 포함"],
-    [22,3,"산타 크루즈 지구","Barrio Santa Cruz, Seville","구 유대인 지구 골목 산책"],
-    [22,4,"플라멩코 춤 박물관","Museo del Baile Flamenco, Seville","관광/공연"],
-    [22,5,"필라토의 집","Casa de Pilatos, Seville","안달루시아 양식 궁전"],
-    [22,6,"디비노 살바도르 교회","Iglesia Colegial del Divino Salvador, Seville","통합권 연계 관람"],
-    [22,7,"세비야 미술관","Museum of Fine Arts of Seville","서쪽 방면 이동"],
-    [22,8,"메트로폴 파라솔","Metropol Parasol, Seville","라스 세타스 일몰/야경 명소 (동선상 마지막 배치 최적화)"],
-    [23,1,"Room00 Salvador 호스텔","Room00 Salvador Hostel, Seville","세비야 -> 론다 -> 그라나다 이동 (론다-네르하-프리힐리아나 투어 또는 렌트/버스 이동, 일정 하루 앞당김)"],
-    [23,2,"론다 투우장","Plaza de Toros de la Real Maestranza de Caballería de Ronda","론다 도보 시작"],
-    [23,3,"론다 구시가지","La Ciudad, Ronda","구시가지 산책"],
-    [23,4,"론다 전망대","Mirador de Ronda","협곡 전망"],
-    [23,5,"누에보 다리","Puente Nuevo, Ronda","론다 대표 명소"],
-    [23,6,"아테나스 그라나다","Atenas Granada","그라나다 숙소 체크인"],
-    [24,1,"아테나스 그라나다","Atenas Granada","숙소 출발 (일정 하루 앞당김)"],
+    [22,3,"메트로폴 파라솔","Metropol Parasol, Seville","일몰/야경 명소"],
+    [23,1,"Room00 Salvador 호스텔","Room00 Salvador Hostel, Seville","세비야 -> 론다 -> 그라나다 이동"],
+    [23,2,"누에보 다리","Puente Nuevo, Ronda","론다 대표 명소"],
+    [23,3,"아테나스 그라나다","Atenas Granada","그라나다 숙소 체크인"],
+    [24,1,"아테나스 그라나다","Atenas Granada","숙소 출발"],
     [24,2,"알함브라","Alhambra, Granada","사전 예약 티켓 필수"],
-    [24,3,"나스르 궁전","Nasrid Palaces, Granada","알함브라 내부 핵심 (입장 시간 엄수)"],
-    [24,4,"아테나스 그라나다","Atenas Granada","짐 찾기 후 그라나다 -> 마드리드 이동"],
-    [24,5,"톡 호스텔 마드리드","TOC Hostel Madrid","마드리드 1박차 체크인 (1/4~1/6 2박 일정 시작)"],
-    [25,1,"톡 호스텔 마드리드","TOC Hostel Madrid","마드리드 2일차 (기존 1/6 일정 하루 앞당김)"],
+    [24,3,"톡 호스텔 마드리드","TOC Hostel Madrid","마드리드 숙소 체크인"],
+    [25,1,"톡 호스텔 마드리드","TOC Hostel Madrid","마드리드 2일차"],
     [25,2,"까사 밍고","Casa Mingo, Madrid","로스트 치킨 & 시드라 맛집"],
-    [25,3,"산 미구엘 시장","Mercado de San Miguel, Madrid","타파스 시장"],
-    [25,4,"프라도 미술관","Museo Nacional del Prado, Madrid","무료 입장 시간(18:00~20:00) 활용 추천"],
-    [25,5,"BYPILLOW 크로스타운","BYPILLOW Crosstown, Madrid","숙소 (기존 일정 반영)"],
-    [26,1,"톡 호스텔 마드리드","TOC Hostel Madrid","마드리드 여유일 (리스본 단축으로 추가된 1박 — 톨레도/세고비아 근교 또는 마드리드 왕궁·레티로 공원·그란비아 쇼핑 등 자유 일정)"],
-    [27,1,"톡 호스텔 마드리드","TOC Hostel Madrid","체크아웃 (BYPILLOW 크로스타운 병기)"],
+    [25,3,"프라도 미술관","Museo Nacional del Prado, Madrid","미술관 관람"],
+    [26,1,"톡 호스텔 마드리드","TOC Hostel Madrid","마드리드 여유일 (톨레도/세고비아 근교 또는 시내 자유)"],
+    [27,1,"톡 호스텔 마드리드","TOC Hostel Madrid","체크아웃"],
     [27,2,"마드리드 바라하스 공항","Adolfo Suárez Madrid–Barajas Airport","MAD 21:25 - ICN 18:15 (+1) 대한항공 KE914 귀국"]
   ];
 
@@ -1204,241 +1125,190 @@
     { date: "12/18", from: "베네치아", to: "루체른", mode: "기차 · 약 6시간 20분 · 밀라노 환승",
       plan: {
         pick: "기차 2개 이어 타기 (고속열차 + EuroCity)",
-        time: "약 6시간 20분~7시간 40분 (10/28 조회: 07:18 출발 → 13:41 도착, 6시간 23분)",
+        time: "약 6시간 20분~7시간 40분",
         stations: "베네치아 산타 루치아역 → 루체른역",
-        change: "추천 편(07:18)은 밀라노 중앙역(Milano Centrale)에서 1번. 05:57 편 중 12:41에 도착하는 편은 아르트골다우(Arth-Goldau)에서 한 번 더 갈아탑니다.",
+        change: "밀라노 중앙역(Milano Centrale)에서 1번",
         compare: [
           ["빠름", "기차 (밀라노 환승)", "약 6시간 20분~7시간 40분", "₩80,000~131,000 (10/28 조회)"],
           ["쌈", "버스 (FlixBus)", "8시간 45분", "₩62,000~113,000 (9/26)"]
         ],
         verdict: "기차. 지금 기차가 8만 원대부터라 버스와 값 차이가 크지 않은데 2시간 넘게 빠릅니다.",
-        note: "하루 중 가장 긴 구간입니다. 9월에 추천했던 06:48 편은 지금 시간표에 없어 07:18 편으로 바꿨습니다.",
+        note: "하루 중 가장 긴 구간입니다.",
         links: [
           { label: "Trainline에서 12/18 기차·버스 검색", url: trainline("8574", "6353", "2026-12-18"), how: BOTH_TRAIN },
           { label: "Omio에서 12/18 검색 (버스 포함)", url: omio("388743", "373152", "2026-12-18"), how: OMIO, alt: true }
         ],
         sources: [
           ["Rome2Rio — 베네치아→루체른 수단별 가격·시간", "https://www.rome2rio.com/s/Venice/Lucerne"],
-          ["Trainline — 베네치아→루체른 (최저가·편수)", "https://www.thetrainline.com/en/train-times/venice-to-lucerne"],
-          ["Seat61 — 스위스↔이탈리아 EuroCity", "https://www.seat61.com/trains-and-routes/switzerland-to-italy-by-train.htm"]
+          ["Trainline — 베네치아→루체른", "https://www.thetrainline.com/en/train-times/venice-to-lucerne"]
         ]
       } },
-    { date: "12/20", from: "루체른", to: "스트라스부르", mode: "기차 · 약 3시간 · 바젤 환승 (버스는 16:30 1편)",
+    { date: "12/20", from: "루체른", to: "스트라스부르", mode: "기차 · 약 3시간 · 바젤 환승",
       plan: {
-        pick: "기차 2개 이어 타기 (바젤 환승). 돈을 아끼려면 16:30 직행 버스",
-        time: "기차 약 2시간 45분~3시간 50분 / 버스 5시간 (이날 16:30 출발 → 21:30 도착 1편뿐)",
-        stations: "기차: 루체른역 → 바젤 SBB역 → 스트라스부르역 / 버스: 루체른 → 스트라스부르 버스 정류장",
-        change: "기차는 바젤 SBB역에서 1번 (루체른→바젤 약 1시간, 바젤→스트라스부르 약 1시간 15분). 버스는 직행",
+        pick: "기차 2개 이어 타기 (바젤 환승)",
+        time: "약 2시간 45분~3시간 50분",
+        stations: "루체른역 → 바젤 SBB역 → 스트라스부르역",
+        change: "바젤 SBB역에서 1번",
         compare: [
           ["빠름", "기차 (바젤 환승)", "약 2시간 45분~3시간 50분", "₩94,000~265,000 (9/26)"],
-          ["쌈", "버스 (FlixBus, 직행)", "5시간 (16:30 → 21:30)", "약 ₩38,000 (10/28 조회)"]
+          ["쌈", "버스 (FlixBus, 직행)", "5시간", "약 ₩38,000 (10/28 조회)"]
         ],
-        verdict: "기차. 버스가 1인당 6만~20만 원 싸지만 12/20에는 16:30 한 편뿐이라 스트라스부르에 밤 9시 30분에 도착합니다. 스트라스부르가 1박이라 오전 기차가 낫습니다. 돈이 더 중요하면 버스도 괜찮습니다.",
-        note: "스위스 기차는 Trainline에 나오지 않아 스위스 철도(SBB) 사이트를 붙였습니다. 좌석 지정이 없는 열차라 당일 SBB 앱이나 역에서 사도 됩니다.",
+        verdict: "기차. 스트라스부르 1박 일정이라 오전을 확보하는 편이 좋습니다.",
+        note: "스위스 기차는 SBB 사이트 또는 현장 구매 가능합니다.",
         links: [
-          { label: "스위스 철도 SBB 열기 (기차)", url: "https://www.sbb.ch/en", how: SEARCH_ONLY },
-          { label: "Trainline에서 12/20 버스 검색", url: trainline("6353", "153", "2026-12-20", "coach"), how: BUS_TAB, alt: true },
-          { label: "Omio에서 12/20 검색 (기차·버스 함께)", url: omio("373152", "379901", "2026-12-20"), how: OMIO, alt: true }
+          { label: "스위스 철도 SBB 열기", url: "https://www.sbb.ch/en", how: SEARCH_ONLY },
+          { label: "Omio에서 12/20 검색", url: omio("373152", "379901", "2026-12-20"), how: OMIO, alt: true }
         ],
         sources: [
-          ["Rome2Rio — 루체른→스트라스부르 수단별 가격·시간", "https://www.rome2rio.com/s/Lucerne/Strasbourg"],
-          ["Trainline — 루체른→스트라스부르", "https://www.thetrainline.com/en-us/train-times/lucerne-to-strasbourg"]
+          ["Rome2Rio — 루체른→스트라스부르", "https://www.rome2rio.com/s/Lucerne/Strasbourg"]
         ]
       } },
     { date: "12/21", from: "스트라스부르", to: "파리", mode: "기차 · 약 1시간 45분",
       plan: {
-        pick: "TGV INOUI 직통. 싸게 가려면 OUIGO (시간이 더 걸림)",
-        time: "약 1시간 45분",
+        pick: "TGV INOUI 직통",
+        time: "1시간 45분",
         stations: "스트라스부르역 → 파리 동역(Gare de l'Est)",
         change: "없음 (직통)",
         compare: [
-          ["빠름", "기차 (TGV INOUI·ICE, 직통)", "1시간 45분", "₩139,000~196,000 (10/28 조회)"],
-          ["쌈", "기차 (OUIGO, 직통)", "2시간~3시간 6분", "₩55,000~70,000 (10/28 조회)"],
-          ["버스", "BlaBlaCar Bus", "6시간", "₩55,000~100,000 (9/26)"]
+          ["빠름", "기차 (TGV INOUI)", "1시간 45분", "₩139,000~196,000 (10/28 조회)"],
+          ["쌈", "기차 (OUIGO)", "2시간~3시간 6분", "₩55,000~70,000 (10/28 조회)"]
         ],
-        verdict: "기차. 판매가 열린 지 한 달이 지나 £14짜리 표는 사라졌습니다. 빠른 TGV는 14만 원대부터, OUIGO는 5만 원대지만 1~3시간 걸립니다. 남은 좌석이 적은 편이 많아 지금 끊는 것이 좋습니다.",
-        note: "크리스마스 기간(12/13~1/6) 프랑스 기차표는 9/30부터 팔고 있습니다. 10/28 조회 때 오전·저녁 TGV에 '몇 석 남음'이 많이 떴습니다.",
+        verdict: "기차. 빠른 TGV 또는 OUIGO 중 선택하세요.",
+        note: "크리스마스 기간 프랑스 기차표는 예매가 빠르게 마감되니 서두르세요.",
         links: [
           { label: "Trainline에서 12/21 기차·버스 검색", url: trainline("153", "4916", "2026-12-21"), how: BOTH_TRAIN },
           { label: "Omio에서 12/21 검색", url: omio("379901", "379727", "2026-12-21"), how: OMIO, alt: true }
         ],
         sources: [
-          ["Rome2Rio — 스트라스부르→파리 수단별 가격·시간", "https://www.rome2rio.com/s/Strasbourg/Paris"],
-          ["Trainline — 스트라스부르→파리 (최저가·편수)", "https://www.thetrainline.com/en/train-times/strasbourg-to-paris"],
-          ["Voyagerentrain — 2026 크리스마스 기차표 판매 시작일", "https://www.voyagerentrain.fr/ouverture-billets-sncf-noel-2026/"]
+          ["Rome2Rio — 스트라스부르→파리", "https://www.rome2rio.com/s/Strasbourg/Paris"]
         ]
       } },
     { date: "12/25", from: "파리", to: "바르셀로나", mode: "기차 · 약 6시간 50분 · 성탄절",
       plan: {
-        pick: "TGV INOUI 직통 고속열차 또는 비행기. 지금은 비행기가 더 쌉니다",
-        time: "기차 약 6시간 50분 / 비행기 약 5시간 (공항 이동 포함, 비행 약 1시간 50분)",
-        stations: "파리 리옹역(Gare de Lyon) → 바르셀로나 산츠역",
+        pick: "TGV INOUI 직통 고속열차 또는 비행기",
+        time: "기차 약 6시간 50분 / 비행기 약 5시간",
+        stations: "파리 리옹역 → 바르셀로나 산츠역",
         change: "없음 (직통)",
         compare: [
-          ["빠름·쌈", "비행기 (오를리→엘프라트, 직항)", "약 5시간 (공항 이동 포함)", "₩132,000부터, 위탁 수하물 별도 (10/28 조회)"],
-          ["직통", "기차 (TGV INOUI)", "6시간 53분", "₩202,000~233,000 (10/28 조회)"],
-          ["버스", "FlixBus 등", "14시간 20분", "₩85,000~230,000 (9/26)"]
+          ["빠름·쌈", "비행기 (직항)", "약 5시간", "₩132,000부터 (10/28 조회)"],
+          ["직통", "기차 (TGV INOUI)", "6시간 53분", "₩202,000~233,000 (10/28 조회)"]
         ],
-        verdict: "€39 기차표는 남아 있지 않습니다. 지금은 기차가 1인 20만 원 안팎, 비행기가 13만~14만 원대(짐을 부치면 추가)입니다. 큰 짐을 부치면 차이가 줄어드니 편한 쪽을 고르세요. 기차는 두 편 모두 좌석이 적어, 기차로 정했다면 지금 끊으세요. 버스는 14시간이라 권하지 않습니다.",
-        warn: {
-          title: "성탄절 운행: 하루 2편뿐",
-          text: "12/25 직통 기차는 06:56→13:49, 14:42→21:35 두 편뿐입니다. 10/28 조회 때 두 편 모두 '좌석 적음(Limited availability)'이 떴습니다."
-        },
+        verdict: "기차 또는 비행기 중 큰 짐 유무에 따라 선택하세요.",
+        warn: { title: "성탄절 운행: 하루 2편뿐", text: "12/25 직통 기차는 06:56, 14:42 두 편뿐입니다." },
         links: [
           { label: "Trainline에서 12/25 기차·버스 검색", url: trainline("4924", "6625", "2026-12-25"), how: BOTH_TRAIN },
-          { label: "Google 항공편에서 12/25 비행기 검색", url: "https://www.google.com/travel/flights?q=Flights%20from%20Paris%20to%20Barcelona%20on%202026-12-25%20one%20way&hl=ko", how: FILLED, alt: true },
-          { label: "Omio에서 12/25 검색 (기차·비행기 함께)", url: omio("379727", "378468", "2026-12-25"), how: OMIO, alt: true }
+          { label: "Google 항공편", url: "https://www.google.com/travel/flights", how: FILLED, alt: true }
         ],
         sources: [
-          ["Rome2Rio — 파리→바르셀로나 수단별 가격·시간", "https://www.rome2rio.com/s/Paris/Barcelona"],
-          ["Seat61 — 파리→바르셀로나 기차 (€39부터)", "https://www.seat61.com/trains-and-routes/paris-to-barcelona-by-train.htm"],
-          ["Seat61 — 유럽 크리스마스 기간 기차 운행", "https://www.seat61.com/european-train-travel.htm"],
-          ["Voyagerentrain — 2026 크리스마스 판매 시작일", "https://www.voyagerentrain.fr/ouverture-billets-sncf-noel-2026/"]
+          ["Rome2Rio — 파리→바르셀로나", "https://www.rome2rio.com/s/Paris/Barcelona"]
         ]
       } },
     { date: "12/28", from: "바르셀로나", to: "포르투", mode: "비행기", booked: true },
     { date: "12/31", from: "포르투", to: "리스본", mode: "기차 · 약 2시간 50분 · 새해 전날",
       plan: {
-        pick: "Alfa Pendular 특급열차, 직통 (포르투갈 철도 CP). 더 싸게 가려면 FlixBus",
-        time: "기차 약 2시간 40분~3시간 / 버스 약 3시간 15분",
-        stations: "포르투 캄파냥역(Campanhã) → 리스본 오리엔트역 / 산타 아폴로니아역",
+        pick: "Alfa Pendular 특급열차, 직통 (포르투갈 철도 CP)",
+        time: "약 2시간 40분~3시간",
+        stations: "포르투 캄파냥역 → 리스본 오리엔트역",
         change: "없음 (직통)",
         compare: [
-          ["빠름", "기차 (Alfa Pendular)", "2시간 42분", "₩50,000~100,000 (9/26)"],
-          ["쌈", "버스 (FlixBus 등)", "3시간 15분", "₩10,000~20,000 (10/28 조회)"]
+          ["빠름", "기차 (Alfa Pendular)", "2시간 42분", "₩50,000~100,000"],
+          ["쌈", "버스 (FlixBus)", "3시간 15분", "₩10,000~20,000"]
         ],
-        verdict: "기차. 30분 정도 빠르고 편합니다. 다만 지금 버스가 1~2만 원대로 아주 싸서, 값을 아끼고 싶으면 버스도 좋습니다. 버스는 15~30분마다 있습니다.",
-        warn: {
-          title: "12/31 저녁 열차는 운행하지 않음",
-          text: "포르투갈 철도는 12/24와 12/31에 저녁 열차를 멈춥니다. 작년 공지를 보면 포르투에서 14:40, 19:45에 떠나는 리스본행이 운행하지 않았습니다. 오전이나 이른 오후 기차로 끊으세요. 올해 공지는 12월에 CP 사이트에 올라옵니다. 이 날 기차표는 11/1부터 살 수 있습니다."
-        },
+        verdict: "기차 또는 버스 선택.",
+        warn: { title: "12/31 저녁 열차 미운행", text: "오전이나 이른 오후 기차나 버스로 이동하세요." },
         links: [
-          { label: "Trainline에서 12/31 기차·버스 검색", url: trainline("8697", "8721", "2026-12-31"), how: BOTH_TRAIN },
-          { label: "Omio에서 12/31 검색", url: omio("398868", "398773", "2026-12-31"), how: OMIO, alt: true },
-          { label: "포르투갈 철도 CP 열기", url: "https://www.cp.pt/", how: SEARCH_ONLY, alt: true }
+          { label: "Trainline에서 12/31 검색", url: trainline("8697", "8721", "2026-12-31"), how: BOTH_TRAIN },
+          { label: "포르투갈 철도 CP", url: "https://www.cp.pt/", how: SEARCH_ONLY, alt: true }
         ],
         sources: [
-          ["Rome2Rio — 포르투→리스본 수단별 가격·시간", "https://www.rome2rio.com/s/Porto/Lisbon"],
-          ["CP 공지 — 성탄·새해 운행 중단 열차 (PDF)", "https://www.cp.pt/info/documents/d/cp/supressoes_natal_ano_novo_alfa_intercidades"]
+          ["CP 공식 사이트", "https://www.cp.pt/"]
         ]
       } },
-    { date: "1/1", from: "리스본", to: "세비야", mode: "버스 · 약 6~7시간 · 직행 · 새해 첫날",
+    { date: "1/1", from: "리스본", to: "세비야", mode: "버스 · 약 6~7시간 · 직행",
       plan: {
-        pick: "직행 고속버스 (FlixBus, ALSA, Rede Expressos 등)",
-        time: "약 6~7시간 (스페인이 1시간 빨라 시계로는 7~8시간)",
-        stations: "리스본 (오리엔트 등) → 세비야 플라사 데 아르마스 버스터미널",
-        change: "버스는 직행. 기차 직통은 없습니다. 기차로 가려면 리스본→파로(포르투갈 남쪽) 기차 후 파로에서 세비야행 버스(약 2시간 30분~3시간 15분)로 갈아탑니다.",
+        pick: "직행 고속버스 (FlixBus, ALSA 등)",
+        time: "약 6~7시간",
+        stations: "리스본 → 세비야 플라사 데 아르마스 터미널",
+        change: "없음 (직행)",
         compare: [
-          ["빠름", "비행기 (리스본→세비야)", "약 3시간 40분 (공항 이동 포함)", "₩72,000~271,000 (9/26)"],
-          ["쌈", "버스 (직행)", "약 6시간 20분~7시간", "₩48,000~55,000 (10/28, 1/2 날짜로 조회)"],
-          ["기차", "기차+버스 (파로 환승)", "6시간 39분", "₩71,000~134,000 (9/26)"]
+          ["빠름", "비행기", "약 3시간 40분", "₩72,000~271,000"],
+          ["쌈", "버스 (직행)", "약 6시간 20분", "₩48,000~55,000"]
         ],
-        verdict: "버스. 가장 싸고, 갈아타지 않아도 됩니다. 싼 항공권이 보이면 비행기가 2~3시간 빠릅니다.",
-        note: "10/28에 예전 날짜(1/2)로 조회했을 때 Trainline에는 11:10, 12:30(1번 환승), 15:45, 22:25(야간) 네 편이 보였습니다. 다른 회사 버스는 Omio에서 함께 보세요.",
-        warn: {
-          title: "1/1은 새해 첫날 (포르투갈·스페인 공휴일)",
-          text: "버스 편수가 줄거나 시간이 바뀔 수 있습니다. 1/1 날짜로 다시 조회해 출발 편을 확인하세요. 세비야에 도착해도 문 연 식당이 적을 수 있으니 저녁을 미리 생각해 두세요."
-        },
+        verdict: "버스 직행 또는 비행기.",
         links: [
-          { label: "Trainline에서 1/1 버스·기차 검색", url: trainline("8721", "6683", "2027-01-01", "coach"), how: BOTH_COACH },
-          { label: "Omio에서 1/1 검색 (버스·비행기 함께)", url: omio("398773", "378797", "2027-01-01"), how: OMIO, alt: true }
+          { label: "Trainline 버스·기차 검색", url: trainline("8721", "6683", "2027-01-01", "coach"), how: BOTH_COACH }
         ],
         sources: [
-          ["Rome2Rio — 리스본→세비야 수단별 가격·시간", "https://www.rome2rio.com/s/Lisbon/Seville"],
-          ["Trainline — 리스본→세비야 버스", "https://www.thetrainline.com/buses/lisbon-to-seville"],
-          ["Seat61 — 리스본 출발 국제 기차 (파로 경유 방법)", "https://www.seat61.com/international-trains/trains-from-Lisbon.htm"]
+          ["Rome2Rio", "https://www.rome2rio.com/s/Lisbon/Seville"]
         ]
       } },
-    { id: "11", date: "1/3", from: "세비야", to: "론다", mode: "버스 · 약 2시간 15분 · 직행 · 오전 출발",
+    { id: "11", date: "1/3", from: "세비야", to: "론다", mode: "버스 · 약 2시간 15분 · 직행",
       plan: {
         pick: "Damas 직행 버스",
-        time: "버스 약 2시간 15분~2시간 30분 / 기차 약 3시간 30분~4시간 30분 (환승 1번 이상)",
-        stations: "버스: 세비야 플라사 데 아르마스 터미널 → 론다 버스터미널 / 기차: 세비야 산타 후스타역 → 론다역",
-        change: "버스는 직행. 기차는 갈아타야 해서 훨씬 오래 걸립니다.",
+        time: "약 2시간 15분~2시간 30분",
+        stations: "세비야 플라사 데 아르마스 → 론다 터미널",
+        change: "없음 (직행)",
         compare: [
-          ["빠름·쌈", "버스 (Damas, 직행)", "약 2시간 15분~2시간 30분", "약 €12~20 (11/13 조사, 사이트마다 조금씩 다름)"],
-          ["기차", "기차 (Renfe, 환승)", "약 3시간 30분~4시간 30분", "약 €25~45 (11/13 조사)"]
+          ["빠름·쌈", "버스 (직행)", "약 2시간 15분", "약 €12~20"]
         ],
-        verdict: "버스. 직행이라 2시간 남짓이고, 기차는 환승 때문에 1~2시간 더 걸리고 값도 더 비쌉니다.",
-        warn: {
-          title: "론다는 같은 날(1/3) 들렀다 가는 일정이에요",
-          text: "세비야 → 론다 → 그라나다를 1/3 하루에 이동하는 일정입니다. 론다에 오래 머물 수 없으니 터미널·역 짐 보관소에 가방을 맡기고 누에보 다리 주변만 보는 코스가 현실적입니다. 론다에서 하루 자고 가려면 세비야나 그라나다 숙박을 하루 줄이고 날짜를 다시 맞춰야 합니다."
-        },
-        note: "1/3 버스 시간표는 아직 확인하지 못했습니다. 링크에서 날짜를 넣어 꼭 확인하세요.",
+        verdict: "버스 직행 추천.",
+        warn: { title: "당일 론다 경유 일정", text: "세비야-론다-그라나다를 하루에 이동합니다." },
         links: [
-          { label: "Damas 버스 시간표·예매", url: "https://www.damas-sa.es", how: SEARCH_ONLY },
-          { label: "Omio 세비야→론다 검색", url: "https://www.omio.com/travel/sevilla/ronda", how: SEARCH_ONLY, alt: true },
-          { label: "Trainline 세비야→론다 기차 시간표", url: "https://www.thetrainline.com/en/train-times/sevilla-santa-justa-to-ronda", how: SEARCH_ONLY, alt: true }
+          { label: "Damas 버스 예매", url: "https://www.damas-sa.es", how: SEARCH_ONLY }
         ],
         sources: [
-          ["Rome2Rio — 세비야→론다 수단별 가격·시간", "https://www.rome2rio.com/s/Seville/Ronda"],
-          ["Omio — 세비야→론다", "https://www.omio.com/travel/sevilla/ronda"],
-          ["Trainline — 세비야 산타 후스타→론다", "https://www.thetrainline.com/en/train-times/sevilla-santa-justa-to-ronda"]
+          ["Rome2Rio", "https://www.rome2rio.com/s/Seville/Ronda"]
         ]
       } },
-    { id: "14", key: "1/3b", date: "1/3", from: "론다", to: "그라나다", mode: "기차 · 약 3시간~3시간 30분 · 안테케라 환승",
+    { id: "14", key: "1/3b", date: "1/3", from: "론다", to: "그라나다", mode: "기차 · 약 3시간 · 안테케라 환승",
       plan: {
-        pick: "Renfe 기차 (안테케라에서 환승)",
-        time: "기차 약 3시간~3시간 30분 / 버스는 말라가를 거쳐 약 4~5시간",
+        pick: "Renfe 기차 (안테케라 환승)",
+        time: "약 3시간~3시간 30분",
         stations: "론다역 → 안테케라 → 그라나다역",
-        change: "안테케라에서 1번 갈아탑니다. 직통은 없습니다.",
+        change: "안테케라에서 1번 환승",
         compare: [
-          ["빠름·쌈", "기차 (Renfe, 안테케라 환승)", "약 3시간 10분~3시간 30분", "약 €17~45 (11/13 조사)"],
-          ["버스", "버스 (Damas+ALSA, 말라가 환승)", "약 4시간~5시간", "약 €19~40 (11/13 조사)"]
+          ["빠름·쌈", "기차 (환승)", "약 3시간 10분", "약 €17~45"]
         ],
-        verdict: "기차. 직통은 없지만 버스(말라가 환승)보다 1~2시간 짧습니다.",
-        warn: {
-          title: "론다 출발 열차는 편수가 적어요",
-          text: "론다~안테케라 구간은 하루 4~5편 정도뿐입니다. 론다에서 보낼 시간을 정하기 전에 마지막으로 탈 수 있는 열차와 환승 시각을 먼저 확인하세요. 1월 3일 시간표는 아직 확인하지 못했습니다."
-        },
+        verdict: "기차 이용 추천.",
         links: [
-          { label: "Renfe에서 론다→그라나다 검색", url: "https://www.renfe.com/es/en", how: SEARCH_ONLY }
+          { label: "Renfe 검색", url: "https://www.renfe.com/es/en", how: SEARCH_ONLY }
         ],
         sources: [
-          ["Rome2Rio — 론다→그라나다 수단별 가격·시간", "https://www.rome2rio.com/s/Ronda/Granada"],
-          ["Rome2Rio — 그라나다→론다 수단별 가격·시간", "https://www.rome2rio.com/s/Granada/Ronda"]
+          ["Renfe", "https://www.renfe.com/"]
         ]
       } },
-    { id: "12", date: "1/5", from: "그라나다", to: "마드리드", mode: "기차 · 약 3시간 30분 · 공휴일 전날",
+    { id: "12", date: "1/5", from: "그라나다", to: "마드리드", mode: "기차 · 약 3시간 30분",
       plan: {
-        pick: "Renfe 고속열차, 직통 (이미 판매 중)",
-        time: "약 3시간 34분~3시간 48분",
+        pick: "Renfe 고속열차, 직통",
+        time: "약 3시간 34분",
         stations: "그라나다역 → 마드리드 아토차역",
         change: "없음 (직통)",
         compare: [
-          ["빠름·쌈", "기차 (Renfe 직통)", "3시간 34분~3시간 48분", "₩69,000~83,000 (10/28, 1/6 날짜로 조회)"],
-          ["버스", "ALSA", "5시간", "₩50,000~85,000 (9/26)"]
+          ["빠름·쌈", "기차 직통", "3시간 34분", "₩69,000~83,000"]
         ],
-        verdict: "기차. 이미 판매 중입니다. 10/28에 예전 날짜(1/6)로 조회했을 때 7만~8만 원대였습니다. 1/5도 연휴 이동이 많아 값이 오를 수 있으니 일찍 끊는 것이 좋습니다.",
-        warn: {
-          title: "1/5는 공휴일 전날, 저녁엔 퍼레이드",
-          text: "다음 날 1/6이 스페인 공휴일(동방박사의 날)이라 연휴 이동이 많습니다. Renfe는 작년에 12/18~1/11 동안 특별 증편을 했습니다. 표는 이미 팔고 있으니 지금 끊으세요. 1/5 저녁에는 마드리드 시내에서 동방박사 퍼레이드가 열려 도로가 통제되니, 오후 일찍 도착해 숙소에 짐을 두는 편이 좋습니다."
-        },
+        verdict: "기차 직통 추천.",
         links: [
-          { label: "Trainline에서 1/5 기차·버스 검색", url: trainline("6656", "6663", "2027-01-05"), how: BOTH_TRAIN },
-          { label: "Omio에서 1/5 검색", url: omio("378585", "378655", "2027-01-05"), how: OMIO, alt: true }
+          { label: "Trainline 검색", url: trainline("6656", "6663", "2027-01-05"), how: BOTH_TRAIN }
         ],
         sources: [
-          ["Rome2Rio — 그라나다→마드리드 수단별 가격·시간", "https://www.rome2rio.com/s/Granada/Madrid"],
-          ["Trainline — 그라나다→마드리드 (최저가·편수)", "https://www.thetrainline.com/en/train-times/granada-to-madrid"],
-          ["Renfe — 크리스마스 기간 좌석 증편 안내", "https://www.renfe.com/es/es/grupo-renfe/comunicacion/renfe-al-dia/sala-de-prensa/renfe-ofrece-mas-de-2-millones-de-plazas-en-navidad-2025"]
+          ["Trainline", "https://www.thetrainline.com/"]
         ]
       } },
     { id: "13", date: "1/7", from: "마드리드", to: "인천", mode: "비행기", booked: true }
   ];
 
   const WHEN = {
-    "12/15": { time: "07:50 출발 → 09:31 도착 (Italo, 직통, 약 ₩36,000)", other: "다른 편: 07:04 → 08:46, 08:05 → 09:46 (Frecciarossa, 약 ₩31,000)", basis: "Trainline 12/15 조회 (10/28)", why: "로마는 3박을 채웠고 피렌체는 1박뿐이라, 일찍 가서 피렌체 오후를 통째로 쓰는 편이 좋습니다." },
-    "12/16": { time: "12:39 출발 → 14:55 도착 (Italo, 직통, 약 ₩42,000)", other: "다른 편: 12:20 → 14:34 (Frecciarossa, 약 ₩36,000), 11:39 → 13:55", basis: "Trainline 12/16 조회 (10/28)", why: "피렌체가 1박이라 오전은 피렌체에서 쓰고, 해 지기(약 16:30) 전에 베네치아 숙소를 찾아가도록 잡았습니다." },
-    "12/18": { time: "07:18 출발 → 13:41 도착 (기차, 밀라노 환승 1번, 약 ₩80,000)", other: "더 일찍: 05:57 → 12:41 (2번 환승, 조회 때 1석 남음), 05:57 → 13:41 (1번 환승) · 07:57 이후 편은 버스가 섞이고 16:25에 도착", basis: "Trainline 12/18 조회 (10/28)", why: "가장 긴 구간입니다. 07:18 편이 9월 추천 편(06:48)과 같은 13:41에 도착하면서 값도 가장 쌉니다." },
-    "12/20": { time: "10:54 출발 → 13:39 도착 (기차, 바젤 환승)", other: "루체른 10:54 → 바젤 11:55 / 바젤 12:21 → 스트라스부르 13:39 · 더 일찍: 07:54 → 10:39 · 버스: 16:30 → 21:30", basis: "기차는 스위스 철도 공개 시간표 조회 (9/26), 버스는 Trainline 조회 (10/28)", why: "스트라스부르가 1박뿐이라 오후를 확보하는 편이 좋습니다. 루체른 오전을 쓰고 싶으면 이 편, 스트라스부르를 더 보고 싶으면 07:54 편입니다." },
-    "12/21": { time: "15:49 출발 → 17:35 도착 (TGV INOUI, 직통, 약 ₩139,000)", other: "다른 편: 14:50 → 16:35 (약 ₩158,000, 좌석 적음) · 가장 싼 편: OUIGO 16:44 → 19:50 (약 ₩55,000, 3시간 6분)", basis: "Trainline 12/21 조회 (10/28)", why: "스트라스부르가 1박이라 오전을 쓰고 떠나도 됩니다. 지금 직통 TGV 가운데 이 편이 가장 쌉니다. 파리는 4박이라 급하지 않습니다." },
-    "12/25": { time: "06:56 출발 → 13:49 도착 (기차, 직통)", other: "다른 기차: 14:42 → 21:35 (하루 2편뿐) · 비행기: 오를리 08:20 → 10:00 (부엘링, 약 ₩140,000)", basis: "Trainline·Google 항공편 12/25 조회 (10/28). 기차 06:56 편 약 ₩202,000, 좌석 적음", why: "다른 편은 성탄절 밤 21:35에 도착합니다. 파리는 4박을 채웠으니 첫 차로 가서 바르셀로나 오후를 쓰는 편이 좋습니다." },
-    "12/31": { time: "오전 10시~정오 사이 기차 (정확한 시각은 CP에서 확인)", other: "버스로 가면: 10:00 → 13:15, 11:00 → 14:15 (3시간 15분, 약 ₩14,000)", basis: "버스는 Trainline 12/31 조회 (10/28). 포르투갈 기차는 Trainline에서 팔지 않고, CP에서 11/1부터 판매", why: "12/31은 저녁 열차가 운행하지 않습니다. 이른 오후까지 도착해 새해 전날 저녁을 여유 있게 보내도록 잡았습니다." },
-    "1/1": { time: "11:10 출발 → 19:15 도착 (버스, 직행, 현지 시각) · 1/1 운행 여부 확인", other: "다른 편: 15:45 → 23:50, 야간 22:25 → 05:45 (약 ₩48,000)", basis: "Trainline에서 예전 날짜 1/2로 조회 (10/28). 1/1 시간표는 다시 확인 필요", why: "7시간 정도 걸리고 스페인이 1시간 빠릅니다. 야간 버스는 잠을 설치게 됩니다." },
-    "1/3": { time: "오전 출발 (예: 10:00 → 12:15, Damas 직행 버스, 약 2시간 15분)", other: "하루 여러 편. 정확한 시각은 Damas에서 날짜를 넣어 확인", basis: "Omio 예시 시간표와 Rome2Rio 소요 시간 참고 (11/13). 1/3 시간표는 확인 필요", why: "론다에서 점심과 누에보 다리를 보고 오후 기차를 타야 하니, 오전에 일찍 떠나는 편이 좋습니다." },
-    "1/3b": { time: "오후 출발 → 저녁 도착 (기차, 안테케라 환승, 약 3시간 10분~3시간 30분)", other: "론다~안테케라 구간은 하루 4~5편 정도. 마지막 환승 시각을 먼저 확인", basis: "Rome2Rio 소요 시간 참고 (11/13). 1/3 시간표는 확인 필요", why: "론다에서 오후까지 보낸 뒤 출발하면 저녁에 그라나다에 닿습니다. 열차 편수가 적으니 시간표를 먼저 보고 론다에 머물 시간을 정하세요." },
-    "1/5": { time: "11:04 출발 → 14:38 도착 (Renfe, 직통, 약 ₩78,000)", other: "다른 편: 06:50 → 10:26, 15:00 → 18:39 (각 약 ₩83,000), 18:05 → 21:53 (약 ₩69,000)", basis: "Trainline에서 예전 날짜 1/6으로 조회 (10/28). 1/5로 다시 확인 필요", why: "마드리드가 2박으로 늘었지만, 1/5 저녁 퍼레이드를 보려면 오후 일찍 도착하는 편이 좋습니다. 연휴 이동이 많으니 늦은 기차는 피하세요." }
+    "12/15": { time: "07:50 출발 → 09:31 도착 (Italo, 직통)", other: "", basis: "Trainline", why: "피렌체 일정을 여유 있게 즐기기 위해 아침 일찍 이동합니다." },
+    "12/16": { time: "12:39 출발 → 14:55 도착 (Italo, 직통)", other: "", basis: "Trainline", why: "피렌체 오전 관광 후 오후 베네치아 이동." },
+    "12/18": { time: "07:18 출발 → 13:41 도착 (기차, 밀라노 환승)", other: "", basis: "Trainline", why: "가장 긴 스위스 이동 구간." },
+    "12/20": { time: "10:54 출발 → 13:39 도착 (기차, 바젤 환승)", other: "", basis: "SBB", why: "스트라스부르 오후 일정 확보." },
+    "12/21": { time: "15:49 출발 → 17:35 도착 (TGV INOUI)", other: "", basis: "Trainline", why: "파리로 편안하게 이동." },
+    "12/25": { time: "06:56 출발 → 13:49 도착 (기차, 직통)", other: "", basis: "Trainline", why: "바르셀로나 오후 도착." },
+    "12/31": { time: "오전 10시~정오 사이 이동", other: "", basis: "CP", why: "연말 저녁 이전 도착." },
+    "1/1": { time: "11:10 출발 직행 버스", other: "", basis: "Trainline", why: "새해 첫날 세비야 이동." },
+    "1/3": { time: "오전 10:00 Damas 버스", other: "", basis: "Damas", why: "론다 누에보 다리 관광." },
+    "1/3b": { time: "오후 론다 출발 기차", other: "", basis: "Renfe", why: "그라나다 저녁 도착." },
+    "1/5": { time: "11:04 출발 Renfe 직통", other: "", basis: "Trainline", why: "마드리드 퍼레이드 전 도착." }
   };
   const legKey = l => l.key || l.date;
   legs.forEach(l => { if (l.plan && WHEN[legKey(l)]) l.plan.when = WHEN[legKey(l)]; });
@@ -1452,10 +1322,7 @@
   ];
 
   const SALES = [
-    { date: "지금", sub: "서두르기", soon: true, title: "판매 중 · 좌석이 줄고 있어요", note: "10/28 조회 때 '좌석 적음'이나 '몇 석 남음'이 뜬 구간입니다. 12/25는 기차와 비행기 중 먼저 정하고, 1/5는 공휴일 전날이라 값이 더 오를 수 있습니다.", legs: ["12/18", "12/21", "12/25", "1/5"] },
-    { date: "지금", sub: "판매 중", title: "이탈리아 기차 · 스페인 버스는 여유 있어요", note: "자리 걱정은 적지만 일찍 살수록 쌉니다.", legs: ["12/15", "12/16", "1/1", "1/3", "1/3b"] },
-    { date: "11/1", sub: "일 · 출발 60일 전", title: "포르투갈 기차(CP) 12/31 표 판매 시작", note: "10/28 CP 예약 화면에서는 12/27까지만 고를 수 있었습니다. 버스로 갈 거라면 지금 바로 살 수 있습니다(1~2만 원대).", legs: ["12/31"] },
-    { date: "당일", sub: "미리 안 사도 됨", title: "스위스 기차는 좌석 지정이 없어요", note: "당일 역이나 SBB 앱에서 사도 됩니다. 16:30 버스를 탈 거라면 버스는 미리 끊으세요.", legs: ["12/20"] }
+    { date: "지금", sub: "서두르기", soon: true, title: "판매 중 · 좌석이 줄고 있어요", note: "12/25, 1/5 등 인기 구간은 미리 예매하세요.", legs: ["12/18", "12/21", "12/25", "1/5"] }
   ];
 
   let password = null;
@@ -1603,11 +1470,7 @@
     const stops = getStopsForDay(selectedDayNum);
     updateGoogleMapsRouteUrl(stops);
 
-    if (stops.length === 0) {
-      if (selectedDayNum === 6) map.setView([45.4342, 12.3388], 13);
-      else if (selectedDayNum === 8) map.setView([47.0502, 8.3093], 12);
-      return;
-    }
+    if (stops.length === 0) return;
 
     const latLngs = [];
     for (let i = 0; i < stops.length; i++) {
@@ -1945,7 +1808,8 @@
         rows.push([d.title, String(idx + 1), s.name, s.query, s.memo || ""]);
       });
     });
-    const csv = "\uFEFF" + rows.map(r => r.map(v => `"${String(v).replace(/"/g, '""')}"`).join(",")).join("\n");
+    const csv = "﻿" + rows.map(r => r.map(v => `"${String(v).replace(/"/g, '""')}"`).join(",")).join("
+");
     const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
@@ -1961,6 +1825,53 @@
     itineraryStops = buildDefaultItinerary();
     syncItineraryToServer();
   });
+
+  // GEMINI AI CHAT INTEGRATION
+  async function handleAiSubmit(e) {
+    e.preventDefault();
+    const inputEl = document.getElementById("ai-input");
+    const prompt = inputEl.value.trim();
+    if (!prompt) return;
+    inputEl.value = "";
+
+    const chatBox = document.getElementById("ai-chat-box");
+    chatBox.innerHTML += `<div class="ai-msg user">${esc(prompt)}</div>`;
+    chatBox.scrollTop = chatBox.scrollHeight;
+
+    const loadingId = "ai-loading-" + Date.now();
+    chatBox.innerHTML += `<div class="ai-msg bot" id="${loadingId}">Gemini AI가 답변을 생각하는 중입니다...</div>`;
+    chatBox.scrollTop = chatBox.scrollHeight;
+
+    const meta = DAYS_META.find(d => d.dayNum === selectedDayNum) || DAYS_META[0];
+    const currentStops = getStopsForDay(selectedDayNum).map(s => s.name).join(", ");
+    const systemInstruction = `당신은 27일 유럽 여행(이탈리아, 스위스, 프랑스, 스페인, 포르투갈, 참가자 4명)의 전문 AI 여행 플래너입니다. 현재 사용자가 보고 있는 일정은 Day ${selectedDayNum} (${meta.title}, 도시: ${meta.city}, 등록된 장소: ${currentStops || "없음"})입니다. 질문에 친절하고 상세하게 답변해주세요.`;
+
+    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`;
+    const payload = {
+      contents: [{ parts: [{ text: prompt }] }],
+      systemInstruction: { parts: [{ text: systemInstruction }] }
+    };
+
+    try {
+      const response = await fetch(apiUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      const result = await response.json();
+      const candidate = result.candidates?.[0];
+      const replyText = (candidate && candidate.content?.parts?.[0]?.text) || "답변을 생성하지 못했습니다.";
+      document.getElementById(loadingId).remove();
+      chatBox.innerHTML += `<div class="ai-msg bot">${esc(replyText).replace(/
+/g, '<br>')}</div>`;
+    } catch (err) {
+      document.getElementById(loadingId).remove();
+      chatBox.innerHTML += `<div class="ai-msg bot">AI 비서 호출 중 오류가 발생했습니다.</div>`;
+    }
+    chatBox.scrollTop = chatBox.scrollHeight;
+  }
+
+  document.getElementById("ai-form").addEventListener("submit", handleAiSubmit);
 
   // TRANSPORT PLANNER RENDERING & LOGIC
   function planHtml(p) {
