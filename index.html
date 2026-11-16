@@ -271,7 +271,9 @@
   .mini-btn:disabled { opacity: 0.35; cursor: default; }
 
   .map-col { position: sticky; top: 14px; display: grid; gap: 12px; }
-  #leaflet-map { width: 100%; height: 320px; background: var(--sunk); z-index: 1; }
+  .map-viewport { position: relative; width: 100%; height: 420px; min-height: 400px; background: var(--sunk); overflow: hidden; }
+  #leaflet-map { width: 100%; height: 100%; min-height: 400px; background: var(--sunk); z-index: 1; }
+  #gmap-embed-frame { width: 100%; height: 100%; min-height: 400px; border: 0; display: block; background: var(--sunk); }
   .leaflet-pin-badge {
     display: flex; align-items: center; justify-content: center; border-radius: 999px;
     font-family: "IBM Plex Mono", monospace; font-weight: 700; font-size: 12px;
@@ -490,12 +492,16 @@
         <div class="panel-card">
           <div class="panel-head">
             <h2 id="map-panel-title">Day 1 동선 지도</h2>
-            <div style="display:flex; gap:5px;">
-              <button type="button" class="mini-btn" id="btn-map-day">일차 동선</button>
+            <div style="display:flex; gap:5px; flex-wrap:wrap;">
+              <button type="button" class="mini-btn" id="btn-map-day">동선 지도</button>
               <button type="button" class="mini-btn" id="btn-map-overview">유럽 전체</button>
+              <button type="button" class="mini-btn" id="btn-map-gembed">구글맵 임베드</button>
             </div>
           </div>
-          <div id="leaflet-map"></div>
+          <div class="map-viewport">
+            <div id="leaflet-map"></div>
+            <iframe id="gmap-embed-frame" hidden loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="Google Maps Preview"></iframe>
+          </div>
           <div class="map-footer">
             <a class="gmap-route-cta" id="gmap-full-route-link" href="#" target="_blank" rel="noopener">
               🗺️ 구글 지도에서 오늘 전체 동선 열기 ↗
@@ -1466,8 +1472,9 @@
   let selectedCityId = "ALL";
   let selectedGuideCityId = "rome";
   let selectedGuideCat = "ALL";
-  let mapViewMode = "day";
+  let mapViewMode = "day"; // 'day' | 'overview' | 'gembed'
   let activeTab = "itinerary";
+  let focusedGmapQuery = null;
 
   async function api(body) {
     const res = await fetch(API_URL, {
@@ -1542,6 +1549,7 @@
 
   function initLeafletMap() {
     if (typeof L === "undefined") return;
+    if (map) return;
     map = L.map("leaflet-map", { zoomControl: true }).setView([41.9028, 12.4964], 13);
     L.tileLayer("https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png", {
       attribution: "&copy; OpenStreetMap &copy; CARTO",
@@ -1549,6 +1557,21 @@
       maxZoom: 19
     }).addTo(map);
     mapLayer = L.layerGroup().addTo(map);
+  }
+
+  function refreshMapSizeAndRender() {
+    if (!map && typeof L !== "undefined") initLeafletMap();
+    if (map) {
+      map.invalidateSize({ pan: false });
+      setTimeout(() => {
+        if (map) {
+          map.invalidateSize({ pan: false });
+          renderMap();
+        }
+      }, 150);
+    } else {
+      renderMap();
+    }
   }
 
   async function resolveLatLng(query) {
@@ -1571,18 +1594,51 @@
   }
 
   async function renderMap() {
-    if (!map || !mapLayer) return;
-    mapLayer.clearLayers();
     const titleEl = document.getElementById("map-panel-title");
     const btnDay = document.getElementById("btn-map-day");
     const btnOver = document.getElementById("btn-map-overview");
+    const btnGembed = document.getElementById("btn-map-gembed");
+    const leafletEl = document.getElementById("leaflet-map");
+    const iframeEl = document.getElementById("gmap-embed-frame");
+
+    [btnDay, btnOver, btnGembed].forEach(b => {
+      if (b) { b.style.background = ""; b.style.color = ""; }
+    });
+
+    const stops = getStopsForDay(selectedDayNum);
+    updateGoogleMapsRouteUrl(stops);
+
+    if (mapViewMode === "gembed") {
+      if (btnGembed) {
+        btnGembed.style.background = "var(--accent)";
+        btnGembed.style.color = "var(--accent-ink)";
+      }
+      if (leafletEl) leafletEl.hidden = true;
+      if (iframeEl) {
+        iframeEl.hidden = false;
+        const targetQuery = focusedGmapQuery
+          || (stops.length > 0 ? stops[0].query : (DAYS_META.find(d => d.dayNum === selectedDayNum)?.city.replace(/[^\w\s가-힣]/g, "").trim() || "Europe"));
+        const nextSrc = "https://maps.google.com/maps?q=" + encodeURIComponent(targetQuery) + "&t=m&z=14&output=embed&hl=ko";
+        if (iframeEl.src !== nextSrc) iframeEl.src = nextSrc;
+      }
+      titleEl.textContent = `Day ${selectedDayNum} 구글맵 미리보기`;
+      return;
+    }
+
+    if (iframeEl) iframeEl.hidden = true;
+    if (leafletEl) leafletEl.hidden = false;
+
+    if (!map && typeof L !== "undefined") initLeafletMap();
+    if (!map || !mapLayer) return;
+    map.invalidateSize({ pan: false });
+    mapLayer.clearLayers();
 
     if (mapViewMode === "overview") {
       titleEl.textContent = "유럽 27일 전체 루트 (5개국 12도시)";
-      btnOver.style.background = "var(--accent)";
-      btnOver.style.color = "var(--accent-ink)";
-      btnDay.style.background = "";
-      btnDay.style.color = "";
+      if (btnOver) {
+        btnOver.style.background = "var(--accent)";
+        btnOver.style.color = "var(--accent-ink)";
+      }
       const pts = [];
       OVERVIEW_POINTS.forEach((pt, idx) => {
         pts.push([pt.lat, pt.lng]);
@@ -1591,6 +1647,19 @@
       });
       L.polyline(pts, { color: "#1d5c82", weight: 3.5, dashArray: "6,6" }).addTo(mapLayer);
       map.fitBounds(L.latLngBounds(pts), { padding: [32, 32] });
+      return;
+    }
+
+    titleEl.textContent = `Day ${selectedDayNum} 동선 지도 (${stops.length}곳)`;
+    if (btnDay) {
+      btnDay.style.background = "var(--accent)";
+      btnDay.style.color = "var(--accent-ink)";
+    }
+
+    if (stops.length === 0) {
+      if (selectedDayNum === 6) map.setView([45.4342, 12.3388], 13);
+      else if (selectedDayNum === 8) map.setView([47.0502, 8.3093], 12);
+      else map.setView([41.9028, 12.4964], 13);
       return;
     }
 
@@ -1799,8 +1868,12 @@
     if (spot.coords) COORD_DB[spot.query] = spot.coords;
 
     if (act === "preview") {
-      if (map && spot.coords) {
+      focusedGmapQuery = spot.query;
+      if (mapViewMode === "gembed") {
+        renderMap();
+      } else if (map && spot.coords) {
         mapViewMode = "day";
+        map.invalidateSize({ pan: false });
         map.setView(spot.coords, 15);
         L.popup()
           .setLatLng(spot.coords)
@@ -1847,8 +1920,9 @@
 
   document.getElementById("itinerary-search").addEventListener("input", renderItineraryUI);
   document.getElementById("search-all-days").addEventListener("change", renderItineraryUI);
-  document.getElementById("btn-map-day").addEventListener("click", () => { mapViewMode = "day"; renderMap(); });
-  document.getElementById("btn-map-overview").addEventListener("click", () => { mapViewMode = "overview"; renderMap(); });
+  document.getElementById("btn-map-day").addEventListener("click", () => { mapViewMode = "day"; refreshMapSizeAndRender(); });
+  document.getElementById("btn-map-overview").addEventListener("click", () => { mapViewMode = "overview"; refreshMapSizeAndRender(); });
+  document.getElementById("btn-map-gembed").addEventListener("click", () => { focusedGmapQuery = null; mapViewMode = "gembed"; renderMap(); });
 
   document.getElementById("stops-container").addEventListener("click", async e => {
     const btn = e.target.closest("[data-act]");
@@ -1877,11 +1951,16 @@
       syncItineraryToServer();
     } else if (act === "pin") {
       selectedDayNum = stop.dayNum;
+      focusedGmapQuery = stop.query;
       syncGuideCityToDay(selectedDayNum);
-      mapViewMode = "day";
-      await renderMap();
-      const coords = await resolveLatLng(stop.query);
-      if (coords && map) map.setView(coords, 16);
+      if (mapViewMode === "gembed") {
+        renderMap();
+      } else {
+        mapViewMode = "day";
+        await renderMap();
+        const coords = await resolveLatLng(stop.query);
+        if (coords && map) map.setView(coords, 16);
+      }
     }
   });
 
@@ -2129,8 +2208,8 @@
     document.getElementById("view-transport").hidden = tabName !== "transport";
     document.getElementById("nav-itinerary").classList.toggle("active", tabName === "itinerary");
     document.getElementById("nav-transport").classList.toggle("active", tabName === "transport");
-    if (tabName === "itinerary" && map) {
-      setTimeout(() => { map.invalidateSize(); renderMap(); }, 100);
+    if (tabName === "itinerary") {
+      refreshMapSizeAndRender();
     }
   }
 
@@ -2182,6 +2261,7 @@
     document.getElementById("today").hidden = false;
     document.getElementById("sales").hidden = document.getElementById("sales").dataset.allDone === "1";
     switchTab(activeTab);
+    refreshMapSizeAndRender();
   }
 
   function lockAgain(reason) {
@@ -2243,6 +2323,7 @@
       showApp();
       renderItineraryUI();
       applyBookings();
+      refreshMapSizeAndRender();
       document.getElementById("synced").textContent = "마지막으로 불러온 시각 " + stamp();
     } catch (e) {
       m.className = "msg err";
@@ -2251,6 +2332,12 @@
       btn.disabled = false;
     }
   }
+
+  window.addEventListener("resize", () => {
+    if (map && !document.getElementById("view-itinerary").hidden) {
+      map.invalidateSize({ pan: false });
+    }
+  });
 
   initLeafletMap();
   buildTransportList();
