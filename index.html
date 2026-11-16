@@ -242,7 +242,6 @@
 
   .stops-list { padding: 12px 14px; display: grid; gap: 10px; }
   .stop-card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; display: grid; gap: 8px; }
-  .stop-card.done { opacity: 0.72; background: var(--sunk); }
   .stop-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; }
   .stop-left { display: flex; align-items: flex-start; gap: 10px; min-width: 0; }
   .stop-num {
@@ -257,7 +256,6 @@
   .stop-tags { display: flex; flex-wrap: wrap; gap: 5px; align-items: center; margin-bottom: 3px; }
   .cat-tag { font-size: 11px; font-weight: 700; padding: 1px 7px; border-radius: 6px; background: var(--sunk); border: 1px solid var(--line); color: var(--muted); }
   .stop-title { font-size: 15px; font-weight: 700; margin: 0; }
-  .stop-card.done .stop-title { text-decoration: line-through; color: var(--muted); }
   .stop-query { font-size: 12px; color: var(--muted); margin-top: 2px; overflow-wrap: anywhere; }
   .stop-memo { margin: 0; font-size: 13px; background: var(--sunk); border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; color: var(--ink); word-break: break-word; }
   .stop-memo a { color: var(--accent); }
@@ -269,10 +267,11 @@
     cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 4px;
   }
   .mini-btn.gmap { background: var(--done-bg); color: var(--done-ink); border-color: transparent; }
+  .mini-btn.add-guide { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
   .mini-btn:disabled { opacity: 0.35; cursor: default; }
 
   .map-col { position: sticky; top: 14px; display: grid; gap: 12px; }
-  #leaflet-map { width: 100%; height: 370px; background: var(--sunk); z-index: 1; }
+  #leaflet-map { width: 100%; height: 320px; background: var(--sunk); z-index: 1; }
   .leaflet-pin-badge {
     display: flex; align-items: center; justify-content: center; border-radius: 999px;
     font-family: "IBM Plex Mono", monospace; font-weight: 700; font-size: 12px;
@@ -285,26 +284,27 @@
     font-size: 14px; padding: 11px 14px; border-radius: 10px; text-align: center;
   }
 
-  .modal-backdrop { position: fixed; inset: 0; background: rgba(16,23,29,0.6); z-index: 90; display: flex; align-items: center; justify-content: center; padding: 16px; }
-  .modal-box { background: var(--card); border: 1px solid var(--line); border-radius: 16px; max-width: 480px; width: 100%; padding: 18px; display: grid; gap: 12px; }
-  .modal-box h3 { margin: 0; font-size: 17px; }
-  .modal-box label { display: grid; gap: 4px; font-size: 13px; color: var(--muted); font-weight: 600; }
-  .modal-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-
-  /* TAB 2: TRANSPORT PLANNER */
-  ol.legs-list { list-style: none; margin: 0; padding: 0; }
-  .leg { background: var(--card); border: 1px solid var(--line); border-radius: 12px; }
-  .row { padding: 14px 16px; display: grid; grid-template-columns: 64px 1fr auto; align-items: center; column-gap: 12px; }
-  summary.row { cursor: pointer; list-style: none; border-radius: 12px; }
-  summary.row::-webkit-details-marker { display: none; }
-  .date { font-family: "IBM Plex Mono", ui-monospace, monospace; font-variant-numeric: tabular-nums; font-weight: 600; font-size: 20px; line-height: 1.1; }
-  .num { display: block; margin-top: 4px; font-size: 11px; font-weight: 500; color: var(--muted); letter-spacing: 0.04em; }
-  .route { font-size: 18px; font-weight: 700; line-height: 1.3; min-width: 0; }
-  .route .arrow { color: var(--accent); font-weight: 500; padding-inline: 2px; }
-  .mode { display: block; font-size: 13px; font-weight: 400; color: var(--muted); margin-top: 2px; }
-  .booked-line { display: block; font-size: 13px; font-weight: 500; color: var(--done-ink); margin-top: 2px; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
-  .side { display: grid; justify-items: end; gap: 6px; }
-  .chev { font-size: 12px; color: var(--accent); font-weight: 500; }
+  /* CITY GUIDE PANEL (STUBBY STYLE) */
+  .guide-city-pills { display: flex; gap: 5px; overflow-x: auto; padding: 10px 12px; border-bottom: 1px solid var(--line); background: var(--card); }
+  .guide-pill {
+    flex: 0 0 auto; font: inherit; font-size: 12px; font-weight: 600;
+    padding: 4px 10px; border-radius: 999px; border: 1px solid var(--line);
+    background: var(--sunk); color: var(--muted); cursor: pointer;
+  }
+  .guide-pill.active { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+  .guide-cat-bar { display: flex; gap: 5px; padding: 8px 12px; background: var(--sunk); border-bottom: 1px solid var(--line); flex-wrap: wrap; }
+  .guide-cat-btn {
+    font: inherit; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 6px;
+    border: 1px solid var(--line); background: var(--card); color: var(--muted); cursor: pointer;
+  }
+  .guide-cat-btn.active { background: var(--ink); color: var(--card); border-color: var(--ink); }
+  .guide-list { max-height: 360px; overflow-y: auto; padding: 10px 12px; display: grid; gap: 8px; }
+  .guide-item { background: var(--sunk); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; display: grid; gap: 6px; }
+  .guide-item-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; }
+  .guide-item-title { font-size: 14px; font-weight: 700; margin: 0; }
+  .guide-item-desc { font-size: 12px; color: var(--muted); margin: 0; line-height: 1.4; }
+  .guide-item-foot { display: flex; justify-content: space-between; align-items: center; gap: 6px; flex-wrap: wrap; }
+  .added-badge { font-size: 11px; font-weight: 700; color: var(--done-ink); background: var(--done-bg); padding: 3px 8px; border-radius: 6px; }
   details[open] .chev-closed, details:not([open]) .chev-open { display: none; }
   .status { font-size: 14px; font-weight: 700; padding: 6px 12px; border-radius: 999px; white-space: nowrap; }
   .status.done { background: var(--done-bg); color: var(--done-ink); }
@@ -505,6 +505,24 @@
               <button type="button" class="linkbtn" id="btn-reset-itinerary">일정 원본 복원</button>
             </div>
           </div>
+        </div>
+
+        <!-- STUBBY STYLE CITY ATTRACTIONS GUIDE -->
+        <div class="panel-card">
+          <div class="panel-head">
+            <h2 id="guide-panel-title">🧭 도시별 추천 명소 가이드</h2>
+            <span style="font-size:11px; color:var(--muted);" id="guide-target-day-label">Day 1에 바로 추가</span>
+          </div>
+          <div class="guide-city-pills" id="guide-city-pills"></div>
+          <div class="guide-cat-bar" id="guide-cat-bar">
+            <button type="button" class="guide-cat-btn active" data-gcat="ALL">전체</button>
+            <button type="button" class="guide-cat-btn" data-gcat="명소">🏛️ 핵심명소</button>
+            <button type="button" class="guide-cat-btn" data-gcat="야경·전망">🌃 야경·전망</button>
+            <button type="button" class="guide-cat-btn" data-gcat="미술관">🎨 미술관·박물관</button>
+            <button type="button" class="guide-cat-btn" data-gcat="맛집·카페">🍽️ 맛집·카페</button>
+            <button type="button" class="guide-cat-btn" data-gcat="근교">🚆 근교·섬</button>
+          </div>
+          <div class="guide-list" id="guide-list-container"></div>
         </div>
       </aside>
     </div>
@@ -715,6 +733,166 @@
     "Casa Mingo, Madrid":[40.4259,-3.7209],"Mercado de San Miguel, Madrid":[40.4154,-3.7089],"Museo Nacional del Prado, Madrid":[40.4138,-3.6921],
     "BYPILLOW Crosstown, Madrid":[40.4148,-3.7037],"Adolfo Suárez Madrid–Barajas Airport":[40.4983,-3.5676]
   };
+
+  // STUBBY-STYLE CITY GUIDES (13 CITIES, 110+ CURATED SPOTS WITH EXACT COORDS)
+  const CITY_GUIDES = [
+    {
+      id: "rome", name: "🇮🇹 로마", days: [1, 2, 3],
+      spots: [
+        { name: "콜로세움", query: "Colosseum, Rome", gcat: "명소", cat: "관광", coords: [41.8902, 12.4922], desc: "로마 제국의 상징 원형 경기장. 통합권 사전 예약 필수" },
+        { name: "바티칸 박물관 & 시스티나 성당", query: "Vatican Museums, Rome", gcat: "미술관", cat: "관광", coords: [41.9065, 12.4536], desc: "미켈란젤로 천지창조·최후의 심판. 오전 첫 타임 입장 추천" },
+        { name: "트레비 분수", query: "Trevi Fountain, Rome", gcat: "야경·전망", cat: "관광", coords: [41.9009, 12.4833], desc: "동전 던지기 명소. 이른 아침이나 밤 조명 켜졌을 때 최고" },
+        { name: "판테온", query: "Pantheon, Rome", gcat: "명소", cat: "관광", coords: [41.8986, 12.4769], desc: "2천 년 된 거대 돔 신전. 입장료 €5 (사전 예약 권장)" },
+        { name: "스페인 광장 & 콘도티 거리", query: "Piazza di Spagna, Rome", gcat: "명소", cat: "관광", coords: [41.9057, 12.4823], desc: "로마의 휴일 계단 & 명품 쇼핑 거리 연결" },
+        { name: "자니콜로 언덕 전망대", query: "Janiculum Hill, Rome", gcat: "야경·전망", cat: "관광", coords: [41.8913, 12.4614], desc: "로마 시내 전경이 한눈에 내려다보이는 일몰/야경 명소" },
+        { name: "나보나 광장", query: "Piazza Navona, Rome", gcat: "명소", cat: "관광", coords: [41.8992, 12.4731], desc: "베르니니의 4대강 분수와 거리 예술가들이 모이는 광장" },
+        { name: "지올리띠 (Giolitti)", query: "Giolitti, Rome", gcat: "맛집·카페", cat: "맛집", coords: [41.9012, 12.4774], desc: "판테온 인근 100년 전통 로마 3대 젤라또 맛집 (쌀·피스타치오 추천)" },
+        { name: "타짜도르 커피 (Tazza d'Oro)", query: "La Casa del Caffè Tazza d'Oro, Rome", gcat: "맛집·카페", cat: "맛집", coords: [41.8993, 12.4776], desc: "판테온 옆 그라니따 디 카페(커피 슬러시) & 에스프레소 명소" }
+      ]
+    },
+    {
+      id: "florence", name: "🇮🇹 피렌체", days: [4],
+      spots: [
+        { name: "피렌체 두오모 (산타 마리아 델 피오레)", query: "Florence Cathedral", gcat: "명소", cat: "관광", coords: [43.7731, 11.2560], desc: "브루넬레스키 쿠폴라 & 조토의 종탑. 쿠폴라 등반은 사전 예약 필수" },
+        { name: "미켈란젤로 언덕", query: "Piazzale Michelangelo, Florence", gcat: "야경·전망", cat: "관광", coords: [43.7629, 11.2651], desc: "피렌체 붉은 지붕과 베키오 다리가 내려다보이는 최고의 일몰 명소" },
+        { name: "우피치 미술관", query: "Uffizi Gallery, Florence", gcat: "미술관", cat: "관광", coords: [43.7678, 11.2553], desc: "보티첼리 '비너스의 탄생', 다빈치 작품 소장. 사전 예약 필수" },
+        { name: "베키오 다리", query: "Ponte Vecchio, Florence", gcat: "야경·전망", cat: "관광", coords: [43.7680, 11.2531], desc: "아르노 강 위 보석 상점들이 늘어선 피렌체 가장 오래된 다리" },
+        { name: "아카데미아 미술관 (다비드상)", query: "Galleria dell'Accademia, Florence", gcat: "미술관", cat: "관광", coords: [43.7768, 11.2586], desc: "미켈란젤로 진품 다비드상 전시관" },
+        { name: "피렌체 중앙시장 (2층 푸드코트)", query: "Mercato Centrale, Florence", gcat: "맛집·카페", cat: "맛집", coords: [43.7766, 11.2530], desc: "곱창버거(람프레도또), 트러플 파스타, 티본스테이크 한자리에서 해결" },
+        { name: "달 오스테 (Trattoria Dall'Oste)", query: "Trattoria Dall'Oste, Florence", gcat: "맛집·카페", cat: "맛집", coords: [43.7753, 11.2492], desc: "피렌체 대표 메뉴 피오렌티나 티본스테이크 인기 레스토랑" }
+      ]
+    },
+    {
+      id: "venice", name: "🇮🇹 베네치아", days: [5, 6],
+      spots: [
+        { name: "산 마르코 광장 & 대성당", query: "Piazza San Marco, Venice", gcat: "명소", cat: "관광", coords: [45.4342, 12.3388], desc: "베네치아 본섬의 심장. 황금 모자이크 대성당 & 종탑 전망대" },
+        { name: "리알토 다리", query: "Rialto Bridge, Venice", gcat: "명소", cat: "관광", coords: [45.4380, 12.3358], desc: "대운하를 가로지르는 베네치아 대표 아치형 다리 & 수상버스 정류장" },
+        { name: "부라노 섬 (아이유 뮤비 촬영지)", query: "Burano, Venice", gcat: "근교", cat: "관광", coords: [45.4854, 12.4167], desc: "알록달록 파스텔톤 집들이 늘어선 섬. 폰다멘타 노베에서 바포레토 약 45분" },
+        { name: "무라노 섬 (유리공예)", query: "Murano, Venice", gcat: "근교", cat: "관광", coords: [45.4586, 12.3568], desc: "부라노 섬 가는 길에 함께 들르기 좋은 전통 유리공예 섬" },
+        { name: "아카데미아 다리 (일몰 명소)", query: "Ponte dell'Accademia, Venice", gcat: "야경·전망", cat: "관광", coords: [45.4317, 12.3289], desc: "산타 마리아 델라 살루테 성당과 대운하가 액자처럼 보이는 뷰포인트" },
+        { name: "탄식의 다리 & 두칼레 궁전", query: "Bridge of Sighs, Venice", gcat: "명소", cat: "관광", coords: [45.4341, 12.3409], desc: "죄수들이 마지막으로 바깥 풍경을 보며 한숨지었다는 다리" },
+        { name: "리브레리아 아쿠아 알타 서점", query: "Libreria Acqua Alta, Venice", gcat: "명소", cat: "관광", coords: [45.4379, 12.3422], desc: "곤돌라와 욕조 안에 책을 쌓아둔 독특한 헌책방 포토스팟" },
+        { name: "달 모로 (Dal Moro's) 테이크아웃 파스타", query: "Dal Moro's Fresh Pasta to Go, Venice", gcat: "맛집·카페", cat: "맛집", coords: [45.4363, 12.3396], desc: "생면 파스타를 박스에 담아주는 가성비 최고 웨이팅 맛집" }
+      ]
+    },
+    {
+      id: "luzern", name: "🇨🇭 루체른", days: [7, 8],
+      spots: [
+        { name: "카펠교 & 팔각 수탑", query: "Chapel Bridge, Lucerne", gcat: "명소", cat: "관광", coords: [47.0516, 8.3075], desc: "유럽에서 가장 오래된 목조 다리. 낮과 밤 조명 모두 아름다움" },
+        { name: "빈사의 사자상", query: "Lion Monument, Lucerne", gcat: "명소", cat: "관광", coords: [47.0584, 8.3106], desc: "마크 트웨인이 '세상에서 가장 슬픈 돌'이라 극찬한 암벽 조각" },
+        { name: "리기산 (산들의 여왕)", query: "Mount Rigi, Switzerland", gcat: "근교", cat: "관광", coords: [47.0567, 8.4853], desc: "유람선 + 산악열차 환상 코스. 스위스패스 소지 시 무료 탑승" },
+        { name: "필라투스 산 (골든 라운드 트립)", query: "Mount Pilatus, Switzerland", gcat: "근교", cat: "관광", coords: [46.9794, 8.2564], desc: "해발 2,132m 알프스 설산 전망대 (스위스패스 50% 할인)" },
+        { name: "융프라우요흐 (인터라켄 당일치기)", query: "Jungfraujoch, Switzerland", gcat: "근교", cat: "관광", coords: [46.5475, 7.9851], desc: "루체른에서 골든패스 기차로 인터라켄 경유 후 산악열차 탑승" },
+        { name: "무제크 성벽 (Museggmauer)", query: "Musegg Wall, Lucerne", gcat: "야경·전망", cat: "관광", coords: [47.0558, 8.3046], desc: "루체른 구시가지와 호수가 한눈에 들어오는 중세 성벽 산책로" },
+        { name: "루체른 호수 유람선 선착장", query: "Luzern Bahnhofquai, Lucerne", gcat: "야경·전망", cat: "관광", coords: [47.0511, 8.3112], desc: "루체른역 바로 앞 선착장. 베기스/피츠나우 방면 유람선 출발" }
+      ]
+    },
+    {
+      id: "strasbourg", name: "🇫🇷 스트라스부르", days: [9],
+      spots: [
+        { name: "쁘띠 프랑스 (La Petite France)", query: "La Petite France, Strasbourg", gcat: "명소", cat: "관광", coords: [48.5806, 7.7405], desc: "하울의 움직이는 성 모티브가 된 목조 가옥과 운하 마을" },
+        { name: "스트라스부르 노트르담 대성당", query: "Cathédrale Notre-Dame-de-Strasbourg", gcat: "명소", cat: "관광", coords: [48.5818, 7.7509], desc: "붉은 사암 고딕 양식 대성당 & 정오 12:30 천문시계 인형 퍼레이드" },
+        { name: "보방 댐 전망대 (Barrage Vauban)", query: "Barrage Vauban, Strasbourg", gcat: "야경·전망", cat: "관광", coords: [48.5792, 7.7379], desc: "쁘띠 프랑스 운하와 덮인 다리(Ponts Couverts)를 한눈에 담는 뷰포인트" },
+        { name: "스트라스부르 크리스마스 마켓", query: "Place Kléber, Strasbourg", gcat: "야경·전망", cat: "관광", coords: [48.5834, 7.7458], desc: "프랑스 최대 크리스마스 마켓(12월 말까지 운영 여부 확인). 초대형 트리" },
+        { name: "오 브라쇠르 (Au Brasseur)", query: "Au Brasseur, Strasbourg", gcat: "맛집·카페", cat: "맛집", coords: [48.5829, 7.7547], desc: "수제 맥주와 알자스 전통 피자 타르트 플랑베(Flammekueche) 맛집" }
+      ]
+    },
+    {
+      id: "paris", name: "🇫🇷 파리", days: [10, 11, 12, 13],
+      spots: [
+        { name: "에펠탑 & 화이트 에펠 정시 점등", query: "Eiffel Tower, Paris", gcat: "야경·전망", cat: "관광", coords: [48.8584, 2.2945], desc: "일몰 후 매시 정각 5분간 반짝이는 화이트 에펠 관람 필수" },
+        { name: "루브르 박물관", query: "Louvre Museum, Paris", gcat: "미술관", cat: "관광", coords: [48.8606, 2.3376], desc: "모나리자·밀로의 비너스. 시간대별 사전 예약 필수 (화요일 휴무)" },
+        { name: "몽마르뜨 언덕 & 사크레쾨르 대성당", query: "Montmartre, Paris", gcat: "야경·전망", cat: "관광", coords: [48.8867, 2.3431], desc: "파리 시내가 한눈에 보이는 언덕. 사랑해벽·테르트르 광장 연계" },
+        { name: "오르세 미술관", query: "Musée d'Orsay, Paris", gcat: "미술관", cat: "관광", coords: [48.8600, 2.3266], desc: "고흐·모네·르누아르 인상주의 명작과 대형 시계창 포토스팟" },
+        { name: "개선문 전망대 (에투알 개선문)", query: "Arc de Triomphe, Paris", gcat: "야경·전망", cat: "관광", coords: [48.8738, 2.2950], desc: "샹젤리제 거리와 에펠탑 야경을 동시에 보는 최고의 파노라마" },
+        { name: "베르사유 궁전 & 거울의 방", query: "Palace of Versailles", gcat: "근교", cat: "관광", coords: [48.8049, 2.1204], desc: "파리 근교 필수 코스. 패스포트 티켓 사전 시간 예약 필수" },
+        { name: "몽생미셸 수도원", query: "Mont-Saint-Michel Abbey", gcat: "근교", cat: "관광", coords: [48.6361, -1.5115], desc: "바다 위 천공의 섬 수도원. TGV+버스 또는 투어 이용" },
+        { name: "오랑주리 미술관 (모네 수련)", query: "Musée de l'Orangerie, Paris", gcat: "미술관", cat: "관광", coords: [48.8638, 2.3226], desc: "튈르리 정원 끝자락, 타원형 전시실의 거대 수련 연작" },
+        { name: "부용 샤르티에 (Bouillon Chartier)", query: "Bouillon Chartier Grands Boulevards, Paris", gcat: "맛집·카페", cat: "맛집", coords: [48.8719, 2.3431], desc: "1896년 오픈한 가성비 최고 파리 전통 비스트로 (에스카르고·오리콩피)" }
+      ]
+    },
+    {
+      id: "barcelona", name: "🇪🇸 바르셀로나", days: [14, 15, 16],
+      spots: [
+        { name: "사그라다 파밀리아 성당", query: "Sagrada Família, Barcelona", gcat: "명소", cat: "관광", coords: [41.4036, 2.1744], desc: "가우디의 역작. 스테인드글라스 빛이 가장 예쁜 오후 3~4시 입장 추천" },
+        { name: "구엘 공원", query: "Park Güell, Barcelona", gcat: "명소", cat: "관광", coords: [41.4145, 2.1527], desc: "도마뱀 분수와 바르셀로나 시내·지중해 전망. 시간 지정 예약 필수" },
+        { name: "카사 바트요 & 카사 밀라", query: "Casa Batlló, Barcelona", gcat: "명소", cat: "관광", coords: [41.3917, 2.1649], desc: "그라시아 거리의 가우디 대표 건축물 2곳" },
+        { name: "카르멜 벙커 (일몰·야경)", query: "Bunkers del Carmel, Barcelona", gcat: "야경·전망", cat: "관광", coords: [41.4193, 2.1617], desc: "바르셀로나 360도 파노라마 뷰포인트. 일몰 40분 전 도착 추천" },
+        { name: "몬주익 매직 분수쇼", query: "Magic Fountain of Montjuïc, Barcelona", gcat: "야경·전망", cat: "관광", coords: [41.3712, 2.1517], desc: "음악과 조명이 어우러지는 분수쇼 (주말 야간 시간표 확인)" },
+        { name: "보케리아 시장", query: "Mercato de la Boqueria, Barcelona", gcat: "맛집·카페", cat: "맛집", coords: [41.3817, 2.1716], desc: "람블라스 거리 대표 시장. 생과일 주스·하몽·해산물 타파스" },
+        { name: "비니투스 (Vinitus) 타파스", query: "Vinitus, Barcelona", gcat: "맛집·카페", cat: "맛집", coords: [41.3905, 2.1628], desc: "꿀대구, 맛조개 구이, 감바스 등 한국인 입맛 저격 타파스 맛집" },
+        { name: "몬세라트 수도원 (근교)", query: "Montserrat Abbey, Spain", gcat: "근교", cat: "관광", coords: [41.5933, 1.8377], desc: "기암괴석 산악 수도원. 바르셀로나 에스파냐 광장에서 기차+산악열차 이동" }
+      ]
+    },
+    {
+      id: "porto", name: "🇵🇹 포르투", days: [17, 18],
+      spots: [
+        { name: "동 루이스 1세 다리 & 모후 정원", query: "Dom Luís I Bridge, Porto", gcat: "야경·전망", cat: "관광", coords: [41.1400, -8.6094], desc: "상층부 도보 횡단하며 보는 도우루 강 일몰과 야경이 압권" },
+        { name: "렐루 서점 (Livraria Lello)", query: "Livraria Lello, Porto", gcat: "명소", cat: "관광", coords: [41.1468, -8.6148], desc: "해리포터 영감의 붉은 나선형 계단 서점. 온라인 시간 예약 필수" },
+        { name: "상 벤투 기차역", query: "São Bento Railway Station, Porto", gcat: "명소", cat: "관광", coords: [41.1456, -8.6104], desc: "2만여 장의 푸른 아줄레주 타일 벽화가 장관인 기차역" },
+        { name: "가이아 지구 포트와인 와이너리", query: "Graham's Port Lodge, Vila Nova de Gaia", gcat: "맛집·카페", cat: "맛집", coords: [41.1365, -8.6236], desc: "그라함·테일러·칼렘·샌드맨 등 강 건너 와이너리 투어 & 테이스팅" },
+        { name: "세라 두 필라르 전망대", query: "Miradouro da Serra do Pilar, Vila Nova de Gaia", gcat: "야경·전망", cat: "관광", coords: [41.1386, -8.6085], desc: "동 루이스 1세 다리와 히베이라 지구를 정면으로 담는 야경 1순위" },
+        { name: "볼사 궁전 (아랍의 방)", query: "Palácio da Bolsa, Porto", gcat: "명소", cat: "관광", coords: [41.1414, -8.6156], desc: "화려한 황금빛 아랍의 방 가이드 투어 인기" },
+        { name: "마제스틱 카페", query: "Café Majestic, Porto", gcat: "맛집·카페", cat: "맛집", coords: [41.1472, -8.6066], desc: "벨 에포크 양식의 고풍스러운 카페. 프렌치토스트(라바나다스) 추천" }
+      ]
+    },
+    {
+      id: "lisbon", name: "🇵🇹 리스본", days: [19, 20],
+      spots: [
+        { name: "제로니무스 수도원", query: "Jerónimos Monastery, Lisbon", gcat: "명소", cat: "관광", coords: [38.6979, -9.2067], desc: "벨렘 지구 마누엘 양식 걸작. 오전 일찍 방문 추천" },
+        { name: "벨렘 탑 & 발견기념비", query: "Belém Tower, Lisbon", gcat: "명소", cat: "관광", coords: [38.6916, -9.2160], desc: "대항해시대 출항지 타구스 강변의 상징 건축물" },
+        { name: "파스테이스 드 벨렘 (원조 에그타르트)", query: "Pastéis de Belém, Lisbon", gcat: "맛집·카페", cat: "맛집", coords: [38.6975, -9.2032], desc: "1837년 수도원 비법 그대로 구워내는 나타 원조 맛집 (시나몬 슈가 필수)" },
+        { name: "28번 노란 트램 & 알파마 지구", query: "Praça Martim Moniz, Lisbon", gcat: "명소", cat: "관광", coords: [38.7156, -9.1364], desc: "좁은 언덕 골목을 누비는 리스본 명물 트램 (소매치기 주의)" },
+        { name: "상 조르제 성", query: "Castelo de São Jorge, Lisbon", gcat: "야경·전망", cat: "관광", coords: [38.7139, -9.1335], desc: "리스본 붉은 지붕과 4월 25일 다리가 내려다보이는 언덕 성채" },
+        { name: "산타 주스타 엘리베이터 & 카르모 수녀원", query: "Santa Justa Lift, Lisbon", gcat: "야경·전망", cat: "관광", coords: [38.7121, -9.1394], desc: "바이샤 시내 야경 뷰포인트 & 지붕 없는 고딕 성당 유적" },
+        { name: "코메르시우 광장", query: "Praça do Comércio, Lisbon", gcat: "명소", cat: "관광", coords: [38.7075, -9.1364], desc: "타구스 강변 개방형 광장. 12/31 연말 불꽃놀이 카운트다운 명소" },
+        { name: "신트라 페나 궁전 & 호카 곶 (근교)", query: "Pena Palace, Sintra", gcat: "근교", cat: "관광", coords: [38.7876, -9.3906], desc: "호시우 역에서 기차로 40분. 동화 속 알록달록 궁전 & 유라시아 최서단" }
+      ]
+    },
+    {
+      id: "seville", name: "🇪🇸 세비야", days: [21, 22],
+      spots: [
+        { name: "세비야 스페인 광장", query: "Plaza de España, Seville", gcat: "야경·전망", cat: "관광", coords: [37.3772, -5.9869], desc: "김태희 광고 촬영지. 반원형 회랑과 타일 벤치, 해질녘 일몰 최고" },
+        { name: "세비야 알카사르", query: "Royal Alcázar of Seville", gcat: "명소", cat: "관광", coords: [37.3831, -5.9902], desc: "왕좌의 게임 촬영지 무데하르 양식 궁전. 사전 예약 필수" },
+        { name: "세비야 대성당 & 히랄다 탑", query: "Seville Cathedral", gcat: "명소", cat: "관광", coords: [37.3861, -5.9926], desc: "세계 3대 성당 & 콜럼버스 무덤. 히랄다 탑 경사로 오르기" },
+        { name: "메트로폴 파라솔 (라스 세타스)", query: "Metropol Parasol, Seville", gcat: "야경·전망", cat: "관광", coords: [37.3933, -5.9918], desc: "세계 최대 목조 구조물 옥상 산책로 야경 명소" },
+        { name: "플라멩코 춤 박물관 공연", query: "Museo del Baile Flamenco, Seville", gcat: "명소", cat: "관광", coords: [37.3895, -5.9914], desc: "안달루시아 본고장에서 즐기는 열정적인 정통 플라멩코 공연" },
+        { name: "라 브루닐다 (La Brunilda) 타파스", query: "La Brunilda, Seville", gcat: "맛집·카페", cat: "맛집", coords: [37.3906, -5.9982], desc: "이베리코 돼지고기 구이와 리조또가 유명한 세비야 1등 타파스 바" }
+      ]
+    },
+    {
+      id: "ronda", name: "🇪🇸 론다", days: [23],
+      spots: [
+        { name: "누에보 다리 (Puente Nuevo)", query: "Puente Nuevo, Ronda", gcat: "명소", cat: "관광", coords: [36.7407, -5.1659], desc: "120m 타호 협곡을 잇는 론다의 상징. 협곡 아래 포토스팟 도보 이동 추천" },
+        { name: "론다 전망대 (Mirador de Ronda)", query: "Mirador de Ronda", gcat: "야경·전망", cat: "관광", coords: [36.7418, -5.1669], desc: "안달루시아 평원이 끝없이 펼쳐지는 절벽 전망대" },
+        { name: "론다 투우장", query: "Plaza de Toros de la Real Maestranza de Caballería de Ronda", gcat: "명소", cat: "관광", coords: [36.7424, -5.1672], desc: "스페인 근대 투우의 발상지이자 가장 오래된 석조 투우장" },
+        { name: "펠리페 5세의 문 & 구시가지", query: "La Ciudad, Ronda", gcat: "명소", cat: "관광", coords: [36.7380, -5.1656], desc: "아랍 목욕탕 유적과 하얀 골목길이 이어지는 론다 구시가지" }
+      ]
+    },
+    {
+      id: "granada", name: "🇪🇸 그라나다", days: [23, 24],
+      spots: [
+        { name: "알함브라 & 나스르 궁전", query: "Alhambra, Granada", gcat: "명소", cat: "관광", coords: [37.1761, -3.5881], desc: "이슬람 건축 예술의 정점. 나스르 궁전 지정 시간 엄수 (예약 필수)" },
+        { name: "산 니콜라스 전망대", query: "Mirador de San Nicolás, Granada", gcat: "야경·전망", cat: "관광", coords: [37.1811, -3.5926], desc: "알바이신 언덕 위에서 붉게 물드는 알함브라 전경을 보는 일몰 명소" },
+        { name: "알바이신 지구 & 아랍 거리", query: "Albaicín, Granada", gcat: "명소", cat: "관광", coords: [37.1815, -3.5935], desc: "미로 같은 하얀 골목길과 민트티·케밥 상점이 모인 이슬람 지구" },
+        { name: "보데가스 카스타녜다 (타파스)", query: "Bodegas Castañeda, Granada", gcat: "맛집·카페", cat: "맛집", coords: [37.1769, -3.5982], desc: "음료 주문 시 무료 타파스가 나오는 그라나다 전통 선술집" }
+      ]
+    },
+    {
+      id: "madrid", name: "🇪🇸 마드리드", days: [24, 25, 26, 27],
+      spots: [
+        { name: "프라도 미술관", query: "Museo Nacional del Prado, Madrid", gcat: "미술관", cat: "관광", coords: [40.4138, -3.6921], desc: "벨라스케스 '시녀들', 고야 작품 소장. 월~토 18:00~20:00 무료 입장" },
+        { name: "마드리드 왕궁 & 알무데나 대성당", query: "Royal Palace of Madrid", gcat: "명소", cat: "관광", coords: [40.4180, -3.7143], desc: "서유럽 최대 규모 왕궁. 근위병 교대식 & 사바티니 정원 산책" },
+        { name: "산 미구엘 시장", query: "Mercado de San Miguel, Madrid", gcat: "맛집·카페", cat: "맛집", coords: [40.4154, -3.7089], desc: "마요르 광장 옆 세련된 미식 시장. 올리브 핀초스·빠에야·상그리아" },
+        { name: "레티로 공원 & 수정궁", query: "El Retiro Park, Madrid", gcat: "명소", cat: "관광", coords: [40.4153, -3.6845], desc: "마드리드 시민들의 휴식처. 유리 온실 크리스탈 궁전 포토스팟" },
+        { name: "데보드 신전 (일몰 명소)", query: "Temple of Debod, Madrid", gcat: "야경·전망", cat: "관광", coords: [40.4240, -3.7178], desc: "이집트에서 기증받은 고대 신전과 스페인 광장 방향 황금빛 일몰" },
+        { name: "톨레도 구시가지 (근교 당일치기)", query: "Toledo, Spain", gcat: "근교", cat: "관광", coords: [39.8628, -4.0273], desc: "아토차 역에서 고속열차 33분. 중세 스페인 옛 수도 (파라도르 전망 추천)" },
+        { name: "세고비아 수도교 & 알카사르 (근교)", query: "Aqueduct of Segovia", gcat: "근교", cat: "관광", coords: [40.9481, -4.1178], desc: "백설공주 성 모티브 알카사르 & 로마 시대 거대 수도교 (버스/기차 1시간)" },
+        { name: "쇼콜라테리아 산 히네스 (츄러스)", query: "Chocolatería San Ginés, Madrid", gcat: "맛집·카페", cat: "맛집", coords: [40.4167, -3.7070], desc: "1894년 오픈한 24시간 전통 츄러스 & 진한 핫초코 맛집" },
+        { name: "까사 밍고 (Casa Mingo)", query: "Casa Mingo, Madrid", gcat: "맛집·카페", cat: "맛집", coords: [40.4259, -3.7209], desc: "100년 전통 로스트 치킨과 사과주(시드라) 콤비 맛집" }
+      ]
+    }
+  ];
 
   // Compact tuple array [dayNum, order, name, query, memo] for all 207 CSV rows
   const RAW_CSV_TUPLES = [
@@ -943,8 +1121,7 @@
       name: r[2],
       query: r[3],
       memo: r[4],
-      cat: detectCategory(r[2], r[4]),
-      done: false
+      cat: detectCategory(r[2], r[4])
     }));
   }
 
@@ -1287,6 +1464,8 @@
   let itineraryStops = loadLocalItinerary();
   let selectedDayNum = 1;
   let selectedCityId = "ALL";
+  let selectedGuideCityId = "rome";
+  let selectedGuideCat = "ALL";
   let mapViewMode = "day";
   let activeTab = "itinerary";
 
@@ -1498,7 +1677,7 @@
 
     const container = document.getElementById("stops-container");
     if (stopsToShow.length === 0) {
-      container.innerHTML = `<div style="text-align:center; padding:32px 16px; color:var(--muted); border:1px dashed var(--line); border-radius:12px;"><p style="margin:0 0 10px;">등록된 세부 장소가 없거나 검색 결과가 없습니다.</p><button type="button" class="primary" id="btn-empty-add">+ 이 일차에 첫 장소 추가하기</button></div>`;
+      container.innerHTML = `<div style="text-align:center; padding:32px 16px; color:var(--muted); border:1px dashed var(--line); border-radius:12px;"><p style="margin:0 0 10px;">등록된 세부 장소가 없거나 검색 결과가 없습니다.</p><p style="margin:0 0 12px; font-size:12px;">오른쪽 <b>도시별 추천 명소 가이드</b>에서 명소를 원클릭으로 추가하거나 직접 입력해 보세요.</p><button type="button" class="primary" id="btn-empty-add">+ 이 일차에 직접 장소 추가하기</button></div>`;
       const emptyBtn = document.getElementById("btn-empty-add");
       if (emptyBtn) emptyBtn.addEventListener("click", openAddModal);
     } else {
@@ -1507,7 +1686,7 @@
         const pinCls = s.cat === "숙소" ? "stay-pin" : s.cat === "교통" ? "transit-pin" : s.cat === "맛집" ? "food-pin" : "";
         const dayPrefix = searchAll && searchInput ? `<span class="cat-tag" style="color:var(--accent);">Day ${s.dayNum}</span>` : "";
         return `
-          <div class="stop-card${s.done ? " done" : ""}">
+          <div class="stop-card">
             <div class="stop-top">
               <div class="stop-left">
                 <span class="stop-num ${pinCls}">${s.order}</span>
@@ -1515,10 +1694,6 @@
                   <div class="stop-tags">
                     ${dayPrefix}
                     <span class="cat-tag">${esc(s.cat || "관광")}</span>
-                    <label style="display:inline-flex; align-items:center; gap:4px; font-size:12px; color:var(--muted); cursor:pointer;">
-                      <input type="checkbox" ${s.done ? "checked" : ""} data-act="toggle-done" data-id="${s.id}" style="width:auto;">
-                      <span>방문완료</span>
-                    </label>
                   </div>
                   <h3 class="stop-title">${esc(s.name)}</h3>
                   <div class="stop-query">📍 ${esc(s.query)}</div>
@@ -1541,8 +1716,112 @@
           </div>`;
       }).join("");
     }
+    renderCityGuidePanel();
     renderMap();
   }
+
+  function renderCityGuidePanel() {
+    const labelEl = document.getElementById("guide-target-day-label");
+    if (labelEl) labelEl.textContent = `Day ${selectedDayNum} 일정에 바로 추가`;
+
+    const pillsContainer = document.getElementById("guide-city-pills");
+    if (pillsContainer) {
+      pillsContainer.innerHTML = CITY_GUIDES.map(g =>
+        `<button type="button" class="guide-pill${g.id === selectedGuideCityId ? " active" : ""}" data-gcity="${g.id}">${g.name}</button>`
+      ).join("");
+    }
+
+    document.querySelectorAll(".guide-cat-btn").forEach(btn => {
+      btn.classList.toggle("active", btn.dataset.gcat === selectedGuideCat);
+    });
+
+    const listContainer = document.getElementById("guide-list-container");
+    if (!listContainer) return;
+
+    const guide = CITY_GUIDES.find(g => g.id === selectedGuideCityId) || CITY_GUIDES[0];
+    const currentDayStops = getStopsForDay(selectedDayNum);
+    const filteredSpots = guide.spots.filter(sp => selectedGuideCat === "ALL" || sp.gcat === selectedGuideCat);
+
+    listContainer.innerHTML = filteredSpots.map((sp, idx) => {
+      const alreadyAdded = currentDayStops.some(existing =>
+        existing.query.toLowerCase() === sp.query.toLowerCase() || existing.name.includes(sp.name) || sp.name.includes(existing.name)
+      );
+      return `
+        <div class="guide-item">
+          <div class="guide-item-head">
+            <div>
+              <span class="cat-tag" style="margin-bottom:3px; display:inline-block;">${esc(sp.gcat)}</span>
+              <h4 class="guide-item-title">${esc(sp.name)}</h4>
+            </div>
+            ${alreadyAdded
+              ? `<span class="added-badge">✓ Day ${selectedDayNum} 포함됨</span>`
+              : `<button type="button" class="mini-btn add-guide" data-gact="add" data-gcity="${guide.id}" data-gidx="${guide.spots.indexOf(sp)}">+ Day ${selectedDayNum} 추가</button>`
+            }
+          </div>
+          <p class="guide-item-desc">${esc(sp.desc)}</p>
+          <div class="guide-item-foot">
+            <button type="button" class="mini-btn" data-gact="preview" data-gcity="${guide.id}" data-gidx="${guide.spots.indexOf(sp)}">📍 지도 미리보기</button>
+            <a class="mini-btn gmap" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(sp.query)}" target="_blank" rel="noopener">구글맵 ↗</a>
+          </div>
+        </div>
+      `;
+    }).join("");
+  }
+
+  function syncGuideCityToDay(dayNum) {
+    const matched = CITY_GUIDES.find(g => g.days.includes(Number(dayNum)));
+    if (matched) selectedGuideCityId = matched.id;
+  }
+
+  document.getElementById("guide-city-pills").addEventListener("click", e => {
+    const btn = e.target.closest(".guide-pill");
+    if (!btn) return;
+    selectedGuideCityId = btn.dataset.gcity;
+    renderCityGuidePanel();
+  });
+
+  document.getElementById("guide-cat-bar").addEventListener("click", e => {
+    const btn = e.target.closest(".guide-cat-btn");
+    if (!btn) return;
+    selectedGuideCat = btn.dataset.gcat;
+    renderCityGuidePanel();
+  });
+
+  document.getElementById("guide-list-container").addEventListener("click", e => {
+    const btn = e.target.closest("[data-gact]");
+    if (!btn) return;
+    const act = btn.dataset.gact;
+    const guide = CITY_GUIDES.find(g => g.id === btn.dataset.gcity);
+    if (!guide) return;
+    const spot = guide.spots[Number(btn.dataset.gidx)];
+    if (!spot) return;
+
+    if (spot.coords) COORD_DB[spot.query] = spot.coords;
+
+    if (act === "preview") {
+      if (map && spot.coords) {
+        mapViewMode = "day";
+        map.setView(spot.coords, 15);
+        L.popup()
+          .setLatLng(spot.coords)
+          .setContent(`<div style="min-width:160px;"><div style="font-size:11px;color:#1d5c82;font-weight:700;">추천 명소 미리보기 · ${esc(spot.gcat)}</div><div style="font-size:14px;font-weight:700;margin:2px 0;">${esc(spot.name)}</div><div style="font-size:12px;color:#5d6b77;">${esc(spot.desc)}</div></div>`)
+          .openOn(map);
+      }
+    } else if (act === "add") {
+      const currentDayStops = getStopsForDay(selectedDayNum);
+      itineraryStops.push({
+        id: "s_" + Date.now(),
+        dayNum: selectedDayNum,
+        order: currentDayStops.length + 1,
+        name: spot.name,
+        query: spot.query,
+        memo: spot.desc,
+        cat: spot.cat || "관광"
+      });
+      mapViewMode = "day";
+      syncItineraryToServer();
+    }
+  });
 
   document.getElementById("city-ribbon").addEventListener("click", e => {
     const btn = e.target.closest(".city-chip");
@@ -1552,6 +1831,7 @@
       const seg = CITY_SEGMENTS.find(c => c.id === selectedCityId);
       if (seg && seg.days.length > 0) selectedDayNum = seg.days[0];
     }
+    syncGuideCityToDay(selectedDayNum);
     mapViewMode = "day";
     renderItineraryUI();
   });
@@ -1560,6 +1840,7 @@
     const item = e.target.closest(".day-item");
     if (!item) return;
     selectedDayNum = Number(item.dataset.day);
+    syncGuideCityToDay(selectedDayNum);
     mapViewMode = "day";
     renderItineraryUI();
   });
@@ -1577,10 +1858,7 @@
     const stop = itineraryStops.find(s => s.id === id);
     if (!stop) return;
 
-    if (act === "toggle-done") {
-      stop.done = !stop.done;
-      syncItineraryToServer();
-    } else if (act === "move-up" || act === "move-down") {
+    if (act === "move-up" || act === "move-down") {
       const dayStops = getStopsForDay(stop.dayNum);
       const idx = dayStops.findIndex(s => s.id === id);
       const target = act === "move-up" ? idx - 1 : idx + 1;
@@ -1599,6 +1877,7 @@
       syncItineraryToServer();
     } else if (act === "pin") {
       selectedDayNum = stop.dayNum;
+      syncGuideCityToDay(selectedDayNum);
       mapViewMode = "day";
       await renderMap();
       const coords = await resolveLatLng(stop.query);
@@ -1651,9 +1930,10 @@
       if (existing) { existing.dayNum = dayNum; existing.cat = cat; existing.name = name; existing.query = query; existing.memo = memo; }
     } else {
       const currentDayStops = getStopsForDay(dayNum);
-      itineraryStops.push({ id: "s_" + Date.now(), dayNum, order: currentDayStops.length + 1, name, query, memo, cat, done: false });
+      itineraryStops.push({ id: "s_" + Date.now(), dayNum, order: currentDayStops.length + 1, name, query, memo, cat });
     }
     selectedDayNum = dayNum;
+    syncGuideCityToDay(dayNum);
     document.getElementById("stop-modal").hidden = true;
     syncItineraryToServer();
   });
