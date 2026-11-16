@@ -261,12 +261,14 @@
 
   /* AI ASSISTANT PANEL */
   .ai-box { display: grid; gap: 10px; padding: 14px 16px; background: var(--card); border: 1px solid var(--line); border-radius: 14px; margin-bottom: 16px; box-shadow: var(--shadow); }
+  .ai-box-head { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
   .ai-box h3 { margin: 0; font-size: 15px; display: flex; align-items: center; gap: 6px; color: var(--accent); }
   .ai-chat-area { max-height: 220px; overflow-y: auto; background: var(--sunk); border: 1px solid var(--line); border-radius: 10px; padding: 10px; display: grid; gap: 8px; font-size: 13px; }
-  .ai-msg { padding: 8px 12px; border-radius: 8px; line-height: 1.4; word-break: break-word; }
+  .ai-msg { padding: 8px 12px; border-radius: 8px; line-height: 1.45; word-break: break-word; }
   .ai-msg.user { background: var(--accent-soft); color: var(--ink); justify-self: end; max-width: 85%; }
   .ai-msg.bot { background: var(--card); border: 1px solid var(--line); color: var(--ink); justify-self: start; max-width: 85%; }
   .ai-input-row { display: flex; gap: 8px; }
+  .ai-key-row { display: flex; gap: 6px; align-items: center; font-size: 12px; color: var(--muted); }
 
   /* CITY GUIDE PANEL */
   .guide-city-pills { display: flex; gap: 5px; overflow-x: auto; padding: 10px 12px; border-bottom: 1px solid var(--line); background: var(--card); }
@@ -290,7 +292,7 @@
   .guide-item-foot { display: flex; justify-content: space-between; align-items: center; gap: 6px; flex-wrap: wrap; }
   .added-badge { font-size: 11px; font-weight: 700; color: var(--done-ink); background: var(--done-bg); padding: 3px 8px; border-radius: 6px; }
 
-  /* TRANSPORT PLANNER STYLES (MOBILE FIXED) */
+  /* TRANSPORT PLANNER STYLES */
   .legs-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
   .leg { background: var(--card); border: 1px solid var(--line); border-radius: 14px; box-shadow: var(--shadow); overflow: hidden; }
   .row {
@@ -394,6 +396,13 @@
   .test-tool input[type="date"] { font: inherit; font-size: 15px; color: var(--ink); background: var(--sunk); border: 1px solid var(--line); border-radius: 8px; padding: 7px 10px; }
   .transport-footer { margin-top: 24px; font-size: 13px; color: var(--muted); display: grid; gap: 6px; }
   .transport-footer p { margin: 0; }
+
+  /* MODAL */
+  .modal-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.6); display: flex; align-items: center; justify-content: center; z-index: 9999; padding: 14px; }
+  .modal-box { background: var(--card); border: 1px solid var(--line); border-radius: 16px; width: 100%; max-width: 480px; padding: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); display: grid; gap: 12px; }
+  .modal-box h3 { margin: 0; font-size: 18px; }
+  .modal-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  @media (max-width: 420px) { .modal-grid-2 { grid-template-columns: 1fr; } }
 </style>
 </head>
 <body>
@@ -407,7 +416,7 @@
         <p class="sub-meta">🇮🇹 이탈리아 · 🇨🇭 스위스 · 🇫🇷 프랑스 · 🇪🇸 스페인 · 🇵🇹 포르투갈 (12도시 통합 일정 &amp; 14개 교통 구간)</p>
       </div>
       <div class="toolbar" id="toolbar">
-        <span id="synced">실시간 동기화 완료</span>
+        <span id="synced">불러오는 중…</span>
         <button type="button" class="linkbtn" id="refresh">새로고침</button>
       </div>
     </div>
@@ -462,12 +471,19 @@
       <aside class="map-col">
         <!-- GEMINI AI ASSISTANT WIDGET -->
         <div class="ai-box">
-          <h3>✨ Gemini AI 여행 비서</h3>
+          <div class="ai-box-head">
+            <h3>✨ Gemini AI 여행 비서</h3>
+            <button type="button" class="mini-btn" id="btn-toggle-apikey">API 키 설정</button>
+          </div>
+          <div class="ai-key-row" id="ai-key-box" hidden>
+            <input type="password" id="ai-key-input" placeholder="AIzaSy... 로 시작하는 Gemini API 키 입력" style="font-size:12px; padding:6px 9px;">
+            <button type="button" class="mini-btn add-guide" id="btn-save-apikey">저장</button>
+          </div>
           <div class="ai-chat-area" id="ai-chat-box">
-            <div class="ai-msg bot">안녕하세요! 27일 유럽 여행 AI 비서입니다. 일정 조정이나 맛집 추천, 동선 변경을 자연어로 요청해 보세요!</div>
+            <div class="ai-msg bot">안녕하세요! 현재 보고 계신 <b>Day 1</b> 일정과 도시 정보를 바탕으로 맛집, 동선, 교통 팁을 알려드립니다. 무엇이든 물어보세요!</div>
           </div>
           <form class="ai-input-row" id="ai-form">
-            <input type="text" id="ai-input" placeholder="예: 오늘 오후에 갈만한 맛집 추천해줘" autocomplete="off">
+            <input type="text" id="ai-input" placeholder="예: 오늘 동선 근처 로컬 맛집 추천해줘" autocomplete="off">
             <button type="submit" class="primary" id="ai-btn">전송</button>
           </form>
         </div>
@@ -486,7 +502,7 @@
               🗺️ 구글 지도에서 오늘 전체 동선 열기 ↗
             </a>
             <div style="display:flex; justify-content:space-between; align-items:center; font-size:12px; color:var(--muted);">
-              <span id="itinerary-save-status">실시간 동기화 완료</span>
+              <span id="itinerary-save-status">실시간 동기화 준비 완료</span>
               <button type="button" class="linkbtn" id="btn-reset-itinerary">일정 원본 복원</button>
             </div>
           </div>
@@ -578,7 +594,9 @@
 <script>
 (function() {
   const API_URL = "https://script.google.com/macros/s/AKfycbxnsNrXANrjEXfquUcYSaaXUqXzTFMljh2PvJv21WaBoVtUhvYBTI4uYTNJYX2xyE0j/exec";
-  const GEMINI_API_KEY = "AQ.Ab8RN6I5p9uKKelVQXgL7LFdbz4uWKyB1MobjQwyMtNEAZJjGg";
+  const DEFAULT_GEMINI_KEY = "AQ.Ab8RN6I5p9uKKelVQXgL7LFdbz4uWKyB1MobjQwyMtNEAZJjGg";
+  const GEMINI_KEY_STORAGE = "europe-2026-gemini-key";
+  const BACKEND_PW = "rome";
 
   const ITINERARY_STORAGE_KEY = "europe-2026-itinerary-v1";
   const ITINERARY_REMOTE_ID = "itinerary_v1";
@@ -1449,6 +1467,31 @@
   let mapViewMode = "day";
   let activeTab = "itinerary";
 
+  function getGeminiKey() {
+    try {
+      const saved = localStorage.getItem(GEMINI_KEY_STORAGE);
+      if (saved && saved.trim()) return saved.trim();
+    } catch (e) {}
+    return DEFAULT_GEMINI_KEY;
+  }
+
+  document.getElementById("btn-toggle-apikey").addEventListener("click", () => {
+    const box = document.getElementById("ai-key-box");
+    box.hidden = !box.hidden;
+    if (!box.hidden) {
+      document.getElementById("ai-key-input").value = getGeminiKey();
+    }
+  });
+
+  document.getElementById("btn-save-apikey").addEventListener("click", () => {
+    const val = document.getElementById("ai-key-input").value.trim();
+    try { localStorage.setItem(GEMINI_KEY_STORAGE, val); } catch (e) {}
+    document.getElementById("ai-key-box").hidden = true;
+    const chatBox = document.getElementById("ai-chat-box");
+    chatBox.innerHTML += `<div class="ai-msg bot">✅ API 키가 저장되었습니다. 이제 질문을 입력해 보세요!</div>`;
+    chatBox.scrollTop = chatBox.scrollHeight;
+  });
+
   async function api(body) {
     const res = await fetch(API_URL, {
       method: "POST",
@@ -1482,7 +1525,7 @@
     try {
       const r = await api({
         action: "save",
-        pw: "rome",
+        pw: BACKEND_PW,
         legId: ITINERARY_REMOTE_ID,
         data: { json: JSON.stringify(itineraryStops), updatedAt: stamp() }
       });
@@ -1490,6 +1533,8 @@
         bookings = r.bookings || bookings;
         if (statusEl) statusEl.textContent = "구글 시트 실시간 동기화 완료 (" + stamp() + ")";
         document.getElementById("synced").textContent = "마지막 동기화 " + stamp();
+      } else {
+        if (statusEl) statusEl.textContent = "로컬 저장 완료 (" + stamp() + ")";
       }
     } catch (e) {
       if (statusEl) statusEl.textContent = "오프라인 로컬 저장됨";
@@ -1717,7 +1762,7 @@
     const currentDayStops = getStopsForDay(selectedDayNum);
     const filteredSpots = guide.spots.filter(sp => selectedGuideCat === "ALL" || sp.gcat === selectedGuideCat);
 
-    listContainer.innerHTML = filteredSpots.map((sp, idx) => {
+    listContainer.innerHTML = filteredSpots.map((sp) => {
       const alreadyAdded = currentDayStops.some(existing =>
         existing.query.toLowerCase() === sp.query.toLowerCase() || existing.name.includes(sp.name) || sp.name.includes(existing.name)
       );
@@ -1920,8 +1965,7 @@
         rows.push([d.title, String(idx + 1), s.name, s.query, s.memo || ""]);
       });
     });
-    const csv = "﻿" + rows.map(r => r.map(v => `"${String(v).replace(/"/g, '""')}"`).join(",")).join("
-");
+    const csv = "\uFEFF" + rows.map(r => r.map(v => `"${String(v).replace(/"/g, '""')}"`).join(",")).join("\n");
     const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
@@ -1950,15 +1994,22 @@
     chatBox.innerHTML += `<div class="ai-msg user">${esc(prompt)}</div>`;
     chatBox.scrollTop = chatBox.scrollHeight;
 
+    const apiKey = getGeminiKey();
+    if (!apiKey || !apiKey.startsWith("AIza")) {
+      chatBox.innerHTML += `<div class="ai-msg bot">⚠️ 올바른 Gemini API 키(<b>AIzaSy...</b> 형태)가 필요합니다. 상단의 <b>[API 키 설정]</b> 버튼을 눌러 Google AI Studio에서 발급한 키를 입력해 주세요!</div>`;
+      chatBox.scrollTop = chatBox.scrollHeight;
+      return;
+    }
+
     const loadingId = "ai-loading-" + Date.now();
     chatBox.innerHTML += `<div class="ai-msg bot" id="${loadingId}">Gemini AI가 답변을 생각하는 중입니다...</div>`;
     chatBox.scrollTop = chatBox.scrollHeight;
 
     const meta = DAYS_META.find(d => d.dayNum === selectedDayNum) || DAYS_META[0];
     const currentStops = getStopsForDay(selectedDayNum).map(s => s.name).join(", ");
-    const systemInstruction = `당신은 27일 유럽 여행(이탈리아, 스위스, 프랑스, 스페인, 포르투갈, 참가자 4명)의 전문 AI 여행 플래너입니다. 현재 사용자가 보고 있는 일정은 Day ${selectedDayNum} (${meta.title}, 도시: ${meta.city}, 등록된 장소: ${currentStops || "없음"})입니다. 질문에 친절하고 상세하게 답변해주세요.`;
+    const systemInstruction = `당신은 27일 유럽 여행(이탈리아, 스위스, 프랑스, 스페인, 포르투갈, 참가자 4명)의 전문 AI 여행 플래너입니다. 현재 사용자가 보고 있는 일정은 Day ${selectedDayNum} (${meta.title}, 도시: ${meta.city}, 등록된 장소: ${currentStops || "없음"})입니다. 질문에 친절하고 실용적으로 답변해주세요.`;
 
-    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`;
+    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${encodeURIComponent(apiKey)}`;
     const payload = {
       contents: [{ parts: [{ text: prompt }] }],
       systemInstruction: { parts: [{ text: systemInstruction }] }
@@ -1971,14 +2022,20 @@
         body: JSON.stringify(payload)
       });
       const result = await response.json();
-      const candidate = result.candidates?.[0];
-      const replyText = (candidate && candidate.content?.parts?.[0]?.text) || "답변을 생성하지 못했습니다.";
-      document.getElementById(loadingId).remove();
-      chatBox.innerHTML += `<div class="ai-msg bot">${esc(replyText).replace(/
-/g, '<br>')}</div>`;
+      const loadEl = document.getElementById(loadingId);
+      if (loadEl) loadEl.remove();
+
+      if (result.error) {
+        chatBox.innerHTML += `<div class="ai-msg bot">❌ API 오류: ${esc(result.error.message || "키를 확인해주세요.")}</div>`;
+      } else {
+        const candidate = result.candidates && result.candidates[0];
+        const replyText = (candidate && candidate.content && candidate.content.parts && candidate.content.parts[0] && candidate.content.parts[0].text) || "답변을 생성하지 못했습니다.";
+        chatBox.innerHTML += `<div class="ai-msg bot">${esc(replyText).replace(/\n/g, '<br>')}</div>`;
+      }
     } catch (err) {
-      document.getElementById(loadingId).remove();
-      chatBox.innerHTML += `<div class="ai-msg bot">AI 비서 호출 중 오류가 발생했습니다.</div>`;
+      const loadEl = document.getElementById(loadingId);
+      if (loadEl) loadEl.remove();
+      chatBox.innerHTML += `<div class="ai-msg bot">AI 비서 호출 중 네트워크 오류가 발생했습니다.</div>`;
     }
     chatBox.scrollTop = chatBox.scrollHeight;
   }
@@ -2164,9 +2221,9 @@
     const synced = document.getElementById("synced");
     synced.textContent = "불러오는 중…";
     try {
-      const r = await api({ action: "get", pw: "rome" });
+      const r = await api({ action: "get", pw: BACKEND_PW });
       if (!r.ok) {
-        synced.textContent = "로컬 데이터 표시 중";
+        synced.textContent = "기본 일정 표시 중";
         return;
       }
       bookings = r.bookings || {};
@@ -2175,7 +2232,7 @@
       applyBookings();
       synced.textContent = "실시간 동기화 완료 (" + stamp() + ")";
     } catch (e) {
-      synced.textContent = "오프라인 모드";
+      synced.textContent = "로컬 데이터 표시 중";
     }
   }
 
@@ -2187,7 +2244,7 @@
     btn.disabled = true;
     msg.textContent = "저장하는 중…";
     try {
-      const r = await api({ action: "save", pw: "rome", legId: id, data });
+      const r = await api({ action: "save", pw: BACKEND_PW, legId: id, data });
       if (!r.ok) {
         msg.textContent = "저장 실패";
         return;
