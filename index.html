@@ -2,223 +2,130 @@
 <html lang="ko">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex">
-<title>2026-2027 유럽 4인 여행 플래너 & 이동표</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap">
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+<title>유럽 27일 플래너 & 이동표</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <style>
-  :root {
-    color-scheme: light;
-    --ground: #eef2f4;
-    --card: #ffffff;
-    --sunk: #f5f8fa;
-    --ink: #17222c;
-    --muted: #5d6b77;
-    --line: #d5dde3;
-    --accent: #1d5c82;
-    --accent-soft: #e6f1f8;
-    --accent-ink: #ffffff;
-    --done-bg: #dcefe3;
-    --done-ink: #1f6a3f;
-    --todo-bg: #fbeacb;
-    --todo-ink: #8a5200;
-    --warn-bg: #fdf1dc;
-    --warn-line: #e3b35c;
-    --err: #b3261e;
-  }
-  @media (prefers-color-scheme: dark) {
-    :root {
-      color-scheme: dark;
-      --ground: #10171d;
-      --card: #1a232b;
-      --sunk: #141c23;
-      --ink: #e6edf2;
-      --muted: #97a6b2;
-      --line: #2c3842;
-      --accent: #7fb8dd;
-      --accent-soft: #1a2e3d;
-      --accent-ink: #0d1a24;
-      --done-bg: #1d3a2a;
-      --done-ink: #8fd8ab;
-      --todo-bg: #3d2f16;
-      --todo-ink: #f1c27a;
-      --warn-bg: #33291a;
-      --warn-line: #8a6a2e;
-      --err: #f2998f;
-    }
-  }
-  * { box-sizing: border-box; }
-  [hidden] { display: none !important; }
+:root{--bg:#eef2f4;--card:#fff;--sunk:#f5f8fa;--ink:#17222c;--mut:#5d6b77;--line:#d5dde3;--acc:#1d5c82;--soft:#e6f1f8;--ok:#1f6a3f;--okbg:#dcefe3;--err:#b3261e}
+*{box-sizing:border-box}[hidden]{display:none!important}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Malgun Gothic",sans-serif;font-size:14px;line-height:1.5;padding:16px}
+.wrap{max-width:1120px;margin:0 auto}
+header{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:10px;margin-bottom:14px}
+h1{margin:0;font-size:22px}.sub{color:var(--mut);font-size:13px}
+.tabs{display:flex;gap:6px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:5px;margin-bottom:14px}
+.tab{flex:1;padding:10px;border:0;border-radius:8px;font:inherit;font-weight:700;cursor:pointer;background:transparent;color:var(--mut)}
+.tab.active{background:var(--acc);color:#fff}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:14px}
+.lock{max-width:440px;margin:40px auto}
+input,button{font:inherit;border-radius:8px;padding:8px 11px;border:1px solid var(--line)}
+input{background:var(--sunk);color:var(--ink);width:100%}
+.btn{background:var(--acc);color:#fff;border:0;font-weight:700;cursor:pointer;white-space:nowrap}
+.ghost{background:var(--sunk);color:var(--ink);cursor:pointer;font-weight:600}
+.days{display:flex;gap:6px;overflow-x:auto;padding-bottom:6px;margin-bottom:12px}
+.day{flex:0 0 auto;background:var(--sunk);border:1px solid var(--line);border-radius:9px;padding:6px 10px;cursor:pointer;text-align:left}
+.day.active{background:var(--soft);border-color:var(--acc);font-weight:700}
+.grid{display:grid;grid-template-columns:1.05fr .95fr;gap:14px}
+@media(max-width:860px){.grid{grid-template-columns:1fr}}
+.stop{display:grid;grid-template-columns:26px 1fr auto;gap:8px;background:var(--sunk);border:1px solid var(--line);border-radius:9px;padding:9px;margin-bottom:8px;align-items:start}
+.stop.sel{border-color:var(--acc);background:var(--soft)}
+.num{width:24px;height:24px;border-radius:50%;background:var(--acc);color:#fff;font-weight:700;font-size:12px;display:flex;align-items:center;justify-content:center}
+#map{width:100%;height:340px;border-radius:10px;border:1px solid var(--line);z-index:1}
+#gmap{width:100%;height:340px;border-radius:10px;border:0}
+.pin{background:#1d5c82;color:#fff;border:2px solid #fff;border-radius:50%;font-weight:700;font-size:11px;text-align:center;line-height:20px}
+.leg{border:1px solid var(--line);border-radius:10px;padding:12px;margin-bottom:10px;background:var(--card)}
+.badge{font-size:12px;font-weight:700;padding:3px 9px;border-radius:99px;background:#fbeacb;color:#8a5200}
+.badge.done{background:var(--okbg);color:var(--ok)}
+.guide-item{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:8px;background:var(--sunk);border-radius:8px;margin-bottom:6px}
+.row{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div><h1>유럽 27일 여행 플래너 & 이동표</h1><div class="sub">2026.12.12 – 2027.01.07 · 로마→피렌체→베네치아→루체른→스트라스부르→파리→바르셀로나→포르투→리스본→세비야→론다→그라나다→마드리드</div></div>
+    <div id="top-tools" hidden class="row">
+      <span id="sync-txt" class="sub"></span>
+      <button class="ghost" onclick="loadData()">새로고침</button>
+      <button class="ghost" onclick="localStorage.removeItem('europe-trip-pw');location.reload()">잠금</button>
+    </div>
+  </header>
 
-  body {
-    margin: 0;
-    background: var(--ground);
-    color: var(--ink);
-    font-family: "IBM Plex Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
-    font-size: 15px;
-    line-height: 1.5;
-    padding-inline: 16px;
-    padding-block: calc(18px + env(safe-area-inset-top, 0px)) calc(56px + env(safe-area-inset-bottom, 0px));
-  }
-  .wrap { max-width: 1180px; margin: 0 auto; }
-  .narrow { max-width: 640px; margin: 0 auto; }
+  <div class="card lock" id="lock-box">
+    <h2 style="margin:0 0 8px">비밀번호 입력</h2>
+    <p class="sub" style="margin:0 0 10px">힌트: 첫번째로 가는 도시의 이름을 영문 소문자로!</p>
+    <form id="pw-form" class="row">
+      <input type="password" id="pw-inp" placeholder="비밀번호" required style="flex:1">
+      <button type="submit" class="btn" id="pw-btn">열기</button>
+    </form>
+    <p id="pw-msg" style="color:var(--err);margin:8px 0 0;font-size:13px"></p>
+  </div>
 
-  header { display: grid; gap: 8px; margin-bottom: 18px; }
-  .header-top { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 10px 16px; }
-  .eyebrow {
-    font-family: "IBM Plex Mono", ui-monospace, monospace;
-    font-size: 12px; letter-spacing: 0.06em; color: var(--accent); font-weight: 600;
-  }
-  h1 { margin: 2px 0 0; font-size: 25px; line-height: 1.25; }
-  .toolbar { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; font-size: 13px; color: var(--muted); }
-  .linkbtn {
-    background: none; border: 0; padding: 0; font: inherit; color: var(--accent);
-    text-decoration: underline; cursor: pointer;
-  }
+  <div id="app" hidden>
+    <div class="tabs">
+      <button class="tab active" id="t-itin" onclick="switchTab('itin')">🗺️ 27일 전체 일정표 & 동선 지도</button>
+      <button class="tab" id="t-move" onclick="switchTab('move')">🚄 교통편 이동표 & 예매 관리</button>
+    </div>
 
-  .nav-tabs {
-    display: flex; gap: 8px; flex-wrap: wrap;
-    background: var(--card); border: 1px solid var(--line); border-radius: 14px;
-    padding: 6px; margin-top: 4px;
-  }
-  .nav-tab {
-    flex: 1 1 200px;
-    display: flex; align-items: center; justify-content: center; gap: 8px;
-    font: inherit; font-size: 15px; font-weight: 700;
-    padding: 11px 16px; border-radius: 10px; border: 0; cursor: pointer;
-    background: transparent; color: var(--muted); transition: 0.15s;
-  }
-  .nav-tab.active { background: var(--accent); color: var(--accent-ink); }
-  .nav-tab .badge {
-    font-family: "IBM Plex Mono", monospace; font-size: 12px;
-    padding: 2px 8px; border-radius: 999px;
-    background: rgba(127,127,127,0.16); color: inherit;
-  }
-  .nav-tab.active .badge { background: rgba(255,255,255,0.22); }
+    <div id="v-itin">
+      <div class="card">
+        <form id="ai-form" class="row">
+          <input id="ai-inp" placeholder="✨ AI 명령: 'Day 2에 지올리띠 젤라또 추가', '트레비 분수 삭제', 'Day 21과 Day 22 교체'" style="flex:1">
+          <button class="btn" type="submit">실행</button>
+        </form>
+        <div id="ai-msg" class="sub" style="margin-top:6px;color:var(--ok)"></div>
+      </div>
 
-  .lock {
-    max-width: 540px; margin: 24px auto;
-    background: var(--card); border: 1px solid var(--line); border-radius: 14px;
-    padding: 22px 18px; display: grid; gap: 12px;
-  }
-  .lock h2 { margin: 0; font-size: 19px; }
-  .lock p { margin: 0; color: var(--muted); font-size: 14px; }
-  .lock form { display: flex; gap: 8px; flex-wrap: wrap; }
-  .lock input { flex: 1 1 180px; }
-  .pwchange { margin: 0 auto 18px; }
-  .pwchange form { display: grid; grid-template-columns: 1fr 1fr; }
-  .msg { font-size: 14px; margin: 0; }
-  .lock .pw-hint { color: var(--ink); font-size: 14px; background: var(--sunk); border-radius: 8px; padding: 8px 12px; }
-  .lock .pw-hint:empty { display: none; }
-  .msg.ok { color: var(--done-ink); }
-  .msg.err { color: var(--err); }
+      <div class="days" id="day-list"></div>
 
-  input[type="text"], input[type="password"], select, textarea {
-    font: inherit; font-size: 14px; color: var(--ink);
-    background: var(--sunk); border: 1px solid var(--line); border-radius: 8px;
-    padding: 9px 11px; width: 100%; min-width: 0;
-  }
-  input:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
-  .primary {
-    font: inherit; font-weight: 700; font-size: 14px;
-    background: var(--accent); color: var(--accent-ink);
-    border: 0; border-radius: 9px; padding: 9px 16px; cursor: pointer;
-  }
-  .primary:disabled { opacity: 0.6; cursor: default; }
-  .ghost {
-    font: inherit; font-size: 13px; font-weight: 600;
-    background: var(--sunk); color: var(--ink);
-    border: 1px solid var(--line); border-radius: 8px; padding: 7px 11px; cursor: pointer;
-  }
-  .ghost:hover { border-color: var(--accent); }
+      <div class="grid">
+        <div class="card">
+          <div class="row" style="justify-content:space-between;margin-bottom:10px">
+            <div><strong id="cur-day-title" style="font-size:17px"></strong><div id="cur-day-sub" class="sub"></div></div>
+            <button class="ghost" onclick="saveCloud()">💾 공유 저장</button>
+          </div>
+          <div id="stop-list"></div>
+          <form id="add-form" style="border-top:1px dashed var(--line);padding-top:10px;margin-top:10px;display:grid;gap:6px">
+            <div class="row">
+              <input id="add-name" placeholder="새 장소명 (예: 트라스테베레 맛집)" required style="flex:1">
+              <input id="add-memo" placeholder="메모 (시간/팁)" style="flex:1">
+              <button class="btn" type="submit">+ 추가</button>
+            </div>
+          </form>
+        </div>
 
-  /* AI 명령어 편집 바 */
-  .ai-bar {
-    background: var(--card); border: 1.5px solid var(--accent); border-radius: 14px;
-    padding: 12px 14px; margin-bottom: 14px; display: grid; gap: 8px;
-  }
-  .ai-bar-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 6px; }
-  .ai-bar-title { font-size: 14px; font-weight: 700; color: var(--accent); }
-  .ai-examples { display: flex; flex-wrap: wrap; gap: 5px; }
-  .ai-ex {
-    font: inherit; font-size: 12px; background: var(--sunk); color: var(--muted);
-    border: 1px solid var(--line); border-radius: 999px; padding: 2px 9px; cursor: pointer;
-  }
-  .ai-ex:hover { border-color: var(--accent); color: var(--ink); }
-  .ai-form { display: flex; gap: 8px; }
-  .ai-log { font-size: 13px; color: var(--done-ink); margin: 0; }
-  .ai-log.err { color: var(--err); }
+        <div>
+          <div class="card">
+            <div class="row" style="justify-content:space-between;margin-bottom:8px">
+              <strong>📍 동선 & 구글맵</strong>
+              <div class="row">
+                <button class="ghost" onclick="setMapMode('osm')">동선 지도</button>
+                <button class="ghost" onclick="setMapMode('gmap')">구글맵 임베드</button>
+                <a id="gmap-link" class="btn" style="text-decoration:none;font-size:12px;padding:6px 10px" target="_blank">구글맵 경로 ↗</a>
+              </div>
+            </div>
+            <div id="map"></div>
+            <iframe id="gmap" hidden loading="lazy"></iframe>
+          </div>
 
-  /* 메인 뷰: 27일 일정 & 지도 */
-  .planner-bar {
-    background: var(--card); border: 1px solid var(--line); border-radius: 14px;
-    padding: 12px 14px; margin-bottom: 16px; display: grid; gap: 10px;
-  }
-  .city-chips { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
-  .city-chip {
-    font: inherit; font-size: 13px; font-weight: 600;
-    padding: 5px 11px; border-radius: 999px; border: 1px solid var(--line);
-    background: var(--sunk); color: var(--ink); cursor: pointer;
-  }
-  .city-chip.active { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
-  .day-strip {
-    display: flex; gap: 6px; overflow-x: auto; padding-bottom: 4px;
-    scrollbar-width: thin;
-  }
-  .day-pill {
-    flex: 0 0 auto; text-align: left;
-    background: var(--sunk); border: 1px solid var(--line); border-radius: 10px;
-    padding: 7px 11px; cursor: pointer; color: var(--ink); min-width: 108px;
-  }
-  .day-pill.active {
-    background: var(--accent-soft); border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent);
-  }
-  .day-pill .d-top { font-family: "IBM Plex Mono", monospace; font-size: 12px; font-weight: 700; color: var(--accent); display: block; }
-  .day-pill .d-city { font-size: 13px; font-weight: 700; display: block; }
-  .day-pill .d-cnt { font-size: 11px; color: var(--muted); }
+          <div class="card">
+            <strong style="display:block;margin-bottom:8px">🧭 <span id="guide-city"></span> 추천 명소 바로 추가</strong>
+            <div id="guide-list"></div>
+          </div>
+        </div>
+      </div>
+    </div>
 
-  .planner-grid {
-    display: grid; grid-template-columns: 1.05fr 0.95fr; gap: 16px; align-items: start;
-  }
-  @media (max-width: 900px) { .planner-grid { grid-template-columns: 1fr; } }
+    <div id="v-move" hidden>
+      <div class="card"><strong>14개 주요 이동 구간 예매 현황</strong> <span id="move-sum" class="sub"></span></div>
+      <div id="leg-list"></div>
+    </div>
+  </div>
+</div>
 
-  .panel {
-    background: var(--card); border: 1px solid var(--line); border-radius: 14px;
-    padding: 16px; display: grid; gap: 14px;
-  }
-  .panel-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 8px; }
-  .panel-head h2 { margin: 0; font-size: 19px; }
-  .panel-sub { font-size: 13px; color: var(--muted); margin: 2px 0 0; }
-
-  .stop-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
-  .stop-card {
-    background: var(--sunk); border: 1px solid var(--line); border-radius: 11px;
-    padding: 11px 12px; display: grid; grid-template-columns: 28px 1fr auto; gap: 10px; align-items: start;
-  }
-  .stop-card.selected { border-color: var(--accent); background: var(--accent-soft); }
-  .stop-num {
-    width: 28px; height: 28px; border-radius: 999px;
-    background: var(--accent); color: var(--accent-ink);
-    font-family: "IBM Plex Mono", monospace; font-weight: 700; font-size: 13px;
-    display: flex; align-items: center; justify-content: center; margin-top: 1px;
-  }
-  .stop-body { min-width: 0; display: grid; gap: 3px; }
-  .stop-title-row { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
-  .stop-name { font-weight: 700; font-size: 15px; cursor: pointer; }
-  .stop-name:hover { color: var(--accent); text-decoration: underline; }
-  .stop-tag {
-    font-size: 11px; font-weight: 700; padding: 1px 7px; border-radius: 999px;
-    background: var(--card); border: 1px solid var(--line); color: var(--muted);
-  }
-  .stop-tag.stay { background: var(--done-bg); color: var(--done-ink); border-color: transparent; }
-  .stop-tag.move { background: var(--todo-bg); color: var(--todo-ink); border-color: transparent; }
-  .stop-memo { font-size: 13px; color: var(--muted); overflow-wrap: anywhere; }
-  .stop-query { font-size: 12px; color: var(--accent); }
-  .stop-actions { display: flex; flex-direction: column; gap: 4px; align-items: flex-end; }
-  .mini-btns { display: flex; gap: 4px; }
-  .icon-btn {
-    background: var(--card); border: 1px solid var
+<script>
+const API="https://script.google.com/macros/s/AKfycbxnsNrXANrjEXfquUcYSaaXUqXzTFMljh2PvJv21WaBoVtUhvYBTI4uYTNJYX2xyE0j/exec";
+const DAYS=[
+["Day 1 (12/12 토)","로마",[41.895,12.482],[["로마 피우미치노 공항","KE931 19:35 도착 / 택시 55유로",41.8003,12.2389],["테르미니 역","공항 이동",41.901,12.5018],["윈드로제 호텔","숙소 체크인",41.9032,12.5005]]],
+["Day 2 (12/13 일)","로마",[41.898,12.485],[["윈드로제 호텔","출발",41.9032,12.5005],["산타 마리아 마조레 대성당","",41.8976,
