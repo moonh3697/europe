@@ -476,7 +476,7 @@
             <button type="button" class="mini-btn" id="btn-toggle-apikey">API 키 설정</button>
           </div>
           <div class="ai-key-row" id="ai-key-box" hidden>
-            <input type="password" id="ai-key-input" placeholder="AIzaSy... 로 시작하는 Gemini API 키 입력" style="font-size:12px; padding:6px 9px;">
+            <input type="password" id="ai-key-input" placeholder="Gemini API 키 입력 (AQ... 또는 AIza...)" style="font-size:12px; padding:6px 9px;">
             <button type="button" class="mini-btn add-guide" id="btn-save-apikey">저장</button>
           </div>
           <div class="ai-chat-area" id="ai-chat-box">
@@ -1982,7 +1982,7 @@
     syncItineraryToServer();
   });
 
-  // GEMINI AI CHAT INTEGRATION
+  // GEMINI AI CHAT INTEGRATION (Supports AQ... and AIza... keys)
   async function handleAiSubmit(e) {
     e.preventDefault();
     const inputEl = document.getElementById("ai-input");
@@ -1995,8 +1995,8 @@
     chatBox.scrollTop = chatBox.scrollHeight;
 
     const apiKey = getGeminiKey();
-    if (!apiKey || !apiKey.startsWith("AIza")) {
-      chatBox.innerHTML += `<div class="ai-msg bot">⚠️ 올바른 Gemini API 키(<b>AIzaSy...</b> 형태)가 필요합니다. 상단의 <b>[API 키 설정]</b> 버튼을 눌러 Google AI Studio에서 발급한 키를 입력해 주세요!</div>`;
+    if (!apiKey) {
+      chatBox.innerHTML += `<div class="ai-msg bot">⚠️ API 키가 비어 있습니다. 상단의 <b>[API 키 설정]</b> 버튼을 눌러 발급받은 키를 입력해 주세요!</div>`;
       chatBox.scrollTop = chatBox.scrollHeight;
       return;
     }
@@ -2026,7 +2026,7 @@
       if (loadEl) loadEl.remove();
 
       if (result.error) {
-        chatBox.innerHTML += `<div class="ai-msg bot">❌ API 오류: ${esc(result.error.message || "키를 확인해주세요.")}</div>`;
+        chatBox.innerHTML += `<div class="ai-msg bot">❌ API 응답 오류: ${esc(result.error.message || "API 키 권한 또는 형식을 확인해주세요.")}</div>`;
       } else {
         const candidate = result.candidates && result.candidates[0];
         const replyText = (candidate && candidate.content && candidate.content.parts && candidate.content.parts[0] && candidate.content.parts[0].text) || "답변을 생성하지 못했습니다.";
