@@ -1457,7 +1457,12 @@
     { date: "당일", sub: "미리 안 사도 됨", title: "스위스 기차는 좌석 지정이 없어요", note: "당일 역이나 SBB 앱에서 사도 됩니다. 16:30 버스를 탈 거라면 버스는 미리 끊으세요.", legs: ["12/20"] }
   ];
 
-  let bookings = {};
+  let bookings = {
+    "1": { time: "14:05", station: "인천공항", price: "대한항공", by: "혁재", code: "KE931" },
+    "6": { time: "08:00", station: "스트라스부르역", price: "OUIGO", by: "혁재", code: "OUIGO-STR-PAR" },
+    "8": { time: "13:00", station: "바르셀로나 공항", price: "부엘링", by: "혁재", code: "VY1178" },
+    "13": { time: "21:25", station: "마드리드 공항", price: "대한항공", by: "혁재", code: "KE914" }
+  };
   const dirty = new Set();
   let itineraryStops = loadLocalItinerary();
   let selectedDayNum = 1;
