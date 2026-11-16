@@ -981,312 +981,13 @@
     [27,2,"마드리드 바라하스 공항","Adolfo Suárez Madrid–Barajas Airport","MAD 21:25 - ICN 18:15 (+1) 대한항공 KE914 귀국"]
   ];
 
-  function detectCategory(name, memo) {
-    const t = (name + " " + memo).toLowerCase();
-    if (t.includes("숙소") || t.includes("호텔") || t.includes("호스텔") || t.includes("아파트먼트") || t.includes("세리즈") || t.includes("마레") || t.includes("bypillow")) return "숙소";
-    if (t.includes("공항") || t.includes("역") || t.includes("터미널") || t.includes("정류장") || t.includes("버스") || t.includes("항공") || t.includes("환승") || t.includes("트램") || t.includes("ke931") || t.includes("ke914") || t.includes("vy1178")) return "교통";
-    if (t.includes("음식점") || t.includes("카페") || t.includes("디저트") || t.includes("빵집") || t.includes("에그타르트") || t.includes("츄러스") || t.includes("타파스") || t.includes("치킨") || t.includes("시장") || t.includes("맥도날드") || t.includes("비니투스") || t.includes("앙젤리나") || t.includes("라뒤레")) return "맛집";
-    return "관광";
-  }
-
-  function buildDefaultItinerary() {
-    return RAW_CSV_TUPLES.map((r, i) => ({
-      id: "s" + (i + 1),
-      dayNum: r[0],
-      order: r[1],
-      name: r[2],
-      query: r[3],
-      memo: r[4],
-      cat: detectCategory(r[2], r[4])
-    }));
-  }
-
-  function loadLocalItinerary() {
-    try {
-      const saved = localStorage.getItem(ITINERARY_STORAGE_KEY);
-      if (saved) {
-        const parsed = JSON.parse(saved);
-        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
-      }
-    } catch (e) {}
-    return buildDefaultItinerary();
-  }
-
-  // ORIGINAL TRANSPORT PLANNER DATA
-  function trainline(from, to, date, tab) {
-    return "https://www.thetrainline.com/book/results?journeySearchType=single"
-      + "&origin=urn%3Atrainline%3Ageneric%3Aloc%3A" + from
-      + "&destination=urn%3Atrainline%3Ageneric%3Aloc%3A" + to
-      + "&outwardDate=" + date + "T08%3A00%3A00"
-      + "&outwardDateType=departAfter&passengers%5B%5D=1996-01-01&directSearch=false&lang=en"
-      + (tab ? "&selectedTab=" + tab : "");
-  }
-  const BUS_TAB = "버스(Coach) 탭이 열린 채로, 도시와 날짜가 들어가 있음";
-  const BOTH_TRAIN = "기차 결과가 먼저 열림 · 위쪽 'Coach'를 누르면 버스";
-  const BOTH_COACH = "버스 결과가 먼저 열림 · 위쪽 'Train'을 누르면 기차";
-  function omio(from, to, iso) {
-    const [y, m, d] = iso.split("-");
-    return "https://www.omio.co.kr/?departure_fk=" + from + "&arrival_fk=" + to
-      + "&departure_date=" + d + "%2F" + m + "%2F" + y;
-  }
-  const OMIO = "출발·도착 도시와 날짜가 채워진 채로 열림 → '검색'만 누르면 됨";
-  const FILLED = "출발·도착 도시와 날짜가 들어간 채로 열림";
-  const SEARCH_ONLY = "검색 화면까지 열림 (도시·날짜 직접 입력)";
-
-  const legs = [
-    { date: "12/12", from: "인천", to: "로마", mode: "비행기", booked: true },
-    { date: "12/15", from: "로마", to: "피렌체", mode: "기차 · 약 1시간 40분",
-      plan: {
-        pick: "고속열차 (Frecciarossa 또는 Italo), 직통",
-        time: "약 1시간 40분",
-        stations: "로마 테르미니역 → 피렌체 산타 마리아 노벨라역",
-        change: "없음 (직통)",
-        compare: [
-          ["빠름", "기차", "1시간 37분~1시간 42분", "₩31,000~39,000 (10/28 조회)"],
-          ["쌈", "버스 (FlixBus)", "3시간 15분", "₩24,000~60,000 (9/26)"]
-        ],
-        verdict: "기차. 지금 3만~4만 원대로 버스와 값이 거의 같은데 2배 빠릅니다.",
-        note: "두 회사 합쳐 하루 100편 가까이 다녀서 자리 걱정이 적은 구간입니다.",
-        links: [
-          { label: "Trainline에서 12/15 기차·버스 검색", url: trainline("8544", "8434", "2026-12-15"), how: BOTH_TRAIN },
-          { label: "Omio에서 12/15 검색", url: omio("388498", "388058", "2026-12-15"), how: OMIO, alt: true }
-        ],
-        sources: [
-          ["Rome2Rio — 로마→피렌체 수단별 가격·시간", "https://www.rome2rio.com/s/Rome/Florence"],
-          ["Italo — 로마↔피렌체 노선 안내", "https://www.italotreno.com/en/destinations-timetable/rome-florence-tickets"]
-        ]
-      } },
-    { date: "12/16", from: "피렌체", to: "베네치아", mode: "기차 · 약 2시간 15분",
-      plan: {
-        pick: "고속열차 (Frecciarossa 또는 Italo), 직통",
-        time: "약 2시간 15분",
-        stations: "피렌체 산타 마리아 노벨라역 → 베네치아 산타 루치아역",
-        change: "없음 (직통)",
-        compare: [
-          ["빠름", "기차", "2시간 14분~2시간 16분", "₩36,000~42,000 (10/28 조회)"],
-          ["쌈", "버스 (FlixBus)", "4시간 5분", "₩31,000~55,000 (9/26)"]
-        ],
-        verdict: "기차. 버스는 2시간 가까이 더 걸리고, 섬 밖(메스트레·트론케토)에 내립니다.",
-        note: "'Venezia Mestre'가 아니라 섬 안의 'Venezia Santa Lucia'행인지 확인하세요.",
-        links: [
-          { label: "Trainline에서 12/16 기차·버스 검색", url: trainline("8434", "8574", "2026-12-16"), how: BOTH_TRAIN },
-          { label: "Omio에서 12/16 검색", url: omio("388058", "388743", "2026-12-16"), how: OMIO, alt: true }
-        ],
-        sources: [
-          ["Rome2Rio — 피렌체→베네치아 수단별 가격·시간", "https://www.rome2rio.com/s/Florence/Venice"],
-          ["Trainline — 피렌체→베네치아 산타 루치아", "https://www.thetrainline.com/en-us/train-times/florence-to-venezia-santa-lucia"]
-        ]
-      } },
-    { date: "12/18", from: "베네치아", to: "루체른", mode: "기차 · 약 6시간 20분 · 밀라노 환승",
-      plan: {
-        pick: "기차 2개 이어 타기 (고속열차 + EuroCity)",
-        time: "약 6시간 20분~7시간 40분",
-        stations: "베네치아 산타 루치아역 → 루체른역",
-        change: "밀라노 중앙역(Milano Centrale)에서 1번",
-        compare: [
-          ["빠름", "기차 (밀라노 환승)", "약 6시간 20분~7시간 40분", "₩80,000~131,000 (10/28 조회)"],
-          ["쌈", "버스 (FlixBus)", "8시간 45분", "₩62,000~113,000 (9/26)"]
-        ],
-        verdict: "기차. 지금 기차가 8만 원대부터라 버스와 값 차이가 크지 않은데 2시간 넘게 빠릅니다.",
-        note: "하루 중 가장 긴 구간입니다.",
-        links: [
-          { label: "Trainline에서 12/18 기차·버스 검색", url: trainline("8574", "6353", "2026-12-18"), how: BOTH_TRAIN },
-          { label: "Omio에서 12/18 검색 (버스 포함)", url: omio("388743", "373152", "2026-12-18"), how: OMIO, alt: true }
-        ],
-        sources: [
-          ["Rome2Rio — 베네치아→루체른 수단별 가격·시간", "https://www.rome2rio.com/s/Venice/Lucerne"],
-          ["Trainline — 베네치아→루체른", "https://www.thetrainline.com/en/train-times/venice-to-lucerne"]
-        ]
-      } },
-    { date: "12/20", from: "루체른", to: "스트라스부르", mode: "기차 · 약 3시간 · 바젤 환승",
-      plan: {
-        pick: "기차 2개 이어 타기 (바젤 환승)",
-        time: "약 2시간 45분~3시간 50분",
-        stations: "루체른역 → 바젤 SBB역 → 스트라스부르역",
-        change: "바젤 SBB역에서 1번",
-        compare: [
-          ["빠름", "기차 (바젤 환승)", "약 2시간 45분~3시간 50분", "₩94,000~265,000 (9/26)"],
-          ["쌈", "버스 (FlixBus, 직행)", "5시간", "약 ₩38,000 (10/28 조회)"]
-        ],
-        verdict: "기차. 스트라스부르 1박 일정이라 오전을 확보하는 편이 좋습니다.",
-        note: "스위스 기차는 SBB 사이트 또는 현장 구매 가능합니다.",
-        links: [
-          { label: "스위스 철도 SBB 열기", url: "https://www.sbb.ch/en", how: SEARCH_ONLY },
-          { label: "Omio에서 12/20 검색", url: omio("373152", "379901", "2026-12-20"), how: OMIO, alt: true }
-        ],
-        sources: [
-          ["Rome2Rio — 루체른→스트라스부르", "https://www.rome2rio.com/s/Lucerne/Strasbourg"]
-        ]
-      } },
-    { date: "12/21", from: "스트라스부르", to: "파리", mode: "기차 · 약 1시간 45분",
-      plan: {
-        pick: "TGV INOUI 직통",
-        time: "1시간 45분",
-        stations: "스트라스부르역 → 파리 동역(Gare de l'Est)",
-        change: "없음 (직통)",
-        compare: [
-          ["빠름", "기차 (TGV INOUI)", "1시간 45분", "₩139,000~196,000 (10/28 조회)"],
-          ["쌈", "기차 (OUIGO)", "2시간~3시간 6분", "₩55,000~70,000 (10/28 조회)"]
-        ],
-        verdict: "기차. 빠른 TGV 또는 OUIGO 중 선택하세요.",
-        note: "크리스마스 기간 프랑스 기차표는 예매가 빠르게 마감되니 서두르세요.",
-        links: [
-          { label: "Trainline에서 12/21 기차·버스 검색", url: trainline("153", "4916", "2026-12-21"), how: BOTH_TRAIN },
-          { label: "Omio에서 12/21 검색", url: omio("379901", "379727", "2026-12-21"), how: OMIO, alt: true }
-        ],
-        sources: [
-          ["Rome2Rio — 스트라스부르→파리", "https://www.rome2rio.com/s/Strasbourg/Paris"]
-        ]
-      } },
-    { date: "12/25", from: "파리", to: "바르셀로나", mode: "기차 · 약 6시간 50분 · 성탄절",
-      plan: {
-        pick: "TGV INOUI 직통 고속열차 또는 비행기",
-        time: "기차 약 6시간 50분 / 비행기 약 5시간",
-        stations: "파리 리옹역 → 바르셀로나 산츠역",
-        change: "없음 (직통)",
-        compare: [
-          ["빠름·쌈", "비행기 (직항)", "약 5시간", "₩132,000부터 (10/28 조회)"],
-          ["직통", "기차 (TGV INOUI)", "6시간 53분", "₩202,000~233,000 (10/28 조회)"]
-        ],
-        verdict: "기차 또는 비행기 중 큰 짐 유무에 따라 선택하세요.",
-        warn: { title: "성탄절 운행: 하루 2편뿐", text: "12/25 직통 기차는 06:56, 14:42 두 편뿐입니다." },
-        links: [
-          { label: "Trainline에서 12/25 기차·버스 검색", url: trainline("4924", "6625", "2026-12-25"), how: BOTH_TRAIN },
-          { label: "Google 항공편", url: "https://www.google.com/travel/flights", how: FILLED, alt: true }
-        ],
-        sources: [
-          ["Rome2Rio — 파리→바르셀로나", "https://www.rome2rio.com/s/Paris/Barcelona"]
-        ]
-      } },
-    { date: "12/28", from: "바르셀로나", to: "포르투", mode: "비행기", booked: true },
-    { date: "12/31", from: "포르투", to: "리스본", mode: "기차 · 약 2시간 50분 · 새해 전날",
-      plan: {
-        pick: "Alfa Pendular 특급열차, 직통 (포르투갈 철도 CP)",
-        time: "약 2시간 40분~3시간",
-        stations: "포르투 캄파냥역 → 리스본 오리엔트역",
-        change: "없음 (직통)",
-        compare: [
-          ["빠름", "기차 (Alfa Pendular)", "2시간 42분", "₩50,000~100,000"],
-          ["쌈", "버스 (FlixBus)", "3시간 15분", "₩10,000~20,000"]
-        ],
-        verdict: "기차 또는 버스 선택.",
-        warn: { title: "12/31 저녁 열차 미운행", text: "오전이나 이른 오후 기차나 버스로 이동하세요." },
-        links: [
-          { label: "Trainline에서 12/31 검색", url: trainline("8697", "8721", "2026-12-31"), how: BOTH_TRAIN },
-          { label: "포르투갈 철도 CP", url: "https://www.cp.pt/", how: SEARCH_ONLY, alt: true }
-        ],
-        sources: [
-          ["CP 공식 사이트", "https://www.cp.pt/"]
-        ]
-      } },
-    { date: "1/1", from: "리스본", to: "세비야", mode: "버스 · 약 6~7시간 · 직행",
-      plan: {
-        pick: "직행 고속버스 (FlixBus, ALSA 등)",
-        time: "약 6~7시간",
-        stations: "리스본 → 세비야 플라사 데 아르마스 터미널",
-        change: "없음 (직행)",
-        compare: [
-          ["빠름", "비행기", "약 3시간 40분", "₩72,000~271,000"],
-          ["쌈", "버스 (직행)", "약 6시간 20분", "₩48,000~55,000"]
-        ],
-        verdict: "버스 직행 또는 비행기.",
-        links: [
-          { label: "Trainline 버스·기차 검색", url: trainline("8721", "6683", "2027-01-01", "coach"), how: BOTH_COACH }
-        ],
-        sources: [
-          ["Rome2Rio", "https://www.rome2rio.com/s/Lisbon/Seville"]
-        ]
-      } },
-    { id: "11", date: "1/3", from: "세비야", to: "론다", mode: "버스 · 약 2시간 15분 · 직행",
-      plan: {
-        pick: "Damas 직행 버스",
-        time: "약 2시간 15분~2시간 30분",
-        stations: "세비야 플라사 데 아르마스 → 론다 터미널",
-        change: "없음 (직행)",
-        compare: [
-          ["빠름·쌈", "버스 (직행)", "약 2시간 15분", "약 €12~20"]
-        ],
-        verdict: "버스 직행 추천.",
-        warn: { title: "당일 론다 경유 일정", text: "세비야-론다-그라나다를 하루에 이동합니다." },
-        links: [
-          { label: "Damas 버스 예매", url: "https://www.damas-sa.es", how: SEARCH_ONLY }
-        ],
-        sources: [
-          ["Rome2Rio", "https://www.rome2rio.com/s/Seville/Ronda"]
-        ]
-      } },
-    { id: "14", key: "1/3b", date: "1/3", from: "론다", to: "그라나다", mode: "기차 · 약 3시간 · 안테케라 환승",
-      plan: {
-        pick: "Renfe 기차 (안테케라 환승)",
-        time: "약 3시간~3시간 30분",
-        stations: "론다역 → 안테케라 → 그라나다역",
-        change: "안테케라에서 1번 환승",
-        compare: [
-          ["빠름·쌈", "기차 (환승)", "약 3시간 10분", "약 €17~45"]
-        ],
-        verdict: "기차 이용 추천.",
-        links: [
-          { label: "Renfe 검색", url: "https://www.renfe.com/es/en", how: SEARCH_ONLY }
-        ],
-        sources: [
-          ["Renfe", "https://www.renfe.com/"]
-        ]
-      } },
-    { id: "12", date: "1/5", from: "그라나다", to: "마드리드", mode: "기차 · 약 3시간 30분",
-      plan: {
-        pick: "Renfe 고속열차, 직통",
-        time: "약 3시간 34분",
-        stations: "그라나다역 → 마드리드 아토차역",
-        change: "없음 (직통)",
-        compare: [
-          ["빠름·쌈", "기차 직통", "3시간 34분", "₩69,000~83,000"]
-        ],
-        verdict: "기차 직통 추천.",
-        links: [
-          { label: "Trainline 검색", url: trainline("6656", "6663", "2027-01-05"), how: BOTH_TRAIN }
-        ],
-        sources: [
-          ["Trainline", "https://www.thetrainline.com/"]
-        ]
-      } },
-    { id: "13", date: "1/7", from: "마드리드", to: "인천", mode: "비행기", booked: true }
-  ];
-
-  const WHEN = {
-    "12/15": { time: "07:50 출발 → 09:31 도착 (Italo, 직통)", other: "", basis: "Trainline", why: "피렌체 일정을 여유 있게 즐기기 위해 아침 일찍 이동합니다." },
-    "12/16": { time: "12:39 출발 → 14:55 도착 (Italo, 직통)", other: "", basis: "Trainline", why: "피렌체 오전 관광 후 오후 베네치아 이동." },
-    "12/18": { time: "07:18 출발 → 13:41 도착 (기차, 밀라노 환승)", other: "", basis: "Trainline", why: "가장 긴 스위스 이동 구간." },
-    "12/20": { time: "10:54 출발 → 13:39 도착 (기차, 바젤 환승)", other: "", basis: "SBB", why: "스트라스부르 오후 일정 확보." },
-    "12/21": { time: "15:49 출발 → 17:35 도착 (TGV INOUI)", other: "", basis: "Trainline", why: "파리로 편안하게 이동." },
-    "12/25": { time: "06:56 출발 → 13:49 도착 (기차, 직통)", other: "", basis: "Trainline", why: "바르셀로나 오후 도착." },
-    "12/31": { time: "오전 10시~정오 사이 이동", other: "", basis: "CP", why: "연말 저녁 이전 도착." },
-    "1/1": { time: "11:10 출발 직행 버스", other: "", basis: "Trainline", why: "새해 첫날 세비야 이동." },
-    "1/3": { time: "오전 10:00 Damas 버스", other: "", basis: "Damas", why: "론다 누에보 다리 관광." },
-    "1/3b": { time: "오후 론다 출발 기차", other: "", basis: "Renfe", why: "그라나다 저녁 도착." },
-    "1/5": { time: "11:04 출발 Renfe 직통", other: "", basis: "Trainline", why: "마드리드 퍼레이드 전 도착." }
-  };
-  const legKey = l => l.key || l.date;
-  legs.forEach(l => { if (l.plan && WHEN[legKey(l)]) l.plan.when = WHEN[legKey(l)]; });
-
-  const FIELDS = [
-    { key: "time", label: "출발 시간", ph: "예: 08:20" },
-    { key: "station", label: "출발 역·공항", ph: "예: 로마 테르미니" },
-    { key: "price", label: "가격", ph: "예: 2명 €58" },
-    { key: "by", label: "예매한 사람", ph: "예: 혁재" },
-    { key: "code", label: "예약번호", ph: "예: ABC123", wide: true }
-  ];
-
-  const SALES = [
-    { date: "지금", sub: "서두르기", soon: true, title: "판매 중 · 좌석이 줄고 있어요", note: "12/25, 1/5 등 인기 구간은 미리 예매하세요.", legs: ["12/18", "12/21", "12/25", "1/5"] }
-  ];
-
   let bookings = {
     "1": { time: "14:05", station: "인천공항 T2", price: "대한항공", by: "혁재", code: "KE931" },
-    "5": { time: "15:49", station: "스트라스부르역", price: "TGV/OUIGO", by: "혁재", code: "OUIGO-STR-PAR" },
-    "6": { time: "22:30", station: "파리 베르시 버스정류장", price: "야간버스", by: "혁재", code: "FLIX-PAR-BCN" },
-    "7": { time: "13:00", station: "바르셀로나 엘프라트", price: "부엘링", by: "혁재", code: "VY1178" },
-    "8": { time: "10:00", station: "포르투 캄파냥", price: "CP 특급열차", by: "혁재", code: "CP-OPO-LIS" },
-    "9": { time: "07:20", station: "리스본 오리엔트", price: "플릭버스", by: "혁재", code: "FLIX-LIS-SEV" },
+    "6": { time: "15:49", station: "스트라스부르역", price: "TGV/OUIGO", by: "혁재", code: "OUIGO-STR-PAR" },
+    "7": { time: "22:30", station: "파리 베르시 버스정류장", price: "야간버스", by: "혁재", code: "FLIX-PAR-BCN" },
+    "8": { time: "13:00", station: "바르셀로나 엘프라트", price: "부엘링", by: "혁재", code: "VY1178" },
+    "9": { time: "10:00", station: "포르투 캄파냥", price: "CP 특급열차", by: "혁재", code: "CP-OPO-LIS" },
+    "10": { time: "07:20", station: "리스본 오리엔트", price: "플릭버스", by: "혁재", code: "FLIX-LIS-SEV" },
     "12": { time: "11:04", station: "그라나다역", price: "Renfe", by: "혁재", code: "RENFE-GRN-MAD" },
     "13": { time: "21:25", station: "마드리드 바라하스 T4", price: "대한항공", by: "혁재", code: "KE914" }
   };
@@ -1298,6 +999,31 @@
   let selectedGuideCat = "ALL";
   let mapViewMode = "day";
   let activeTab = "itinerary";
+
+  function getGeminiKey() {
+    try {
+      const saved = localStorage.getItem(GEMINI_KEY_STORAGE);
+      if (saved && saved.trim()) return saved.trim();
+    } catch (e) {}
+    return DEFAULT_GEMINI_KEY;
+  }
+
+  document.getElementById("btn-toggle-apikey").addEventListener("click", () => {
+    const box = document.getElementById("ai-key-box");
+    box.hidden = !box.hidden;
+    if (!box.hidden) {
+      document.getElementById("ai-key-input").value = getGeminiKey();
+    }
+  });
+
+  document.getElementById("btn-save-apikey").addEventListener("click", () => {
+    const val = document.getElementById("ai-key-input").value.trim();
+    try { localStorage.setItem(GEMINI_KEY_STORAGE, val); } catch (e) {}
+    document.getElementById("ai-key-box").hidden = true;
+    const chatBox = document.getElementById("ai-chat-box");
+    chatBox.innerHTML += `<div class="ai-msg bot">✅ API 키가 저장되었습니다. 이제 질문을 입력해 보세요!</div>`;
+    chatBox.scrollTop = chatBox.scrollHeight;
+  });
 
   async function api(body) {
     const res = await fetch(API_URL, {
@@ -1923,7 +1649,7 @@
       return `<li class="sale${s.soon ? " soon" : ""}"><div class="sale-date">${s.date}<small>${s.sub}</small></div><div class="sale-body"><span class="sale-title">${s.title}</span><div class="chips">${chips}</div><span class="sale-note">${s.note}</span></div></li>`;
     }).join("");
     document.getElementById("sales").dataset.allDone = open === 0 ? "1" : "";
-    if (password) document.getElementById("sales").hidden = open === 0;
+    document.getElementById("sales").hidden = open === 0;
   }
 
   document.getElementById("sales-list").addEventListener("click", e => {
@@ -2022,15 +1748,18 @@
     const synced = document.getElementById("synced");
     synced.textContent = "불러오는 중…";
     try {
-      const r = await api({ action: "get", pw: password });
-      if (!r.ok) { lockAgain(r.reason); return; }
+      const r = await api({ action: "get", pw: BACKEND_PW });
+      if (!r.ok) {
+        synced.textContent = "기본 일정 표시 중";
+        return;
+      }
       bookings = r.bookings || {};
       hydrateItineraryFromBookings();
       renderItineraryUI();
       applyBookings();
-      synced.textContent = "마지막으로 불러온 시각 " + stamp();
+      synced.textContent = "실시간 동기화 완료 (" + stamp() + ")";
     } catch (e) {
-      synced.textContent = "불러오지 못했습니다. 인터넷 연결을 확인하고 새로고침을 눌러 주세요.";
+      synced.textContent = "로컬 데이터 표시 중";
     }
   }
 
@@ -2042,118 +1771,32 @@
     btn.disabled = true;
     msg.textContent = "저장하는 중…";
     try {
-      const r = await api({ action: "save", pw: password, legId: id, data });
-      if (!r.ok) { lockAgain(r.reason); return; }
+      const r = await api({ action: "save", pw: BACKEND_PW, legId: id, data });
+      if (!r.ok) {
+        msg.textContent = "저장 실패";
+        return;
+      }
       dirty.delete(id);
       bookings = r.bookings || {};
       applyBookings();
       msg.textContent = "저장했습니다 (" + stamp() + ")";
-      document.getElementById("synced").textContent = "마지막으로 불러온 시각 " + stamp();
     } catch (e) {
-      msg.textContent = "저장하지 못했습니다. 인터넷 연결을 확인하고 다시 눌러 주세요.";
+      msg.textContent = "저장하지 못했습니다.";
     } finally {
       btn.disabled = false;
     }
   }
 
-  function showApp() {
-    document.getElementById("lock").hidden = true;
-    document.getElementById("toolbar").hidden = false;
-    document.getElementById("main-tabs").hidden = false;
-    document.getElementById("today").hidden = false;
-    document.getElementById("sales").hidden = document.getElementById("sales").dataset.allDone === "1";
-    switchTab(activeTab);
-  }
-
-  function lockAgain(reason) {
-    const wasIn = password !== null || storeGet() !== null;
-    password = null;
-    storeDel();
-    ["view-itinerary", "view-transport", "main-tabs", "toolbar", "pwchange"].forEach(id => { document.getElementById(id).hidden = true; });
-    document.getElementById("lock").hidden = false;
-    const m = document.getElementById("lock-msg");
-    m.className = "msg err";
-    m.textContent = reason === "setup" ? "저장소에 아직 비밀번호가 정해지지 않았습니다. 만든 사람에게 알려 주세요." : wasIn ? "비밀번호가 바뀌었을 수 있습니다. 일행에게 새 비밀번호를 물어보고 넣어 주세요." : "비밀번호가 맞지 않습니다. 다시 넣어 주세요.";
-  }
-
-  async function changePassword() {
-    const m = document.getElementById("pwchange-msg");
-    const btn = document.getElementById("pwchange-btn");
-    const a = document.getElementById("pw-new").value.trim();
-    const b = document.getElementById("pw-new2").value.trim();
-    m.className = "msg err";
-    if (a.length < 4) { m.textContent = "새 비밀번호는 4자 이상으로 넣어 주세요."; return; }
-    if (a !== b) { m.textContent = "두 칸에 넣은 새 비밀번호가 서로 다릅니다. 똑같이 넣어 주세요."; return; }
-    if (a === password) { m.textContent = "지금 비밀번호와 같습니다. 다른 비밀번호를 넣어 주세요."; return; }
-    btn.disabled = true;
-    m.className = "msg";
-    m.textContent = "바꾸는 중…";
-    try {
-      const r = await api({ action: "changePw", pw: password, newPw: a });
-      if (!r.ok && r.reason === "bad_password") { m.className = "msg err"; m.textContent = "새 비밀번호는 4~50자로 넣어 주세요."; return; }
-      if (!r.ok && r.reason === "bad_request") { m.className = "msg err"; m.textContent = "저장소가 아직 비밀번호 바꾸기를 지원하지 않습니다. 만든 사람에게 알려 주세요."; return; }
-      if (!r.ok) { lockAgain(r.reason); return; }
-      password = a;
-      storeSet(a);
-      document.getElementById("pw-new").value = "";
-      document.getElementById("pw-new2").value = "";
-      m.className = "msg ok";
-      m.textContent = "비밀번호를 바꿨습니다. 일행에게 새 비밀번호를 알려 주세요. 이 기기는 그대로 쓸 수 있습니다.";
-    } catch (e) {
-      m.className = "msg err";
-      m.textContent = "바꾸지 못했습니다. 인터넷 연결을 확인하고 다시 눌러 주세요.";
-    } finally {
-      btn.disabled = false;
-    }
-  }
-
-  async function unlock(pw) {
-    const m = document.getElementById("lock-msg");
-    const btn = document.getElementById("pw-btn");
-    m.className = "msg";
-    m.textContent = "확인하는 중…";
-    btn.disabled = true;
-    try {
-      const r = await api({ action: "get", pw });
-      if (!r.ok) { lockAgain(r.reason); return; }
-      password = pw;
-      storeSet(pw);
-      bookings = r.bookings || {};
-      hydrateItineraryFromBookings();
-      m.textContent = "";
-      showApp();
-      renderItineraryUI();
-      applyBookings();
-      document.getElementById("synced").textContent = "마지막으로 불러온 시각 " + stamp();
-    } catch (e) {
-      m.className = "msg err";
-      m.textContent = "저장소에 연결하지 못했습니다. 인터넷 연결을 확인하고 다시 눌러 주세요.";
-    } finally {
-      btn.disabled = false;
-    }
-  }
-
+  document.getElementById("today").hidden = false;
   initLeafletMap();
   buildTransportList();
   renderItineraryUI();
+  applyBookings();
+  loadAllData();
 
-  document.getElementById("lock-form").addEventListener("submit", e => { e.preventDefault(); unlock(document.getElementById("pw").value); });
   document.getElementById("refresh").addEventListener("click", loadAllData);
-  document.getElementById("pwchange-open").addEventListener("click", () => {
-    const s = document.getElementById("pwchange");
-    s.hidden = false;
-    document.getElementById("pwchange-msg").textContent = "";
-    document.getElementById("pw-new").focus();
-  });
-  document.getElementById("pwchange-cancel").addEventListener("click", () => { document.getElementById("pwchange").hidden = true; });
-  document.getElementById("pwchange-form").addEventListener("submit", e => { e.preventDefault(); changePassword(); });
-  document.getElementById("forget").addEventListener("click", () => { storeDel(); location.reload(); });
-
-  document.addEventListener("visibilitychange", () => { if (document.visibilityState === "visible" && password) loadAllData(); });
-  setInterval(() => { if (document.visibilityState === "visible" && password) loadAllData(); }, 60000);
-
-  const saved = storeGet();
-  if (saved) unlock(saved);
+  document.addEventListener("visibilitychange", () => { if (document.visibilityState === "visible") loadAllData(); });
+  setInterval(() => { if (document.visibilityState === "visible") loadAllData(); }, 60000);
 })();
 </script>
 </body>
