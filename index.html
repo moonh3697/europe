@@ -341,8 +341,8 @@
         ],
         verdict: "기차 추천 (스트라스부르 1박 일정상 오전 기차가 유리)",
         links: [
-          { label: "Trainline에서 루체른→스트라스부르 검색", url: trainline("lucerne", "strasbourg", "2026-12-20"), how: BOTH_TRAIN },
-          { label: "Omio에서 루체른→스트라스부르 검색", url: omio("lucerne", "strasbourg", "2026-12-20"), how: OMIO, alt: true }
+          { label: "Trainline에서 루체른→스트라스부르 검색", url: trainline("Lucerne", "Strasbourg", "2026-12-20"), how: BOTH_TRAIN },
+          { label: "Omio에서 루체른→스트라스부르 검색", url: omio("Lucerne", "Strasbourg", "2026-12-20"), how: OMIO, alt: true }
         ],
         sources: [["Trainline", "https://www.thetrainline.com"]]
       } },
@@ -362,8 +362,9 @@
         ],
         verdict: "Damas 직행 버스 추천",
         links: [
-          { label: "Trainline에서 세비야→론다 검색", url: trainline("seville", "ronda", "2027-01-03", "coach"), how: BUS_TAB },
-          { label: "Omio에서 세비야→론다 검색", url: omio("seville", "ronda", "2027-01-03"), how: OMIO, alt: true }
+          { label: "Trainline에서 세비야→론다 검색", url: trainline("Seville", "Ronda", "2027-01-03", "coach"), how: BUS_TAB },
+          { label: "Omio에서 세비야→론다 검색", url: omio("Seville", "Ronda", "2027-01-03"), how: OMIO, alt: true },
+          { label: "Damas 버스 공식 홈페이지", url: "https://www.damas-sa.es", how: SEARCH_ONLY, alt: true }
         ],
         sources: [["Trainline", "https://www.thetrainline.com"]]
       } },
@@ -378,8 +379,9 @@
         ],
         verdict: "Renfe 기차 추천",
         links: [
-          { label: "Trainline에서 론다→그라나다 검색", url: trainline("ronda", "granada", "2027-01-03"), how: BOTH_TRAIN },
-          { label: "Omio에서 론다→그라나다 검색", url: omio("ronda", "granada", "2027-01-03"), how: OMIO, alt: true }
+          { label: "Trainline에서 론다→그라나다 검색", url: trainline("Ronda", "Granada", "2027-01-03"), how: BOTH_TRAIN },
+          { label: "Omio에서 론다→그라나다 검색", url: omio("Ronda", "Granada", "2027-01-03"), how: OMIO, alt: true },
+          { label: "Renfe 공식 홈페이지", url: "https://www.renfe.com/es/en", how: SEARCH_ONLY, alt: true }
         ],
         sources: [["Trainline", "https://www.thetrainline.com"]]
       } },
@@ -395,8 +397,9 @@
         ],
         verdict: "Renfe 고속열차 직통 추천 (공휴일 전날이라 조기 예매 필수)",
         links: [
-          { label: "Trainline에서 그라나다→마드리드 검색", url: trainline("granada", "madrid", "2027-01-05"), how: BOTH_TRAIN },
-          { label: "Omio에서 그라나다→마드리드 검색", url: omio("granada", "madrid", "2027-01-05"), how: OMIO, alt: true }
+          { label: "Trainline에서 그라나다→마드리드 검색", url: trainline("Granada", "Madrid", "2027-01-05"), how: BOTH_TRAIN },
+          { label: "Omio에서 그라나다→마드리드 검색", url: omio("Granada", "Madrid", "2027-01-05"), how: OMIO, alt: true },
+          { label: "Renfe 공식 홈페이지", url: "https://www.renfe.com/es/en", how: SEARCH_ONLY, alt: true }
         ],
         sources: [["Trainline", "https://www.thetrainline.com"]]
       } },
@@ -571,7 +574,7 @@
     const msg = document.getElementById("save-msg-" + id);
     const btn = form.querySelector("button");
     const data = {};
-    FIELDS.forEach(f => { data[f.key] = document.getElementById(`f-${id}-${f.key}`).value; });
+    FIELDS.forEach(f => { data[f.key] = document.getElementById(`f-${id}-${f.key}` ).value; });
     btn.disabled = true;
     msg.textContent = "저장하는 중…";
     try {
@@ -663,7 +666,7 @@
         password = a;
         storeSet(a);
         m.className = "msg ok";
-        m.textContent = "비밀번호를 바꿨습니다.";
+        m.textContent = "비밀번호를 바꾸었습니다.";
       } else {
         m.className = "msg err";
         m.textContent = "변경 실패";
