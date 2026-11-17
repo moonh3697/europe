@@ -145,6 +145,31 @@
   }
   .tab-btn:not(.active) .tab-pill { background: var(--done-bg); color: var(--done-ink); }
 
+  .lock {
+    max-width: 540px;
+    margin: 24px auto;
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 22px 18px;
+    display: grid;
+    gap: 12px;
+    box-shadow: var(--shadow);
+  }
+  .lock h2 { margin: 0; font-size: 18px; }
+  .lock p { margin: 0; color: var(--muted); font-size: 14px; }
+  .lock form { display: flex; gap: 8px; flex-wrap: wrap; }
+  .lock input { flex: 1 1 180px; }
+  .pwchange { max-width: 600px; margin: 0 auto 16px; }
+  .pwchange form { display: grid; grid-template-columns: 1fr 1fr; }
+  .pwchange form .primary, .pwchange form .ghost { justify-self: start; }
+  @media (max-width: 440px) { .pwchange form { grid-template-columns: 1fr; } }
+  .msg { font-size: 14px; }
+  .lock .pw-hint { color: var(--ink); font-size: 13px; background: var(--sunk); border-radius: 8px; padding: 8px 12px; }
+  .lock .pw-hint:empty { display: none; }
+  .msg.ok { color: var(--done-ink); }
+  .msg.err { color: var(--err); }
+
   input[type="text"], input[type="password"], select, textarea {
     font: inherit; font-size: 15px; color: var(--ink);
     background: var(--sunk); border: 1px solid var(--line); border-radius: 9px;
@@ -270,7 +295,7 @@
   .ai-key-row { display: grid; gap: 6px; font-size: 12px; color: var(--muted); background: var(--sunk); padding: 10px; border-radius: 8px; border: 1px solid var(--line); }
   .ai-key-inputs { display: flex; gap: 6px; }
 
-  /* CITY GUIDE PANEL */
+  /* CITY GUIDE PANEL (STUBBY STYLE) */
   .guide-city-pills { display: flex; gap: 5px; overflow-x: auto; padding: 10px 12px; border-bottom: 1px solid var(--line); background: var(--card); -webkit-overflow-scrolling: touch; }
   .guide-pill {
     flex: 0 0 auto; font: inherit; font-size: 12px; font-weight: 600;
@@ -311,7 +336,6 @@
   .side { display: grid; justify-items: end; gap: 4px; font-size: 12px; color: var(--muted); flex-shrink: 0; }
   .chev { font-size: 12px; color: var(--accent); font-weight: 600; }
   details[open] .chev-closed, details:not([open]) .chev-open { display: none; }
-
   .status { font-size: 14px; font-weight: 700; padding: 6px 12px; border-radius: 999px; white-space: nowrap; }
   .status.done { background: var(--done-bg); color: var(--done-ink); }
   .status.todo { background: var(--todo-bg); color: var(--todo-ink); }
@@ -418,13 +442,15 @@
         <h1>2026-2027 유럽 4인 여행 플래너</h1>
         <p class="sub-meta">🇮🇹 이탈리아 · 🇨🇭 스위스 · 🇫🇷 프랑스 · 🇪🇸 스페인 · 🇵🇹 포르투갈 (12도시 통합 일정 &amp; 14개 교통 구간)</p>
       </div>
-      <div class="toolbar" id="toolbar">
+      <div class="toolbar" id="toolbar" hidden>
         <span id="synced">불러오는 중…</span>
         <button type="button" class="linkbtn" id="refresh">새로고침</button>
+        <button type="button" class="linkbtn" id="forget">비밀번호 지우기</button>
+        <button type="button" class="linkbtn" id="pwchange-open">비밀번호 바꾸기</button>
       </div>
     </div>
 
-    <nav class="main-tabs" id="main-tabs" aria-label="주요 메뉴">
+    <nav class="main-tabs" id="main-tabs" hidden aria-label="주요 메뉴">
       <button type="button" class="tab-btn active" id="nav-itinerary" data-tab="itinerary">
         <span>🗓️ 27일 전체 일정표 &amp; 지도</span>
         <span class="tab-pill" id="pill-stops-count">207곳</span>
@@ -436,8 +462,31 @@
     </nav>
   </header>
 
+  <section class="lock pwchange" id="pwchange" hidden>
+    <h2>비밀번호 바꾸기</h2>
+    <p>바꾸면 일행 모두 새 비밀번호를 다시 넣어야 합니다. 바꾼 뒤 카톡으로 새 비밀번호를 알려 주세요.</p>
+    <form id="pwchange-form" autocomplete="off">
+      <input type="password" id="pw-new" placeholder="새 비밀번호 (4자 이상)" aria-label="새 비밀번호" minlength="4" maxlength="50" required>
+      <input type="password" id="pw-new2" placeholder="새 비밀번호 한 번 더" aria-label="새 비밀번호 확인" minlength="4" maxlength="50" required>
+      <button type="submit" class="primary" id="pwchange-btn">바꾸기</button>
+      <button type="button" class="ghost" id="pwchange-cancel">닫기</button>
+    </form>
+    <p class="msg" id="pwchange-msg" aria-live="polite"></p>
+  </section>
+
+  <section class="lock" id="lock">
+    <h2>비밀번호를 넣어 주세요</h2>
+    <p>일행끼리 정한 비밀번호를 넣어야 27일 전체 일정과 교통편 예매 정보가 보입니다. 한 번 넣으면 이 기기에서는 다시 묻지 않습니다.</p>
+    <form id="lock-form" autocomplete="off">
+      <input type="password" id="pw" placeholder="비밀번호" aria-label="비밀번호" required>
+      <button type="submit" class="primary" id="pw-btn">열기</button>
+    </form>
+    <p class="pw-hint" id="pw-hint"></p>
+    <p class="msg" id="lock-msg" aria-live="polite"></p>
+  </section>
+
   <!-- VIEW 1: MAIN 27-DAY ITINERARY & MAP -->
-  <div id="view-itinerary">
+  <div id="view-itinerary" hidden>
     <div class="city-ribbon" id="city-ribbon"></div>
     <div class="planner-grid">
       <aside class="panel-card day-sidebar">
@@ -486,7 +535,7 @@
             </div>
           </div>
           <div class="ai-chat-area" id="ai-chat-box">
-            <div class="ai-msg bot">안녕하세요! 현재 보고 계신 <b>Day 1</b> 일정과 도시 정보를 바탕으로 맛집, 동선, 교통 팁을 알려드립니다. 무엇이든 물어보세요!</div>
+            <div class="ai-msg bot">안녕하세요! 현재 보고 계신 <b>Day 1</b> 일정과 도시 정보, 그리고 저장된 <b>교통편 예매 내역</b>을 바탕으로 맛집, 동선, 환승 팁을 알려드립니다. 무엇이든 물어보세요!</div>
           </div>
           <form class="ai-input-row" id="ai-form">
             <input type="text" id="ai-input" placeholder="예: 오늘 동선 근처 로컬 맛집 추천해줘" autocomplete="off">
@@ -508,7 +557,7 @@
               🗺️ 구글 지도에서 오늘 전체 동선 열기 ↗
             </a>
             <div style="display:flex; justify-content:space-between; align-items:center; font-size:12px; color:var(--muted);">
-              <span id="itinerary-save-status">실시간 동기화 준비 완료</span>
+              <span id="itinerary-save-status">실시간 동기화 대기 중</span>
               <button type="button" class="linkbtn" id="btn-reset-itinerary">일정 원본 복원</button>
             </div>
           </div>
@@ -600,9 +649,12 @@
 <script>
 (function() {
   const API_URL = "https://script.google.com/macros/s/AKfycbxnsNrXANrjEXfquUcYSaaXUqXzTFMljh2PvJv21WaBoVtUhvYBTI4uYTNJYX2xyE0j/exec";
+  const PW_KEY = "europe-trip-pw";
+  const PW_HINT = "힌트: 첫번째로 가는 도시의 이름을 영문 소문자로!";
+  document.getElementById("pw-hint").textContent = PW_HINT;
+
   const DEFAULT_GEMINI_KEY = "AQ.Ab8RN6I5p9uKKelVQXgL7LFdbz4uWKyB1MobjQwyMtNEAZJjGg";
   const GEMINI_KEY_STORAGE = "europe-2026-gemini-key";
-  const BACKEND_PW = "rome";
 
   const ITINERARY_STORAGE_KEY = "europe-2026-itinerary-v1";
   const ITINERARY_REMOTE_ID = "itinerary_v1";
@@ -900,7 +952,6 @@
     }
   ];
 
-  // 207 CSV rows
   const RAW_CSV_TUPLES = [
     [1,1,"로마 피우미치노 공항","Rome Fiumicino Airport","ICN 14:05 - FCO 19:35 (대한항공 KE931) / 공항-테르미니 택시 55유로 (https://naver.me/xll20Y8D)"],
     [1,2,"테르미니 역","Roma Termini","공항에서 약 23.4km 이동"],
@@ -1142,6 +1193,7 @@
     return buildDefaultItinerary();
   }
 
+  // ORIGINAL TRANSPORT PLANNER HELPERS & DATA (100% preserved from index_12.html)
   function trainline(from, to, date, tab) {
     return "https://www.thetrainline.com/book/results?journeySearchType=single"
       + "&origin=urn%3Atrainline%3Ageneric%3Aloc%3A" + from
@@ -1463,15 +1515,8 @@
     { date: "당일", sub: "미리 안 사도 됨", title: "스위스 기차는 좌석 지정이 없어요", note: "당일 역이나 SBB 앱에서 사도 됩니다. 16:30 버스를 탈 거라면 버스는 미리 끊으세요.", legs: ["12/20"] }
   ];
 
-  // Verified bookings from email confirmations + trip records, merged with Google Sheets remote data
-  const DEFAULT_BOOKINGS = {
-    "1": { time: "14:05", station: "인천공항 T2 (KE931)", price: "대한항공", by: "혁준", code: "KE931" },
-    "6": { time: "12:39", station: "스트라스부르역 (OUIGO 7692, 1호차 116~119)", price: "4인 $286.58", by: "혁준", code: "Y824GX" },
-    "8": { time: "13:00", station: "바르셀로나 엘프라트 T1 (VY1178)", price: "부엘링항공", by: "혁준", code: "1400829076181460" },
-    "13": { time: "21:25", station: "마드리드 바라하스 T4 (KE914)", price: "대한항공", by: "혁준", code: "KE914" }
-  };
-
-  let bookings = Object.assign({}, DEFAULT_BOOKINGS);
+  let password = null;
+  let bookings = {};
   const dirty = new Set();
   let itineraryStops = loadLocalItinerary();
   let selectedDayNum = 1;
@@ -1516,24 +1561,14 @@
     return res.json();
   }
 
+  function storeGet() { try { return localStorage.getItem(PW_KEY); } catch (e) { return null; } }
+  function storeSet(v) { try { localStorage.setItem(PW_KEY, v); } catch (e) {} }
+  function storeDel() { try { localStorage.removeItem(PW_KEY); } catch (e) {} }
+
   const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
   const linkify = s => esc(s).replace(/(https?:\/\/[^\s)]+)/g, '<a href="$1" target="_blank" rel="noopener">$1</a>');
   const legId = i => legs[i].id || String(i + 1);
   const isBooked = (leg, i) => leg.booked || !!(bookings[legId(i)] && bookings[legId(i)].code);
-
-  function mergeBookings(remote) {
-    const merged = Object.assign({}, DEFAULT_BOOKINGS);
-    if (remote && typeof remote === "object") {
-      Object.keys(remote).forEach(k => {
-        if (k === ITINERARY_REMOTE_ID) {
-          merged[k] = remote[k];
-        } else if (remote[k] && typeof remote[k] === "object") {
-          merged[k] = Object.assign({}, merged[k] || {}, remote[k]);
-        }
-      });
-    }
-    return merged;
-  }
 
   function toDay(d) {
     const [m, day] = d.split("/").map(Number);
@@ -1549,20 +1584,19 @@
     try { localStorage.setItem(ITINERARY_STORAGE_KEY, JSON.stringify(itineraryStops)); } catch (e) {}
     renderItineraryUI();
     const statusEl = document.getElementById("itinerary-save-status");
+    if (!password) return;
     if (statusEl) statusEl.textContent = "저장하는 중…";
     try {
       const r = await api({
         action: "save",
-        pw: BACKEND_PW,
+        pw: password,
         legId: ITINERARY_REMOTE_ID,
         data: { json: JSON.stringify(itineraryStops), updatedAt: stamp() }
       });
       if (r && r.ok) {
-        bookings = mergeBookings(r.bookings);
+        bookings = r.bookings || bookings;
         if (statusEl) statusEl.textContent = "구글 시트 실시간 동기화 완료 (" + stamp() + ")";
-        document.getElementById("synced").textContent = "마지막 동기화 " + stamp();
-      } else {
-        if (statusEl) statusEl.textContent = "로컬 저장 완료 (" + stamp() + ")";
+        document.getElementById("synced").textContent = "마지막으로 불러온 시각 " + stamp();
       }
     } catch (e) {
       if (statusEl) statusEl.textContent = "오프라인 로컬 저장됨";
@@ -1651,7 +1685,11 @@
     const stops = getStopsForDay(selectedDayNum);
     updateGoogleMapsRouteUrl(stops);
 
-    if (stops.length === 0) return;
+    if (stops.length === 0) {
+      if (selectedDayNum === 6) map.setView([45.4342, 12.3388], 13);
+      else if (selectedDayNum === 8) map.setView([47.0502, 8.3093], 12);
+      return;
+    }
 
     const latLngs = [];
     for (let i = 0; i < stops.length; i++) {
@@ -2006,7 +2044,7 @@
     syncItineraryToServer();
   });
 
-  // GEMINI AI CHAT INTEGRATION (Automatic fallback across models + clear key validation)
+  // GEMINI AI CHAT INTEGRATION (Automatic fallback across models + context-aware)
   async function callGeminiModel(apiKey, modelName, prompt, systemInstruction) {
     const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${encodeURIComponent(apiKey)}`;
     const payload = {
@@ -2046,7 +2084,11 @@
 
     const meta = DAYS_META.find(d => d.dayNum === selectedDayNum) || DAYS_META[0];
     const currentStops = getStopsForDay(selectedDayNum).map(s => s.name).join(", ");
-    const systemInstruction = `당신은 27일 유럽 여행(이탈리아, 스위스, 프랑스, 스페인, 포르투갈, 참가자 4명)의 전문 AI 여행 플래너입니다. 현재 사용자가 보고 있는 일정은 Day ${selectedDayNum} (${meta.title}, 도시: ${meta.city}, 등록된 장소: ${currentStops || "없음"})입니다. 질문에 친절하고 실용적으로 답변해주세요.`;
+    const bookedSummary = legs.map((l, i) => {
+      const b = bookings[legId(i)] || {};
+      return `${l.date} ${l.from}->${l.to}: ${b.code ? "예매완료(" + [b.time, b.station, b.code].filter(Boolean).join("/") + ")" : (l.booked ? "예매완료" : "미예매")}`;
+    }).join("; ");
+    const systemInstruction = `당신은 27일 유럽 여행(이탈리아, 스위스, 프랑스, 스페인, 포르투갈, 참가자 4명)의 전문 AI 여행 플래너입니다. 현재 사용자가 보고 있는 일정은 Day ${selectedDayNum} (${meta.title}, 도시: ${meta.city}, 등록된 장소: ${currentStops || "없음"})이며, 전체 교통편 현황은 [${bookedSummary}]입니다. 질문에 친절하고 실용적으로 답변해주세요.`;
 
     const modelsToTry = ["gemini-2.5-flash", "gemini-2.0-flash", "gemini-1.5-flash"];
     let finalReply = null;
@@ -2077,7 +2119,7 @@
       } else {
         const isAqKey = apiKey.startsWith("AQ.");
         const guideHint = isAqKey
-          ? `<br><br>💡 현재 입력된 <code>AQ.</code> 키는 Google Cloud OAuth/Vertex 토큰 형식으로 일반 브라우저 Gemini API에서 거부됩니다. 상단 <b>[API 키 설정]</b>을 눌러 Google AI Studio에서 발급받은 <b><code>AIza...</code></b> 키를 입력해 주시면 바로 작동합니다!`
+          ? `<br><br>💡 현재 입력된 <code>AQ.</code> 키는 Google Cloud Vertex/OAuth 토큰 형식이라 브라우저에서 직접 호출할 때 인증 오류가 납니다. 상단 <b>[API 키 설정]</b>을 눌러 Google AI Studio에서 발급받은 <b><code>AIza...</code></b> 키를 입력해 주시면 바로 작동합니다!`
           : `<br><br>💡 상단 <b>[API 키 설정]</b>에서 키가 올바른지 확인해 주세요.`;
         chatBox.innerHTML += `<div class="ai-msg bot">❌ API 응답 오류: ${esc(lastErrorMsg || "응답을 받을 수 없습니다.")}${guideHint}</div>`;
       }
@@ -2091,7 +2133,7 @@
 
   document.getElementById("ai-form").addEventListener("submit", handleAiSubmit);
 
-  // TRANSPORT PLANNER RENDERING & LOGIC
+  // TRANSPORT PLANNER RENDERING & LOGIC (100% preserved from index_12.html)
   function planHtml(p) {
     const warn = p.warn ? `<div class="warn"><b>${p.warn.title}</b>${p.warn.text}</div>` : "";
     const note = p.note ? `<p>${p.note}</p>` : "";
@@ -2171,7 +2213,7 @@
       return `<li class="sale${s.soon ? " soon" : ""}"><div class="sale-date">${s.date}<small>${s.sub}</small></div><div class="sale-body"><span class="sale-title">${s.title}</span><div class="chips">${chips}</div><span class="sale-note">${s.note}</span></div></li>`;
     }).join("");
     document.getElementById("sales").dataset.allDone = open === 0 ? "1" : "";
-    document.getElementById("sales").hidden = open === 0;
+    if (password) document.getElementById("sales").hidden = open === 0;
   }
 
   document.getElementById("sales-list").addEventListener("click", e => {
@@ -2270,18 +2312,15 @@
     const synced = document.getElementById("synced");
     synced.textContent = "불러오는 중…";
     try {
-      const r = await api({ action: "get", pw: BACKEND_PW });
-      if (!r.ok) {
-        synced.textContent = "기본 일정 표시 중";
-        return;
-      }
-      bookings = mergeBookings(r.bookings);
+      const r = await api({ action: "get", pw: password });
+      if (!r.ok) { lockAgain(r.reason); return; }
+      bookings = r.bookings || {};
       hydrateItineraryFromBookings();
       renderItineraryUI();
       applyBookings();
-      synced.textContent = "실시간 동기화 완료 (" + stamp() + ")";
+      synced.textContent = "마지막으로 불러온 시각 " + stamp();
     } catch (e) {
-      synced.textContent = "로컬 데이터 표시 중";
+      synced.textContent = "불러오지 못했습니다. 인터넷 연결을 확인하고 새로고침을 눌러 주세요.";
     }
   }
 
@@ -2293,32 +2332,118 @@
     btn.disabled = true;
     msg.textContent = "저장하는 중…";
     try {
-      const r = await api({ action: "save", pw: BACKEND_PW, legId: id, data });
-      if (!r.ok) {
-        msg.textContent = "저장 실패";
-        return;
-      }
+      const r = await api({ action: "save", pw: password, legId: id, data });
+      if (!r.ok) { lockAgain(r.reason); return; }
       dirty.delete(id);
-      bookings = mergeBookings(r.bookings);
+      bookings = r.bookings || {};
       applyBookings();
       msg.textContent = "저장했습니다 (" + stamp() + ")";
+      document.getElementById("synced").textContent = "마지막으로 불러온 시각 " + stamp();
     } catch (e) {
-      msg.textContent = "저장하지 못했습니다.";
+      msg.textContent = "저장하지 못했습니다. 인터넷 연결을 확인하고 다시 눌러 주세요.";
     } finally {
       btn.disabled = false;
     }
   }
 
-  document.getElementById("today").hidden = false;
+  function showApp() {
+    document.getElementById("lock").hidden = true;
+    document.getElementById("toolbar").hidden = false;
+    document.getElementById("main-tabs").hidden = false;
+    document.getElementById("today").hidden = false;
+    document.getElementById("sales").hidden = document.getElementById("sales").dataset.allDone === "1";
+    switchTab(activeTab);
+  }
+
+  function lockAgain(reason) {
+    const wasIn = password !== null || storeGet() !== null;
+    password = null;
+    storeDel();
+    ["view-itinerary", "view-transport", "main-tabs", "toolbar", "pwchange"].forEach(id => { document.getElementById(id).hidden = true; });
+    document.getElementById("lock").hidden = false;
+    const m = document.getElementById("lock-msg");
+    m.className = "msg err";
+    m.textContent = reason === "setup" ? "저장소에 아직 비밀번호가 정해지지 않았습니다. 만든 사람에게 알려 주세요." : wasIn ? "비밀번호가 바뀌었을 수 있습니다. 일행에게 새 비밀번호를 물어보고 넣어 주세요." : "비밀번호가 맞지 않습니다. 다시 넣어 주세요.";
+  }
+
+  async function changePassword() {
+    const m = document.getElementById("pwchange-msg");
+    const btn = document.getElementById("pwchange-btn");
+    const a = document.getElementById("pw-new").value.trim();
+    const b = document.getElementById("pw-new2").value.trim();
+    m.className = "msg err";
+    if (a.length < 4) { m.textContent = "새 비밀번호는 4자 이상으로 넣어 주세요."; return; }
+    if (a !== b) { m.textContent = "두 칸에 넣은 새 비밀번호가 서로 다릅니다. 똑같이 넣어 주세요."; return; }
+    if (a === password) { m.textContent = "지금 비밀번호와 같습니다. 다른 비밀번호를 넣어 주세요."; return; }
+    btn.disabled = true;
+    m.className = "msg";
+    m.textContent = "바꾸는 중…";
+    try {
+      const r = await api({ action: "changePw", pw: password, newPw: a });
+      if (!r.ok && r.reason === "bad_password") { m.className = "msg err"; m.textContent = "새 비밀번호는 4~50자로 넣어 주세요."; return; }
+      if (!r.ok && r.reason === "bad_request") { m.className = "msg err"; m.textContent = "저장소가 아직 비밀번호 바꾸기를 지원하지 않습니다. 만든 사람에게 알려 주세요."; return; }
+      if (!r.ok) { lockAgain(r.reason); return; }
+      password = a;
+      storeSet(a);
+      document.getElementById("pw-new").value = "";
+      document.getElementById("pw-new2").value = "";
+      m.className = "msg ok";
+      m.textContent = "비밀번호를 바꿨습니다. 일행에게 새 비밀번호를 알려 주세요. 이 기기는 그대로 쓸 수 있습니다.";
+    } catch (e) {
+      m.className = "msg err";
+      m.textContent = "바꾸지 못했습니다. 인터넷 연결을 확인하고 다시 눌러 주세요.";
+    } finally {
+      btn.disabled = false;
+    }
+  }
+
+  async function unlock(pw) {
+    const m = document.getElementById("lock-msg");
+    const btn = document.getElementById("pw-btn");
+    m.className = "msg";
+    m.textContent = "확인하는 중…";
+    btn.disabled = true;
+    try {
+      const r = await api({ action: "get", pw });
+      if (!r.ok) { lockAgain(r.reason); return; }
+      password = pw;
+      storeSet(pw);
+      bookings = r.bookings || {};
+      hydrateItineraryFromBookings();
+      m.textContent = "";
+      showApp();
+      renderItineraryUI();
+      applyBookings();
+      document.getElementById("synced").textContent = "마지막으로 불러온 시각 " + stamp();
+    } catch (e) {
+      m.className = "msg err";
+      m.textContent = "저장소에 연결하지 못했습니다. 인터넷 연결을 확인하고 다시 눌러 주세요.";
+    } finally {
+      btn.disabled = false;
+    }
+  }
+
   initLeafletMap();
   buildTransportList();
   renderItineraryUI();
-  applyBookings();
-  loadAllData();
 
+  document.getElementById("lock-form").addEventListener("submit", e => { e.preventDefault(); unlock(document.getElementById("pw").value); });
   document.getElementById("refresh").addEventListener("click", loadAllData);
-  document.addEventListener("visibilitychange", () => { if (document.visibilityState === "visible") loadAllData(); });
-  setInterval(() => { if (document.visibilityState === "visible") loadAllData(); }, 60000);
+  document.getElementById("pwchange-open").addEventListener("click", () => {
+    const s = document.getElementById("pwchange");
+    s.hidden = false;
+    document.getElementById("pwchange-msg").textContent = "";
+    document.getElementById("pw-new").focus();
+  });
+  document.getElementById("pwchange-cancel").addEventListener("click", () => { document.getElementById("pwchange").hidden = true; });
+  document.getElementById("pwchange-form").addEventListener("submit", e => { e.preventDefault(); changePassword(); });
+  document.getElementById("forget").addEventListener("click", () => { storeDel(); location.reload(); });
+
+  document.addEventListener("visibilitychange", () => { if (document.visibilityState === "visible" && password) loadAllData(); });
+  setInterval(() => { if (document.visibilityState === "visible" && password) loadAllData(); }, 60000);
+
+  const saved = storeGet();
+  if (saved) unlock(saved);
 })();
 </script>
 </body>
