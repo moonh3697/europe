@@ -260,6 +260,12 @@
       + "&outwardDateType=departAfter&passengers%5B%5D=1996-01-01&directSearch=false&lang=en"
       + (tab ? "&selectedTab=" + tab : "");
   }
+  // 도시 이름만 넣는 deep link는 Trainline이 역을 못 찾아 엉뚱하게(예: 출발·도착 둘 다 Ronda) 채우는 경우가 있어서,
+  // 출발·도착이 이미 정해져 있는 노선 페이지로 연결 (날짜만 고르면 됨)
+  function trainlineRoute(fromSlug, toSlug, kind) {
+    return "https://www.thetrainline.com/en/" + (kind === "bus" ? "buses/" : "train-times/") + fromSlug + "-to-" + toSlug;
+  }
+  const ROUTE_PAGE = "출발·도착이 이미 채워진 노선 페이지 → 날짜만 고르고 검색";
   const BUS_TAB = "버스(Coach) 탭이 열린 채로, 도시와 날짜가 들어가 있음";
   const BOTH_TRAIN = "기차 결과가 먼저 열림 · 위쪽 'Coach'를 누르면 버스";
   const BOTH_COACH = "버스 결과가 먼저 열림 · 위쪽 'Train'을 누르면 기차";
@@ -341,8 +347,9 @@
         ],
         verdict: "기차 추천 (스트라스부르 1박 일정상 오전 기차가 유리)",
         links: [
-          { label: "Trainline에서 루체른→스트라스부르 검색", url: trainline("Lucerne", "Strasbourg", "2026-12-20"), how: BOTH_TRAIN },
-          { label: "Omio에서 루체른→스트라스부르 검색", url: omio("Lucerne", "Strasbourg", "2026-12-20"), how: OMIO, alt: true }
+          { label: "Trainline 루체른→스트라스부르 (기차)", url: trainlineRoute("lucerne", "strasbourg"), how: ROUTE_PAGE },
+          { label: "Trainline 루체른→스트라스부르 (버스)", url: trainlineRoute("lucerne", "strasbourg", "bus"), how: ROUTE_PAGE, alt: true },
+          { label: "Omio에서 루체른→스트라스부르 검색", url: omio("lucerne", "strasbourg", "2026-12-20"), how: OMIO, alt: true }
         ],
         sources: [["Trainline", "https://www.thetrainline.com"]]
       } },
@@ -362,9 +369,8 @@
         ],
         verdict: "Damas 직행 버스 추천",
         links: [
-          { label: "Trainline에서 세비야→론다 검색", url: trainline("Seville", "Ronda", "2027-01-03", "coach"), how: BUS_TAB },
-          { label: "Omio에서 세비야→론다 검색", url: omio("Seville", "Ronda", "2027-01-03"), how: OMIO, alt: true },
-          { label: "Damas 버스 공식 홈페이지", url: "https://www.damas-sa.es", how: SEARCH_ONLY, alt: true }
+          { label: "Trainline 세비야→론다 (기차)", url: trainlineRoute("seville", "ronda"), how: ROUTE_PAGE },
+          { label: "Omio에서 세비야→론다 검색", url: omio("seville", "ronda", "2027-01-03"), how: OMIO, alt: true }
         ],
         sources: [["Trainline", "https://www.thetrainline.com"]]
       } },
@@ -379,9 +385,8 @@
         ],
         verdict: "Renfe 기차 추천",
         links: [
-          { label: "Trainline에서 론다→그라나다 검색", url: trainline("Ronda", "Granada", "2027-01-03"), how: BOTH_TRAIN },
-          { label: "Omio에서 론다→그라나다 검색", url: omio("Ronda", "Granada", "2027-01-03"), how: OMIO, alt: true },
-          { label: "Renfe 공식 홈페이지", url: "https://www.renfe.com/es/en", how: SEARCH_ONLY, alt: true }
+          { label: "Trainline 론다→그라나다 (기차)", url: trainlineRoute("ronda", "granada"), how: ROUTE_PAGE },
+          { label: "Omio에서 론다→그라나다 검색", url: omio("ronda", "granada", "2027-01-03"), how: OMIO, alt: true }
         ],
         sources: [["Trainline", "https://www.thetrainline.com"]]
       } },
@@ -397,9 +402,8 @@
         ],
         verdict: "Renfe 고속열차 직통 추천 (공휴일 전날이라 조기 예매 필수)",
         links: [
-          { label: "Trainline에서 그라나다→마드리드 검색", url: trainline("Granada", "Madrid", "2027-01-05"), how: BOTH_TRAIN },
-          { label: "Omio에서 그라나다→마드리드 검색", url: omio("Granada", "Madrid", "2027-01-05"), how: OMIO, alt: true },
-          { label: "Renfe 공식 홈페이지", url: "https://www.renfe.com/es/en", how: SEARCH_ONLY, alt: true }
+          { label: "Trainline에서 그라나다→마드리드 검색", url: trainline("granada", "madrid", "2027-01-05"), how: BOTH_TRAIN },
+          { label: "Omio에서 그라나다→마드리드 검색", url: omio("granada", "madrid", "2027-01-05"), how: OMIO, alt: true }
         ],
         sources: [["Trainline", "https://www.thetrainline.com"]]
       } },
@@ -411,7 +415,6 @@
     "2": { time: "07:50", station: "로마 테르미니", price: "Italo 직통", by: "혁준", code: "IT-8102" },
     "3": { time: "12:39", station: "피렌체 S.M.N", price: "고속열차", by: "혁준", code: "IT-9402" },
     "4": { time: "07:18", station: "베네치아 산타 루치아", price: "EuroCity", by: "혁준", code: "EC-37" },
-    "5": { time: "10:54", station: "루체른역", price: "SBB", by: "혁준", code: "SBB-CH" },
     "6": { time: "12:39", station: "스트라스부르역", price: "Trainline", by: "혁준", code: "Y824GX" },
     "7": { time: "23:00", station: "파리 베르시", price: "야간버스", by: "혁준", code: "01T0D0" },
     "8": { time: "13:00", station: "바르셀로나 엘프라트", price: "부엘링", by: "혁준", code: "VY1178" },
@@ -574,7 +577,7 @@
     const msg = document.getElementById("save-msg-" + id);
     const btn = form.querySelector("button");
     const data = {};
-    FIELDS.forEach(f => { data[f.key] = document.getElementById(`f-${id}-${f.key}` ).value; });
+    FIELDS.forEach(f => { data[f.key] = document.getElementById(`f-${id}-${f.key}`).value; });
     btn.disabled = true;
     msg.textContent = "저장하는 중…";
     try {
@@ -666,7 +669,7 @@
         password = a;
         storeSet(a);
         m.className = "msg ok";
-        m.textContent = "비밀번호를 바꾸었습니다.";
+        m.textContent = "비밀번호를 바꿨습니다.";
       } else {
         m.className = "msg err";
         m.textContent = "변경 실패";
