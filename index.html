@@ -4,54 +4,30 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex, nofollow">
-<title>2026-2027 유럽 4인 여행 플래너 & 이동표</title>
+<title>2026-2027 유럽 4인 여행 교통편 예매표</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap">
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
 <style>
   :root {
     color-scheme: light;
-    --ground: #eef2f4;
-    --card: #ffffff;
-    --sunk: #f5f8fa;
-    --ink: #17222c;
-    --muted: #5d6b77;
-    --line: #d5dde3;
-    --accent: #1d5c82;
-    --accent-soft: #e6f0f6;
-    --accent-ink: #ffffff;
-    --done-bg: #dcefe3;
-    --done-ink: #1f6a3f;
-    --todo-bg: #fbeacb;
-    --todo-ink: #8a5200;
-    --warn-bg: #fdf1dc;
-    --warn-line: #e3b35c;
-    --err: #b3261e;
-    --shadow: 0 2px 10px rgba(23, 34, 44, 0.06);
-  }
-  @media (prefers-color-scheme: dark) {
-    :root {
-      color-scheme: dark;
-      --ground: #10171d;
-      --card: #1a232b;
-      --sunk: #141c23;
-      --ink: #e6edf2;
-      --muted: #97a6b2;
-      --line: #2c3842;
-      --accent: #7fb8dd;
-      --accent-soft: #1c2e3b;
-      --accent-ink: #0d1a24;
-      --done-bg: #1d3a2a;
-      --done-ink: #8fd8ab;
-      --todo-bg: #3d2f16;
-      --todo-ink: #f1c27a;
-      --warn-bg: #33291a;
-      --warn-line: #8a6a2e;
-      --err: #f2998f;
-      --shadow: 0 2px 12px rgba(0, 0, 0, 0.28);
-    }
+    --ground: #10171d;
+    --card: #1a232b;
+    --sunk: #141c23;
+    --ink: #e6edf2;
+    --muted: #97a6b2;
+    --line: #2c3842;
+    --accent: #7fb8dd;
+    --accent-soft: #1c2e3b;
+    --accent-ink: #0d1a24;
+    --done-bg: #1d3a2a;
+    --done-ink: #8fd8ab;
+    --todo-bg: #3d2f16;
+    --todo-ink: #f1c27a;
+    --warn-bg: #33291a;
+    --warn-line: #8a6a2e;
+    --err: #f2998f;
+    --shadow: 0 2px 12px rgba(0, 0, 0, 0.28);
   }
   * { box-sizing: border-box; }
   [hidden] { display: none !important; }
@@ -65,14 +41,13 @@
     padding-inline: 14px;
     padding-block: calc(16px + env(safe-area-inset-top, 0px)) calc(56px + env(safe-area-inset-bottom, 0px));
   }
-  .wrap-wide { max-width: 1240px; margin: 0 auto; }
   .wrap-narrow { max-width: 580px; margin: 0 auto; }
 
   .top-header {
     background: var(--card);
     border: 1px solid var(--line);
     border-radius: 16px;
-    padding: 16px 18px;
+    padding: 18px 20px;
     margin-bottom: 16px;
     box-shadow: var(--shadow);
     display: grid;
@@ -94,7 +69,7 @@
     display: block;
     margin-bottom: 2px;
   }
-  h1 { margin: 0; font-size: 22px; line-height: 1.25; font-weight: 700; }
+  h1 { margin: 0; font-size: 22px; line-height: 1.25; font-weight: 700; color: #fff; }
   .sub-meta { margin: 3px 0 0; font-size: 13px; color: var(--muted); }
   .toolbar {
     display: flex;
@@ -108,42 +83,14 @@
     background: none; border: 0; padding: 0; font: inherit; color: var(--accent);
     text-decoration: underline; cursor: pointer; font-weight: 500;
   }
-  .main-tabs {
-    display: flex;
-    gap: 8px;
-    padding-top: 8px;
-    border-top: 1px solid var(--line);
-    flex-wrap: wrap;
-  }
-  .tab-btn {
-    font: inherit;
-    font-size: 14px;
-    font-weight: 700;
-    padding: 10px 16px;
-    border-radius: 11px;
-    border: 1px solid var(--line);
-    background: var(--sunk);
-    color: var(--ink);
-    cursor: pointer;
-    display: inline-flex;
-    align-items: center;
-    gap: 7px;
-  }
-  .tab-btn.active {
-    background: var(--accent);
-    color: var(--accent-ink);
-    border-color: var(--accent);
-  }
-  .tab-pill {
-    font-family: "IBM Plex Mono", ui-monospace, monospace;
-    font-size: 11px;
-    font-weight: 600;
-    padding: 2px 7px;
-    border-radius: 999px;
-    background: rgba(255, 255, 255, 0.22);
-    color: inherit;
-  }
-  .tab-btn:not(.active) .tab-pill { background: var(--done-bg); color: var(--done-ink); }
+
+  .pwchange { max-width: 580px; margin: 0 auto 16px; background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 16px; box-shadow: var(--shadow); }
+  .pwchange form { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .pwchange form .primary, .pwchange form .ghost { justify-self: start; }
+  @media (max-width: 440px) { .pwchange form { grid-template-columns: 1fr; } }
+  .msg { font-size: 14px; }
+  .msg.ok { color: var(--done-ink); }
+  .msg.err { color: var(--err); }
 
   input[type="text"], input[type="password"], select, textarea {
     font: inherit; font-size: 15px; color: var(--ink);
@@ -163,136 +110,7 @@
     border: 1px solid var(--line); border-radius: 9px; padding: 8px 12px; cursor: pointer; white-space: nowrap;
   }
 
-  /* TAB 1: ITINERARY & MAP */
-  .city-ribbon { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 6px; margin-bottom: 14px; -webkit-overflow-scrolling: touch; }
-  .city-chip {
-    flex: 0 0 auto; font: inherit; font-size: 13px; font-weight: 600;
-    padding: 7px 12px; border-radius: 999px; border: 1px solid var(--line);
-    background: var(--card); color: var(--ink); cursor: pointer;
-    display: inline-flex; align-items: center; gap: 5px; white-space: nowrap;
-  }
-  .city-chip.active { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
-  .city-chip small { font-size: 11px; opacity: 0.8; }
-
-  .planner-grid { display: grid; grid-template-columns: 245px 1fr 400px; gap: 16px; align-items: start; }
-  @media (max-width: 1080px) {
-    .planner-grid { grid-template-columns: 1fr; }
-    .map-col { order: -1; position: static !important; }
-    .day-sidebar { position: static !important; }
-  }
-  @media (max-width: 720px) {
-    .day-list-scroll { max-height: 220px !important; }
-  }
-
-  .panel-card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; box-shadow: var(--shadow); overflow: hidden; margin-bottom: 16px; }
-  .panel-head { padding: 12px 14px; background: var(--sunk); border-bottom: 1px solid var(--line); display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
-  .panel-head h2 { margin: 0; font-size: 14px; font-weight: 700; }
-
-  .day-sidebar { position: sticky; top: 14px; }
-  .day-list-scroll { max-height: calc(100vh - 180px); overflow-y: auto; -webkit-overflow-scrolling: touch; }
-  .day-item {
-    width: 100%; text-align: left; border: 0; border-bottom: 1px solid var(--line);
-    background: transparent; color: var(--ink); padding: 10px 14px; cursor: pointer;
-    display: flex; align-items: center; justify-content: space-between; gap: 8px; font: inherit;
-  }
-  .day-item:last-child { border-bottom: 0; }
-  .day-item:hover { background: var(--sunk); }
-  .day-item.active { background: var(--accent-soft); border-left: 4px solid var(--accent); }
-  .day-item-title { font-size: 13px; font-weight: 700; display: block; }
-  .day-item-city { font-size: 12px; color: var(--muted); display: block; margin-top: 1px; }
-  .day-count-badge {
-    font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: 11px; font-weight: 600;
-    padding: 2px 7px; border-radius: 999px; background: var(--sunk); border: 1px solid var(--line); color: var(--muted); flex-shrink: 0;
-  }
-  .day-item.active .day-count-badge { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
-
-  .day-header-box { padding: 14px 16px; border-bottom: 1px solid var(--line); display: grid; gap: 10px; }
-  .day-title-row { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 8px; }
-  .day-badge { font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: 12px; font-weight: 600; background: var(--accent); color: var(--accent-ink); padding: 3px 9px; border-radius: 7px; }
-  .day-city-heading { font-size: 18px; font-weight: 700; margin: 0; }
-  .day-sub-desc { font-size: 13px; color: var(--muted); margin: 2px 0 0; }
-  .filter-bar { display: grid; grid-template-columns: 1fr auto; gap: 8px; }
-  @media (max-width: 480px) { .filter-bar { grid-template-columns: 1fr; } }
-
-  .stops-list { padding: 12px 14px; display: grid; gap: 10px; }
-  .stop-card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; display: grid; gap: 8px; }
-  .stop-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
-  .stop-left { display: flex; align-items: flex-start; gap: 10px; min-width: 0; flex: 1; }
-  .stop-num {
-    width: 24px; height: 24px; border-radius: 999px; background: var(--accent); color: var(--accent-ink);
-    font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: 12px; font-weight: 700;
-    display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px;
-  }
-  .stop-num.stay-pin { background: #6b46c1; }
-  .stop-num.transit-pin { background: #0284c7; }
-  .stop-num.food-pin { background: #d97706; }
-  .stop-name-wrap { min-width: 0; flex: 1; }
-  .stop-tags { display: flex; flex-wrap: wrap; gap: 5px; align-items: center; margin-bottom: 3px; }
-  .cat-tag { font-size: 11px; font-weight: 700; padding: 1px 7px; border-radius: 6px; background: var(--sunk); border: 1px solid var(--line); color: var(--muted); }
-  .stop-title { font-size: 15px; font-weight: 700; margin: 0; }
-  .stop-query { font-size: 12px; color: var(--muted); margin-top: 2px; overflow-wrap: anywhere; }
-  .stop-memo { margin: 0; font-size: 13px; background: var(--sunk); border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; color: var(--ink); word-break: break-word; }
-  .stop-memo a { color: var(--accent); }
-  .stop-actions { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 6px; }
-  .stop-btn-group { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
-  .mini-btn {
-    font: inherit; font-size: 12px; font-weight: 600; padding: 4px 9px; border-radius: 7px;
-    border: 1px solid var(--line); background: var(--sunk); color: var(--ink);
-    cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 4px;
-  }
-  .mini-btn.gmap { background: var(--done-bg); color: var(--done-ink); border-color: transparent; }
-  .mini-btn.add-guide { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
-  .mini-btn:disabled { opacity: 0.35; cursor: default; }
-
-  .map-col { position: sticky; top: 14px; display: grid; gap: 12px; }
-  #leaflet-map { width: 100%; height: 320px; background: var(--sunk); z-index: 1; border-radius: 8px; }
-  .leaflet-pin-badge {
-    display: flex; align-items: center; justify-content: center; border-radius: 999px;
-    font-family: "IBM Plex Mono", monospace; font-weight: 700; font-size: 12px;
-    color: #fff; border: 2px solid #fff; box-shadow: 0 3px 8px rgba(0,0,0,0.3);
-  }
-  .map-footer { padding: 12px 14px; display: grid; gap: 8px; border-top: 1px solid var(--line); }
-  .gmap-route-cta {
-    display: flex; align-items: center; justify-content: center; gap: 6px;
-    background: #1f6a3f; color: #ffffff; text-decoration: none; font-weight: 700;
-    font-size: 14px; padding: 11px 14px; border-radius: 10px; text-align: center;
-  }
-
-  /* AI ASSISTANT PANEL */
-  .ai-box { display: grid; gap: 10px; padding: 14px 16px; background: var(--card); border: 1px solid var(--line); border-radius: 14px; margin-bottom: 16px; box-shadow: var(--shadow); }
-  .ai-box-head { display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; }
-  .ai-box h3 { margin: 0; font-size: 15px; display: flex; align-items: center; gap: 6px; color: var(--accent); }
-  .ai-chat-area { max-height: 240px; overflow-y: auto; background: var(--sunk); border: 1px solid var(--line); border-radius: 10px; padding: 10px; display: grid; gap: 8px; font-size: 13px; -webkit-overflow-scrolling: touch; }
-  .ai-msg { padding: 8px 12px; border-radius: 8px; line-height: 1.45; word-break: break-word; }
-  .ai-msg.user { background: var(--accent-soft); color: var(--ink); justify-self: end; max-width: 85%; }
-  .ai-msg.bot { background: var(--card); border: 1px solid var(--line); color: var(--ink); justify-self: start; max-width: 90%; }
-  .ai-input-row { display: flex; gap: 8px; }
-  .ai-key-row { display: grid; gap: 6px; font-size: 12px; color: var(--muted); background: var(--sunk); padding: 10px; border-radius: 8px; border: 1px solid var(--line); }
-  .ai-key-inputs { display: flex; gap: 6px; }
-
-  /* CITY GUIDE PANEL */
-  .guide-city-pills { display: flex; gap: 5px; overflow-x: auto; padding: 10px 12px; border-bottom: 1px solid var(--line); background: var(--card); -webkit-overflow-scrolling: touch; }
-  .guide-pill {
-    flex: 0 0 auto; font: inherit; font-size: 12px; font-weight: 600;
-    padding: 4px 10px; border-radius: 999px; border: 1px solid var(--line);
-    background: var(--sunk); color: var(--muted); cursor: pointer; white-space: nowrap;
-  }
-  .guide-pill.active { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
-  .guide-cat-bar { display: flex; gap: 5px; padding: 8px 12px; background: var(--sunk); border-bottom: 1px solid var(--line); flex-wrap: wrap; }
-  .guide-cat-btn {
-    font: inherit; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 6px;
-    border: 1px solid var(--line); background: var(--card); color: var(--muted); cursor: pointer;
-  }
-  .guide-cat-btn.active { background: var(--ink); color: var(--card); border-color: var(--ink); }
-  .guide-list { max-height: 360px; overflow-y: auto; padding: 10px 12px; display: grid; gap: 8px; -webkit-overflow-scrolling: touch; }
-  .guide-item { background: var(--sunk); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; display: grid; gap: 6px; }
-  .guide-item-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; flex-wrap: wrap; }
-  .guide-item-title { font-size: 14px; font-weight: 700; margin: 0; }
-  .guide-item-desc { font-size: 12px; color: var(--muted); margin: 0; line-height: 1.4; }
-  .guide-item-foot { display: flex; justify-content: space-between; align-items: center; gap: 6px; flex-wrap: wrap; }
-  .added-badge { font-size: 11px; font-weight: 700; color: var(--done-ink); background: var(--done-bg); padding: 3px 8px; border-radius: 6px; }
-
-  /* TRANSPORT PLANNER STYLES */
+  /* TRANSPORT PLANNER STYLES (Matching user screenshot style) */
   .legs-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
   .leg { background: var(--card); border: 1px solid var(--line); border-radius: 14px; box-shadow: var(--shadow); overflow: hidden; }
   .row {
@@ -302,25 +120,25 @@
     .row { grid-template-columns: 1fr; gap: 6px; }
     .side { justify-self: start; display: flex; gap: 12px; align-items: center; width: 100%; justify-content: space-between; border-top: 1px solid var(--line); padding-top: 6px; }
   }
-  .date { font-family: "IBM Plex Mono", ui-monospace, monospace; font-weight: 600; font-size: 15px; line-height: 1.3; font-variant-numeric: tabular-nums; }
+  .date { font-family: "IBM Plex Mono", ui-monospace, monospace; font-weight: 600; font-size: 16px; line-height: 1.3; font-variant-numeric: tabular-nums; color: #fff; }
   .date .num { display: block; font-family: "IBM Plex Sans KR", sans-serif; font-weight: 400; font-size: 11px; color: var(--muted); }
-  .route { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; font-size: 16px; font-weight: 700; min-width: 0; word-break: break-all; }
+  .route { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; font-size: 16px; font-weight: 700; min-width: 0; word-break: break-all; color: #fff; }
   .route .arrow { color: var(--accent); font-weight: 500; flex-shrink: 0; }
   .route .mode { font-size: 12px; font-weight: 400; color: var(--muted); background: var(--sunk); border: 1px solid var(--line); padding: 1px 7px; border-radius: 6px; flex-shrink: 0; }
-  .booked-line { display: block; font-size: 12px; font-weight: 400; color: var(--done-ink); width: 100%; margin-top: 2px; }
+  .booked-line { display: block; font-size: 13px; font-weight: 400; color: var(--done-ink); width: 100%; margin-top: 3px; line-height: 1.4; }
   .side { display: grid; justify-items: end; gap: 4px; font-size: 12px; color: var(--muted); flex-shrink: 0; }
   .chev { font-size: 12px; color: var(--accent); font-weight: 600; }
   details[open] .chev-closed, details:not([open]) .chev-open { display: none; }
 
-  .status { font-size: 14px; font-weight: 700; padding: 6px 12px; border-radius: 999px; white-space: nowrap; }
+  .status { font-size: 13px; font-weight: 700; padding: 5px 12px; border-radius: 999px; white-space: nowrap; }
   .status.done { background: var(--done-bg); color: var(--done-ink); }
   .status.todo { background: var(--todo-bg); color: var(--todo-ink); }
   .detail { border-top: 1px solid var(--line); padding: 14px 16px 16px; display: grid; gap: 14px; font-size: 15px; }
   .detail p { margin: 0; }
-  .pick { font-size: 16px; font-weight: 700; }
+  .pick { font-size: 16px; font-weight: 700; color: #fff; }
   .facts { display: grid; grid-template-columns: auto 1fr; gap: 4px 12px; margin: 0; }
   .facts dt { color: var(--muted); font-size: 13px; padding-top: 2px; }
-  .facts dd { margin: 0; }
+  .facts dd { margin: 0; color: var(--ink); }
   .warn { background: var(--warn-bg); border: 1px solid var(--warn-line); border-radius: 8px; padding: 10px 12px; font-size: 14px; }
   .warn b { display: block; margin-bottom: 2px; }
   .when { display: grid; gap: 2px; border-left: 3px solid var(--accent); padding: 2px 0 2px 12px; }
@@ -329,19 +147,6 @@
   .when-other { font-size: 13px; font-variant-numeric: tabular-nums; }
   .when-why { font-size: 13px; color: var(--muted); }
   .when-basis { font-size: 11px; color: var(--muted); }
-  .sales { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 16px; margin-bottom: 16px; display: grid; gap: 12px; }
-  .sales h2 { margin: 0; font-size: 16px; }
-  .sales ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
-  .sale { display: grid; grid-template-columns: 72px 1fr; gap: 10px; align-items: start; }
-  .sale-date { font-family: "IBM Plex Mono", ui-monospace, monospace; font-weight: 600; font-size: 15px; line-height: 1.3; font-variant-numeric: tabular-nums; }
-  .sale-date small { display: block; font-family: "IBM Plex Sans KR", sans-serif; font-weight: 400; font-size: 11px; color: var(--muted); }
-  .sale.soon .sale-date { color: var(--accent); }
-  .sale-body { display: grid; gap: 4px; min-width: 0; }
-  .sale-title { font-weight: 700; font-size: 15px; }
-  .sale-note { font-size: 13px; color: var(--muted); }
-  .chips { display: flex; flex-wrap: wrap; gap: 6px; }
-  .chip { font: inherit; font-size: 13px; cursor: pointer; border: 1px solid var(--line); background: var(--sunk); color: var(--ink); border-radius: 999px; padding: 3px 10px; }
-  .chip.done { background: var(--done-bg); color: var(--done-ink); border-color: transparent; text-decoration: line-through; }
   .compare { display: grid; gap: 8px; }
   .compare-title { font-size: 14px; font-weight: 700; }
   .compare-title span { font-weight: 400; font-size: 12px; color: var(--muted); }
@@ -370,73 +175,32 @@
   .src ul { margin: 4px 0 0; padding-left: 18px; display: grid; gap: 2px; }
   .src a { color: var(--muted); word-break: break-word; }
   .stay { margin-left: 40px; border-left: 2px dashed var(--line); padding: 8px 0 8px 18px; font-size: 13px; color: var(--muted); }
-  .stay b { color: var(--ink); font-weight: 500; }
-  .today { background: var(--card); border: 2px solid var(--accent); border-radius: 14px; padding: 16px; margin-bottom: 20px; display: grid; gap: 12px; }
-  .today-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 4px 12px; }
-  .today-label { font-size: 14px; font-weight: 700; color: var(--accent); letter-spacing: 0.02em; }
-  .today-date { font-size: 13px; color: var(--muted); font-variant-numeric: tabular-nums; }
-  .today-route { margin: 0; font-size: 24px; line-height: 1.25; font-weight: 700; }
-  .today-route .arrow { color: var(--accent); font-weight: 500; }
-  .today-mode { margin: -6px 0 0; font-size: 14px; color: var(--muted); }
-  .today-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-  .tile { background: var(--sunk); border-radius: 10px; padding: 10px 12px; min-width: 0; }
-  .tile.wide { grid-column: 1 / -1; }
-  .tile-label { display: block; font-size: 12px; color: var(--muted); margin-bottom: 2px; }
-  .tile-value { font-size: 18px; font-weight: 700; line-height: 1.3; overflow-wrap: anywhere; }
-  .tile-value.big { font-family: "IBM Plex Mono", ui-monospace, monospace; font-variant-numeric: tabular-nums; font-size: 28px; line-height: 1.1; }
-  .tile-value.code { font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: 24px; letter-spacing: 0.04em; }
-  .tile-value.empty { font-size: 14px; font-weight: 400; color: var(--muted); }
-  .tile-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
-  .today-actions { display: flex; flex-wrap: wrap; gap: 8px 16px; font-size: 14px; }
-  .today-note { margin: 0; font-size: 14px; color: var(--muted); }
-  .test-banner { background: var(--warn-bg); border: 1px solid var(--warn-line); border-radius: 8px; padding: 8px 12px; font-size: 13px; display: flex; flex-wrap: wrap; gap: 4px 12px; align-items: center; }
-  .test-tool { font-size: 13px; color: var(--muted); }
-  .test-tool summary { cursor: pointer; color: var(--accent); text-decoration: underline; width: max-content; }
-  .test-tool .test-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 8px; }
-  .test-tool input[type="date"] { font: inherit; font-size: 15px; color: var(--ink); background: var(--sunk); border: 1px solid var(--line); border-radius: 8px; padding: 7px 10px; }
+  .stay b { color: #fff; font-weight: 500; }
   .transport-footer { margin-top: 24px; font-size: 13px; color: var(--muted); display: grid; gap: 6px; }
   .transport-footer p { margin: 0; }
-  @media (max-width: 380px) {
-    .today-grid { grid-template-columns: 1fr; }
-    .row { grid-template-columns: 56px 1fr; row-gap: 8px; }
-    .side { grid-column: 2; justify-items: start; grid-auto-flow: column; align-items: center; }
-    .fields { grid-template-columns: 1fr; }
-  }
 </style>
 </head>
 <body>
 
-<div class="wrap-wide">
+<div class="wrap-narrow">
   <header class="top-header">
     <div class="header-top-row">
       <div>
         <span class="eyebrow">2026.12.12 – 2027.01.07 · 25박 27일 · 4인 동행</span>
-        <h1>2026-2027 유럽 4인 여행 플래너</h1>
-        <p class="sub-meta">🇮🇹 이탈리아 · 🇨🇭 스위스 · 🇫🇷 프랑스 · 🇪🇸 스페인 · 🇵🇹 포르투갈 (12도시 통합 일정 &amp; 14개 교통 구간)</p>
+        <h1>유럽 여행 교통편 예매표</h1>
+        <p class="sub-meta">🇮🇹 이탈리아 · 🇨🇭 스위스 · 🇫🇷 프랑스 · 🇪🇸 스페인 · 🇵🇹 포르투갈 (14개 교통 구간)</p>
       </div>
-      <div class="toolbar" id="toolbar" hidden>
-        <span id="synced">불러오는 중…</span>
+      <div class="toolbar" id="toolbar">
+        <span id="synced">자동 연동 중</span>
         <button type="button" class="linkbtn" id="refresh">새로고침</button>
-        <button type="button" class="linkbtn" id="forget">비밀번호 지우기</button>
         <button type="button" class="linkbtn" id="pwchange-open">비밀번호 바꾸기</button>
       </div>
     </div>
-
-    <nav class="main-tabs" id="main-tabs" hidden aria-label="주요 메뉴">
-      <button type="button" class="tab-btn active" id="nav-itinerary" data-tab="itinerary">
-        <span>🗓️ 27일 전체 일정표 &amp; 지도</span>
-        <span class="tab-pill" id="pill-stops-count">207곳</span>
-      </button>
-      <button type="button" class="tab-btn" id="nav-transport" data-tab="transport">
-        <span>🚄 교통편 이동표 &amp; 예매</span>
-        <span class="tab-pill" id="pill-transport-count">예매 0/14</span>
-      </button>
-    </nav>
   </header>
 
   <section class="lock pwchange" id="pwchange" hidden>
     <h2>비밀번호 바꾸기</h2>
-    <p>바꾸면 일행 모두 새 비밀번호를 다시 넣어야 합니다. 바꾼 뒤 카톡으로 새 비밀번호를 알려 주세요.</p>
+    <p>바꾸면 일행 모두 새 비밀번호(기본: rome)를 다시 넣어야 합니다.</p>
     <form id="pwchange-form" autocomplete="off">
       <input type="password" id="pw-new" placeholder="새 비밀번호 (4자 이상)" aria-label="새 비밀번호" minlength="4" maxlength="50" required>
       <input type="password" id="pw-new2" placeholder="새 비밀번호 한 번 더" aria-label="새 비밀번호 확인" minlength="4" maxlength="50" required>
@@ -446,175 +210,15 @@
     <p class="msg" id="pwchange-msg" aria-live="polite"></p>
   </section>
 
-  <section class="lock" id="lock">
-    <h2>비밀번호를 넣어 주세요</h2>
-    <p>일행끼리 정한 비밀번호를 넣어야 27일 전체 일정과 교통편 예매 정보가 보입니다. 한 번 넣으면 이 기기에서는 다시 묻지 않습니다.</p>
-    <form id="lock-form" autocomplete="off">
-      <input type="password" id="pw" placeholder="비밀번호" aria-label="비밀번호" required>
-      <button type="submit" class="primary" id="pw-btn">열기</button>
-    </form>
-    <p class="pw-hint" id="pw-hint"></p>
-    <p class="msg" id="lock-msg" aria-live="polite"></p>
-  </section>
-
-  <!-- VIEW 1: MAIN 27-DAY ITINERARY & MAP -->
-  <div id="view-itinerary" hidden>
-    <div class="city-ribbon" id="city-ribbon"></div>
-    <div class="planner-grid">
-      <aside class="panel-card day-sidebar">
-        <div class="panel-head">
-          <h2>일차 선택 (Day 1~27)</h2>
-          <button type="button" class="mini-btn" id="btn-export-csv">CSV 저장</button>
-        </div>
-        <div class="day-list-scroll" id="day-sidebar-list"></div>
-      </aside>
-
-      <section class="panel-card">
-        <div class="day-header-box">
-          <div class="day-title-row">
-            <div>
-              <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
-                <span class="day-badge" id="center-day-badge">Day 1 (12/12 토)</span>
-                <h2 class="day-city-heading" id="center-city-title">🇮🇹 로마</h2>
-              </div>
-              <p class="day-sub-desc" id="center-day-sub"></p>
-            </div>
-            <button type="button" class="primary" id="btn-add-stop">+ 장소 추가</button>
-          </div>
-          <div class="filter-bar">
-            <input type="text" id="itinerary-search" placeholder="현재 일차 장소·메모 검색...">
-            <label style="display:inline-flex; align-items:center; gap:6px; font-size:13px; color:var(--muted); cursor:pointer; white-space:nowrap;">
-              <input type="checkbox" id="search-all-days" style="width:auto;">
-              <span>전체 27일 검색</span>
-            </label>
-          </div>
-        </div>
-        <div class="stops-list" id="stops-container"></div>
-      </section>
-
-      <aside class="map-col">
-        <!-- GEMINI AI ASSISTANT WIDGET -->
-        <div class="ai-box">
-          <div class="ai-box-head">
-            <h3>✨ Gemini AI 여행 비서</h3>
-            <button type="button" class="mini-btn" id="btn-toggle-apikey">API 키 설정</button>
-          </div>
-          <div class="ai-key-row" id="ai-key-box" hidden>
-            <div>Google AI Studio에서 발급한 API 키(<b>AIza...</b>로 시작)를 넣어주세요:</div>
-            <div class="ai-key-inputs">
-              <input type="password" id="ai-key-input" placeholder="AIzaSy..." style="font-size:12px; padding:6px 9px;">
-              <button type="button" class="mini-btn add-guide" id="btn-save-apikey">저장</button>
-            </div>
-          </div>
-          <div class="ai-chat-area" id="ai-chat-box">
-            <div class="ai-msg bot">안녕하세요! 현재 보고 계신 <b>Day 1</b> 일정과 도시 정보, 그리고 저장된 <b>교통편 예매 내역</b>을 바탕으로 맛집, 동선, 환승 팁을 알려드립니다. 무엇이든 물어보세요!</div>
-          </div>
-          <form class="ai-input-row" id="ai-form">
-            <input type="text" id="ai-input" placeholder="예: 오늘 동선 근처 로컬 맛집 추천해줘" autocomplete="off">
-            <button type="submit" class="primary" id="ai-btn">전송</button>
-          </form>
-        </div>
-
-        <div class="panel-card">
-          <div class="panel-head">
-            <h2 id="map-panel-title">Day 1 동선 지도</h2>
-            <div style="display:flex; gap:5px;">
-              <button type="button" class="mini-btn" id="btn-map-day">일차 동선</button>
-              <button type="button" class="mini-btn" id="btn-map-overview">유럽 전체</button>
-            </div>
-          </div>
-          <div id="leaflet-map"></div>
-          <div class="map-footer">
-            <a class="gmap-route-cta" id="gmap-full-route-link" href="#" target="_blank" rel="noopener">
-              🗺️ 구글 지도에서 오늘 전체 동선 열기 ↗
-            </a>
-            <div style="display:flex; justify-content:space-between; align-items:center; font-size:12px; color:var(--muted);">
-              <span id="itinerary-save-status">실시간 동기화 대기 중</span>
-              <button type="button" class="linkbtn" id="btn-reset-itinerary">일정 원본 복원</button>
-            </div>
-          </div>
-        </div>
-
-        <!-- STUBBY STYLE CITY ATTRACTIONS GUIDE -->
-        <div class="panel-card">
-          <div class="panel-head">
-            <h2 id="guide-panel-title">🧭 도시별 추천 명소 가이드</h2>
-            <span style="font-size:11px; color:var(--muted);" id="guide-target-day-label">Day 1에 바로 추가</span>
-          </div>
-          <div class="guide-city-pills" id="guide-city-pills"></div>
-          <div class="guide-cat-bar" id="guide-cat-bar">
-            <button type="button" class="guide-cat-btn active" data-gcat="ALL">전체</button>
-            <button type="button" class="guide-cat-btn" data-gcat="명소">🏛️ 핵심명소</button>
-            <button type="button" class="guide-cat-btn" data-gcat="야경·전망">🌃 야경·전망</button>
-            <button type="button" class="guide-cat-btn" data-gcat="미술관">🎨 미술관·박물관</button>
-            <button type="button" class="guide-cat-btn" data-gcat="맛집·카페">🍽️ 맛집·카페</button>
-            <button type="button" class="guide-cat-btn" data-gcat="근교">🚆 근교·섬</button>
-          </div>
-          <div class="guide-list" id="guide-list-container"></div>
-        </div>
-      </aside>
-    </div>
-  </div>
-
-  <!-- VIEW 2: SECONDARY TAB - ORIGINAL 14-LEG TRANSPORT PLANNER -->
-  <div id="view-transport" class="wrap-narrow" hidden>
+  <!-- VIEW: TRANSPORT PLANNER ONLY -->
+  <div id="view-transport">
     <p style="margin:0 0 14px; font-size:15px; color:var(--muted);" id="summary"></p>
-
-    <section class="sales" id="sales" hidden aria-labelledby="sales-h">
-      <h2 id="sales-h">예매 오픈 달력</h2>
-      <ol id="sales-list"></ol>
-    </section>
-
-    <section class="today" id="today" hidden>
-      <div id="today-body" aria-live="polite"></div>
-      <details class="test-tool" id="test-tool">
-        <summary>날짜 바꿔서 시험해 보기</summary>
-        <div class="test-row">
-          <label for="test-date">이 날짜인 척 보기</label>
-          <input type="date" id="test-date" min="2026-12-01" max="2027-01-10" value="2026-12-16">
-          <button type="button" class="ghost" id="test-reset">원래 날짜로</button>
-        </div>
-      </details>
-    </section>
-
     <ol class="legs-list" id="legs"></ol>
 
     <footer class="transport-footer">
-      <p>구간을 누르면 추천 수단, 예매 링크, 예매 정보 칸이 펼쳐집니다.</p>
+      <p>구간을 누르면 추천 수단, 예매 링크, 예매 정보가 펼쳐집니다.</p>
       <p>예약번호를 적고 저장하면 그 구간이 '예매 완료'로 바뀌고, 일행 모두의 화면에 보입니다.</p>
-      <p>Trainline 링크는 그 날짜 검색 결과가 바로 열립니다. Omio 링크는 도시와 날짜가 채워진 검색 화면이 열리고, '검색'을 누르면 기차·버스·비행기가 함께 나옵니다.</p>
-      <p>'빠른 길 · 싼 길 비교'의 가격은 대략적인 1인 편도 가격입니다. '10/28 조회'는 2026-10-28에 다시 본 값(1달러 약 1,340원으로 바꿈), '9/26'은 9월 조사 값입니다. 실제 가격은 링크를 눌러 확인하세요.</p>
-      <p>검색 결과가 비어 있거나 "Not available"이 보이면 아직 표 판매가 시작되지 않은 것입니다.</p>
-      <p>추천 수단 조사 2026-09-25, 시간표·가격·판매 상황 다시 확인 2026-10-28. 시간과 운행 편수는 바뀔 수 있습니다.</p>
     </footer>
-  </div>
-</div>
-
-<!-- ADD / EDIT ITINERARY STOP MODAL -->
-<div class="modal-backdrop" id="stop-modal" hidden>
-  <div class="modal-box">
-    <h3 id="modal-heading">새 장소 / 일정 추가</h3>
-    <form id="stop-form" style="display:grid; gap:10px;">
-      <input type="hidden" id="edit-stop-id">
-      <div class="modal-grid-2">
-        <label>일차 선택<select id="edit-stop-day"></select></label>
-        <label>구분
-          <select id="edit-stop-cat">
-            <option value="관광">🏛️ 관광</option>
-            <option value="숙소">🏨 숙소</option>
-            <option value="교통">🚆 교통</option>
-            <option value="맛집">🍽️ 맛집·카페</option>
-          </select>
-        </label>
-      </div>
-      <label>장소명 (한글 표기) *<input type="text" id="edit-stop-name" required placeholder="예: 바티칸 박물관"></label>
-      <label>구글맵 검색용 위치 (영문/현지어 권장) *<input type="text" id="edit-stop-query" required placeholder="예: Vatican Museums, Rome"></label>
-      <label>메모 (이동거리, 예약시간, 주의사항 등)<textarea id="edit-stop-memo" rows="3" placeholder="예: 사전 예약 필수 (09:00 입장 권장)"></textarea></label>
-      <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:4px;">
-        <button type="button" class="ghost" id="btn-cancel-stop">취소</button>
-        <button type="submit" class="primary" id="btn-save-stop">저장 및 동기화</button>
-      </div>
-    </form>
   </div>
 </div>
 
@@ -622,427 +226,137 @@
 (function() {
   const API_URL = "https://script.google.com/macros/s/AKfycbxnsNrXANrjEXfquUcYSaaXUqXzTFMljh2PvJv21WaBoVtUhvYBTI4uYTNJYX2xyE0j/exec";
   const PW_KEY = "europe-trip-pw";
-  const PW_HINT = "힌트: 첫번째로 가는 도시의 이름을 영문 소문자로!";
-  document.getElementById("pw-hint").textContent = PW_HINT;
 
-  const ITINERARY_STORAGE_KEY = "europe-2026-itinerary-v1";
-  const ITINERARY_REMOTE_ID = "itinerary_v1";
-
-  const CITY_SEGMENTS = [
-    { id: "rome", label: "🇮🇹 로마", sub: "3박", days: [1, 2, 3] },
-    { id: "florence", label: "🇮🇹 피렌체", sub: "1박", days: [4] },
-    { id: "venice", label: "🇮🇹 베네치아", sub: "2박", days: [5, 6] },
-    { id: "luzern", label: "🇨🇭 루체른", sub: "2박", days: [7, 8] },
-    { id: "strasbourg", label: "🇫🇷 스트라스부르", sub: "1박", days: [9] },
-    { id: "paris", label: "🇫🇷 파리", sub: "3박+야간", days: [10, 11, 12, 13] },
-    { id: "barcelona", label: "🇪🇸 바르셀로나", sub: "3박", days: [14, 15, 16] },
-    { id: "porto", label: "🇵🇹 포르투", sub: "2박", days: [17, 18] },
-    { id: "lisbon", label: "🇵🇹 리스본", sub: "2박", days: [19, 20] },
-    { id: "seville", label: "🇪🇸 세비야", sub: "2박", days: [21, 22] },
-    { id: "granada", label: "🇪🇸 론다·그라나다", sub: "1박", days: [23] },
-    { id: "madrid", label: "🇪🇸 마드리드", sub: "3박", days: [24, 25, 26, 27] }
-  ];
-
-  const DAYS_META = [
-    { dayNum: 1, title: "Day 1 (12/12 토)", city: "🇮🇹 로마", desc: "인천 출발 (KE931) → 로마 피우미치노 도착 & 숙소 체크인" },
-    { dayNum: 2, title: "Day 2 (12/13 일)", city: "🇮🇹 로마", desc: "콜로세움 · 포로 로마노 · 트레비 분수 · 스페인 광장 · 보르게세 공원" },
-    { dayNum: 3, title: "Day 3 (12/14 월)", city: "🇮🇹 로마", desc: "바티칸 투어 · 성 베드로 대성당 · 나보나 · 판테온 · 트라스테베레" },
-    { dayNum: 4, title: "Day 4 (12/15 화)", city: "🇮🇹 로마 → 피렌체", desc: "피렌체 이동 · 산타 마리아 노벨라 · 중앙시장" },
-    { dayNum: 5, title: "Day 5 (12/16 수)", city: "🇮🇹 피렌체 → 베네치아", desc: "베네치아 이동 & 호텔 아론 체크인" },
-    { dayNum: 6, title: "Day 6 (12/17 목)", city: "🇮🇹 베네치아", desc: "베네치아 자유일정 (본섬 산마르코 · 부라노섬 등 자유 추가 가능)" },
-    { dayNum: 7, title: "Day 7 (12/18 금)", city: "🇮🇹 베네치아 → 🇨🇭 루체른", desc: "스위스 국경 횡단 · 루체른 도착 & 바라바스 체크인" },
-    { dayNum: 8, title: "Day 8 (12/19 토)", city: "🇨🇭 루체른", desc: "루체른 / 리기산·필라투스 자유일정 (세부 스팟 자유 추가)" },
-    { dayNum: 9, title: "Day 9 (12/20 일)", city: "🇨🇭 루체른 → 🇫🇷 스트라스부르", desc: "쁘띠 프랑스 · 노트르담 대성당 · 알자스 디너" },
-    { dayNum: 10, title: "Day 10 (12/21 월)", city: "🇫🇷 스트라스부르 → 파리", desc: "몽마르뜨 · 에펠탑 야경 · 개선문 · 마레 숙소" },
-    { dayNum: 11, title: "Day 11 (12/22 화)", city: "🇫🇷 파리 (몽생미셸)", desc: "몽파르나스 → 렌 환승 → 몽생미셸 수도원 당일치기" },
-    { dayNum: 12, title: "Day 12 (12/23 수)", city: "🇫🇷 파리", desc: "루브르 · 튈르리 · 샹젤리제 · 오르세 미술관 · 센강 유람선" },
-    { dayNum: 13, title: "Day 13 (12/24 목)", city: "🇫🇷 파리 → 🇪🇸 바르셀로나", desc: "베르사유 궁전 · 노트르담 · 베르시 야간버스 출발" },
-    { dayNum: 14, title: "Day 14 (12/25 금)", city: "🇪🇸 바르셀로나", desc: "람블라스 · 바르셀로네타 · 카르멜 벙커 일몰 · 고딕 지구" },
-    { dayNum: 15, title: "Day 15 (12/26 토)", city: "🇪🇸 바르셀로나", desc: "카탈루냐 음악당 · 보케리아 · 몬주익 매직 분수쇼" },
-    { dayNum: 16, title: "Day 16 (12/27 일)", city: "🇪🇸 바르셀로나", desc: "가우디 핵심 투어 (바트요 · 밀라 · 구엘 · 사그라다)" },
-    { dayNum: 17, title: "Day 17 (12/28 월)", city: "🇪🇸 바르셀로나 → 🇵🇹 포르투", desc: "부엘링 항공 VY1178 · 포르투 구시가지 · 가이아 와이너리" },
-    { dayNum: 18, title: "Day 18 (12/29 화)", city: "🇵🇹 포르투", desc: "볼량 시장 · 렐루 서점 · 볼사 궁전 · 동 루이스 1세 다리 야경" },
-    { dayNum: 19, title: "Day 19 (12/30 수)", city: "🇵🇹 포르투 → 리스본", desc: "벨렘 지구 (에그타르트 · 제로니무스) · 비카 푸니쿨라" },
-    { dayNum: 20, title: "Day 20 (12/31 목)", city: "🇵🇹 리스본", desc: "28번 트램 · 상 조르제 성 · 코메르시우 새해 카운트다운" },
-    { dayNum: 21, title: "Day 21 (1/1 금)", city: "🇵🇹 리스본 → 🇪🇸 세비야", desc: "플릭버스 이동 · 알카사르 · 스페인 광장 일몰" },
-    { dayNum: 22, title: "Day 22 (1/2 토)", city: "🇪🇸 세비야", desc: "세비야 대성당 · 산타 크루즈 · 메트로폴 파라솔 야경" },
-    { dayNum: 23, title: "Day 23 (1/3 일)", city: "🇪🇸 세비야 → 론다 → 그라나다", desc: "론다 누에보 다리 경유 · 그라나다 숙소 체크인" },
-    { dayNum: 24, title: "Day 24 (1/4 월)", city: "🇪🇸 그라나다 → 마드리드", desc: "알함브라 & 나스르 궁전 · 마드리드 이동" },
-    { dayNum: 25, title: "Day 25 (1/5 화)", city: "🇪🇸 마드리드", desc: "까사 밍고 · 산 미구엘 시장 · 프라도 미술관" },
-    { dayNum: 26, title: "Day 26 (1/6 수)", city: "🇪🇸 마드리드", desc: "마드리드 여유일 (톨레도/세고비아 근교 또는 시내 자유)" },
-    { dayNum: 27, title: "Day 27 (1/7 목)", city: "🇪🇸 마드리드 → 인천", desc: "체크아웃 · 바라하스 공항 대한항공 KE914 귀국" }
-  ];
-
-  const OVERVIEW_POINTS = [
-    { name: "1. 로마 (3박)", lat: 41.9028, lng: 12.4964 },
-    { name: "2. 피렌체 (1박)", lat: 43.7696, lng: 11.2558 },
-    { name: "3. 베네치아 (2박)", lat: 45.4408, lng: 12.3155 },
-    { name: "4. 루체른 (2박)", lat: 47.0502, lng: 8.3093 },
-    { name: "5. 스트라스부르 (1박)", lat: 48.5734, lng: 7.7521 },
-    { name: "6. 파리 (3박+야간)", lat: 48.8566, lng: 2.3522 },
-    { name: "7. 바르셀로나 (3박)", lat: 41.3851, lng: 2.1734 },
-    { name: "8. 포르투 (2박)", lat: 41.1579, lng: -8.6291 },
-    { name: "9. 리스본 (2박)", lat: 38.7223, lng: -9.1393 },
-    { name: "10. 세비야 (2박)", lat: 37.3891, lng: -5.9845 },
-    { name: "11. 론다 (경유)", lat: 36.7462, lng: -5.1612 },
-    { name: "12. 그라나다 (1박)", lat: 37.1773, lng: -3.5986 },
-    { name: "13. 마드리드 (3박)", lat: 40.4168, lng: -3.7038 }
-  ];
-
-  const COORD_DB = {
-    "Rome Fiumicino Airport":[41.8003,12.2389],"Roma Termini":[41.901,12.5018],"Hotel Windrose Rome":[41.9041,12.5012],
-    "Basilica Papale di Santa Maria Maggiore, Rome":[41.8976,12.4984],"Colosseum, Rome":[41.8902,12.4922],
-    "Arch of Constantine, Rome":[41.8897,12.4907],"Palatine Hill, Rome":[41.8892,12.4875],"Roman Forum, Rome":[41.8925,12.4853],
-    "Via dei Fori Imperiali, Rome":[41.8938,12.4867],"Piazza del Campidoglio, Rome":[41.8933,12.4829],
-    "Piazza Venezia, Rome":[41.8958,12.4823],"Trevi Fountain, Rome":[41.9009,12.4833],"Piazza di Spagna, Rome":[41.9057,12.4823],
-    "Via dei Condotti, Rome":[41.9053,12.4803],"Via del Corso, Rome":[41.9035,12.4795],"Piazza del Popolo, Rome":[41.9107,12.4763],
-    "Pincian Hill, Rome":[41.9114,12.4792],"Villa Borghese, Rome":[41.9142,12.4852],"Vatican Museums, Rome":[41.9065,12.4536],
-    "Sistine Chapel, Vatican City":[41.9029,12.4545],"St. Peter's Basilica, Vatican City":[41.9022,12.4539],
-    "St. Peter's Square, Vatican City":[41.9022,12.4572],"Via della Conciliazione, Rome":[41.9022,12.4622],
-    "Castel Sant'Angelo, Rome":[41.9031,12.4663],"Piazza Navona, Rome":[41.8992,12.4731],"Pantheon, Rome":[41.8986,12.4769],
-    "Campo de' Fiori, Rome":[41.8956,12.4722],"Villa Farnesina, Rome":[41.8936,12.4673],"Piazza Trilussa, Rome":[41.8914,12.4694],
-    "Janiculum Hill, Rome":[41.8913,12.4614],"Ponte Garibaldi, Rome":[41.8902,12.4744],"Ponte Fabricio, Rome":[41.8912,12.4781],
-    "Theatre of Marcellus, Rome":[41.8919,12.4808],"Firenze Santa Maria Novella":[43.7764,11.2478],"PLUS Florence":[43.7824,11.2535],
-    "Basilica of Santa Maria Novella, Florence":[43.7746,11.2494],"Officina Profumo-Farmaceutica di Santa Maria Novella, Florence":[43.7743,11.2476],
-    "Basilica di San Lorenzo, Florence":[43.7749,11.2539],"Biblioteca Medicea Laurenziana, Florence":[43.7747,11.2536],
-    "Mercato Centrale, Florence":[43.7766,11.253],"Hotel Aaron, Venice Mestre":[45.4832,12.2335],"Barabas Hotel Luzern":[47.0519,8.3032],
-    "Gare de Strasbourg-Ville":[48.5851,7.7345],"Gare Routière de Strasbourg Place de l'Étoile":[48.5736,7.7544],
-    "La Petite France, Strasbourg":[48.5806,7.7405],"Cathédrale Notre-Dame-de-Strasbourg":[48.5818,7.7509],
-    "Au Brasseur, Strasbourg":[48.5829,7.7547],"Maison Kammerzell, Strasbourg":[48.5821,7.7498],"Cerise Strasbourg":[48.5628,7.7568],
-    "Montmartre, Paris":[48.8867,2.3431],"Place du Trocadéro, Paris":[48.8628,2.2875],"Eiffel Tower, Paris":[48.8584,2.2945],
-    "Champ de Mars, Paris":[48.8556,2.2986],"Arc de Triomphe, Paris":[48.8738,2.295],"Le Bon Marché, Paris":[48.851,2.3245],
-    "The People - Paris Marais":[48.8501,2.3627],"Gare Montparnasse, Paris":[48.8414,2.3209],"Gare de Rennes":[48.1035,-1.6722],
-    "Mont-Saint-Michel Abbey":[48.6361,-1.5115],"Louvre Museum, Paris":[48.8606,2.3376],"Angelina Paris Rivoli":[48.8651,2.3283],
-    "Tuileries Garden, Paris":[48.8635,2.3275],"Place de la Concorde, Paris":[48.8656,2.3212],"Ladurée Paris Royale":[48.8685,2.3235],
-    "Champs-Élysées, Paris":[48.8698,2.3075],"Pont Alexandre III, Paris":[48.8639,2.3136],"Musée d'Orsay, Paris":[48.86,2.3266],
-    "Bateaux Mouches, Paris":[48.8637,2.3046],"Bateaux Parisiens, Paris":[48.8596,2.2934],"Palace of Versailles":[48.8049,2.1204],
-    "Cathédrale Notre-Dame de Paris":[48.853,2.3499],"Paris Bercy Seine Bus Station":[48.8355,2.3802],
-    "Estació d'Autobusos Barcelona Nord":[41.3944,2.183],"Hotel Ginebra Barcelona":[41.3869,2.1688],"La Rambla, Barcelona":[41.3809,2.1733],
-    "Columbus Monument, Barcelona":[41.3758,2.1778],"Port Vell, Barcelona":[41.3768,2.1823],"Barceloneta Beach, Barcelona":[41.3784,2.1925],
-    "Parc de la Ciutadella, Barcelona":[41.3881,2.186],"Arc de Triomf, Barcelona":[41.3911,2.1806],"Bunkers del Carmel, Barcelona":[41.4193,2.1617],
-    "Barcelona Cathedral":[41.384,2.1762],"Plaça del Rei, Barcelona":[41.3843,2.1774],"Plaça Reial, Barcelona":[41.3801,2.1753],
-    "Palau de la Música Catalana, Barcelona":[41.3876,2.1753],"Hofmann Pastisseria, Barcelona":[41.3846,2.1818],
-    "Mercato de la Boqueria, Barcelona":[41.3817,2.1716],"Xurreria Manuel San Román, Barcelona":[41.3827,2.1759],
-    "Montjuïc Castle, Barcelona":[41.3636,2.1661],"Museu Nacional d'Art de Catalunya, Barcelona":[41.3684,2.1536],
-    "Magic Fountain of Montjuïc, Barcelona":[41.3712,2.1517],"Casa Batlló, Barcelona":[41.3917,2.1649],"Casa Milà, Barcelona":[41.3954,2.1619],
-    "Park Güell, Barcelona":[41.4145,2.1527],"Sagrada Família, Barcelona":[41.4036,2.1744],"Hospital de la Santa Creu i Sant Pau, Barcelona":[41.4116,2.1743],
-    "Passeig de Gràcia, Barcelona":[41.3926,2.164],"Vinitus, Barcelona":[41.3905,2.1628],"Josep Tarradellas Barcelona-El Prat Airport":[41.2974,2.0833],
-    "Francisco Sá Carneiro Airport, Porto":[41.2481,-8.6814],"Spot Family Apartments, Porto":[41.1489,-8.6095],
-    "Praça da Liberdade, Porto":[41.1469,-8.6114],"McDonald's Imperial, Porto":[41.1466,-8.611],"Igreja de Santo António dos Congregados, Porto":[41.1461,-8.6102],
-    "São Bento Railway Station, Porto":[41.1456,-8.6104],"Rua das Flores, Porto":[41.1436,-8.6129],"Porto Cathedral":[41.1428,-8.6111],
-    "Igreja de São Lourenço, Porto":[41.1419,-8.613],"Cais da Ribeira, Porto":[41.1406,-8.6131],"Cais de Gaia, Vila Nova de Gaia":[41.1372,-8.6148],
-    "WOW Porto":[41.1348,-8.6134],"Graham's Port Lodge, Vila Nova de Gaia":[41.1365,-8.6236],"Taylor's Port, Vila Nova de Gaia":[41.1338,-8.6138],
-    "Cálem, Vila Nova de Gaia":[41.1376,-8.6119],"Sandeman, Vila Nova de Gaia":[41.1373,-8.613],"Kopke Port Wine House, Vila Nova de Gaia":[41.1371,-8.6164],
-    "Sogevinus Fine Wines, Vila Nova de Gaia":[41.1369,-8.6152],"Jardim do Morro, Vila Nova de Gaia":[41.1375,-8.6092],
-    "Monastery of Serra do Pilar, Vila Nova de Gaia":[41.1384,-8.608],"Miradouro da Serra do Pilar, Vila Nova de Gaia":[41.1386,-8.6085],
-    "Rua de Santa Catarina, Porto":[41.1485,-8.6063],"Capela das Almas, Porto":[41.1499,-8.6057],"Mercado do Bolhão, Porto":[41.1494,-8.6069],
-    "Café Majestic, Porto":[41.1472,-8.6066],"Igreja de Santo Ildefonso, Porto":[41.1462,-8.6066],"Avenida dos Aliados, Porto":[41.1486,-8.6108],
-    "Câmara Municipal do Porto":[41.1501,-8.6103],"Igreja da Santíssima Trindade, Porto":[41.1511,-8.6098],"Clérigos Church, Porto":[41.1458,-8.6146],
-    "Livraria Lello, Porto":[41.1468,-8.6148],"Igreja do Carmo, Porto":[41.1474,-8.6164],"Passeio das Virtudes, Porto":[41.1449,-8.6177],
-    "Miradouro da Vitória, Porto":[41.1436,-8.6154],"Palácio da Bolsa, Porto":[41.1414,-8.6156],"Igreja de São Francisco, Porto":[41.1409,-8.6158],
-    "Praça da Ribeira, Porto":[41.1407,-8.613],"Dom Luís I Bridge, Porto":[41.14,-8.6094],"The Central House Lisbon Baixa":[38.7116,-9.1373],
-    "Praça da Figueira, Lisbon":[38.7138,-9.1381],"Pastéis de Belém, Lisbon":[38.6975,-9.2032],"Jerónimos Monastery, Lisbon":[38.6979,-9.2067],
-    "Church of Santa Maria of Belém, Lisbon":[38.6977,-9.2058],"Padrão dos Descobrimentos, Lisbon":[38.6936,-9.2057],
-    "Belém Tower, Lisbon":[38.6916,-9.216],"Manteigaria Cais do Sodré, Lisbon":[38.7069,-9.1444],"Elevador da Bica, Lisbon":[38.7107,-9.1466],
-    "Santa Justa Lift, Lisbon":[38.7121,-9.1394],"Rossio Square, Lisbon":[38.7139,-9.1394],"Carmo Convent, Lisbon":[38.7121,-9.1403],
-    "Miradouro de São Pedro de Alcântara, Lisbon":[38.7153,-9.1442],"Igreja de São Roque, Lisbon":[38.7134,-9.1434],
-    "Praça Martim Moniz, Lisbon":[38.7156,-9.1364],"Castelo de São Jorge, Lisbon":[38.7139,-9.1335],"Lisbon Cathedral":[38.7099,-9.1326],
-    "Fábrica da Nata - Rua Augusta, Lisbon":[38.7126,-9.1385],"Rua Augusta, Lisbon":[38.7112,-9.1376],"Rua Augusta Arch, Lisbon":[38.7084,-9.1368],
-    "Lisbon City Hall":[38.7082,-9.1388],"Praça do Comércio, Lisbon":[38.7075,-9.1364],"Gare do Oriente, Lisbon":[38.7678,-9.0992],
-    "Estación de Autobuses Plaza de Armas, Seville":[37.3921,-6.0044],"Room00 Salvador Hostel, Seville":[37.3922,-5.9926],
-    "Royal Alcázar of Seville":[37.3831,-5.9902],"University of Seville":[37.3812,-5.9912],"Palacio de San Telmo, Seville":[37.3795,-5.9936],
-    "Plaza de España, Seville":[37.3772,-5.9869],"Parque de María Luisa, Seville":[37.3746,-5.9886],"Torre del Oro, Seville":[37.3824,-5.9965],
-    "Seville Cathedral":[37.3861,-5.9926],"Barrio Santa Cruz, Seville":[37.3853,-5.9896],"Museo del Baile Flamenco, Seville":[37.3895,-5.9914],
-    "Casa de Pilatos, Seville":[37.39,-5.9871],"Iglesia Colegial del Divino Salvador, Seville":[37.3901,-5.9928],
-    "Museum of Fine Arts of Seville":[37.3926,-5.9999],"Metropol Parasol, Seville":[37.3933,-5.9918],
-    "Plaza de Toros de la Real Maestranza de Caballería de Ronda":[36.7424,-5.1672],"La Ciudad, Ronda":[36.738,-5.1656],
-    "Mirador de Ronda":[36.7418,-5.1669],"Puente Nuevo, Ronda":[36.7407,-5.1659],"Atenas Granada":[37.1782,-3.5999],
-    "Alhambra, Granada":[37.1761,-3.5881],"Nasrid Palaces, Granada":[37.1771,-3.5892],"TOC Hostel Madrid":[40.4173,-3.7051],
-    "Casa Mingo, Madrid":[40.4259,-3.7209],"Mercado de San Miguel, Madrid":[40.4154,-3.7089],"Museo Nacional del Prado, Madrid":[40.4138,-3.6921],
-    "BYPILLOW Crosstown, Madrid":[40.4148,-3.7037],"Adolfo Suárez Madrid–Barajas Airport":[40.4983,-3.5676]
-  };
-
-  const CITY_GUIDES = [
-    {
-      id: "rome", name: "🇮🇹 로마", days: [1, 2, 3],
-      spots: [
-        { name: "콜로세움", query: "Colosseum, Rome", gcat: "명소", cat: "관광", coords: [41.8902, 12.4922], desc: "로마 제국의 상징 원형 경기장. 통합권 사전 예약 필수" },
-        { name: "바티칸 박물관 & 시스티나 성당", query: "Vatican Museums, Rome", gcat: "미술관", cat: "관광", coords: [41.9065, 12.4536], desc: "미켈란젤로 천지창조·최후의 심판. 오전 첫 타임 입장 추천" },
-        { name: "트레비 분수", query: "Trevi Fountain, Rome", gcat: "야경·전망", cat: "관광", coords: [41.9009, 12.4833], desc: "동전 던지기 명소. 이른 아침이나 밤 조명 켜졌을 때 최고" }
-      ]
-    },
-    {
-      id: "florence", name: "🇮🇹 피렌체", days: [4],
-      spots: [
-        { name: "피렌체 두오모 (산타 마리아 델 피오레)", query: "Florence Cathedral", gcat: "명소", cat: "관광", coords: [43.7731, 11.2560], desc: "브루넬레스키 쿠폴라 & 조토의 종탑. 쿠폴라 등반은 사전 예약 필수" },
-        { name: "미켈란젤로 언덕", query: "Piazzale Michelangelo, Florence", gcat: "야경·전망", cat: "관광", coords: [43.7629, 11.2651], desc: "피렌체 붉은 지붕과 베키오 다리가 내려다보이는 최고의 일몰 명소" }
-      ]
-    },
-    {
-      id: "venice", name: "🇮🇹 베네치아", days: [5, 6],
-      spots: [
-        { name: "산 마르코 광장 & 대성당", query: "Piazza San Marco, Venice", gcat: "명소", cat: "관광", coords: [45.4342, 12.3388], desc: "베네치아 본섬의 심장. 황금 모자이크 대성당 & 종탑 전망대" },
-        { name: "부라노 섬 (아이유 뮤비 촬영지)", query: "Burano, Venice", gcat: "근교", cat: "관광", coords: [45.4854, 12.4167], desc: "알록달록 파스텔톤 집들이 늘어선 섬." }
-      ]
-    },
-    {
-      id: "luzern", name: "🇨🇭 루체른", days: [7, 8],
-      spots: [
-        { name: "카펠교 & 팔각 수탑", query: "Chapel Bridge, Lucerne", gcat: "명소", cat: "관광", coords: [47.0516, 8.3075], desc: "유럽에서 가장 오래된 목조 다리." },
-        { name: "리기산 (산들의 여왕)", query: "Mount Rigi, Switzerland", gcat: "근교", cat: "관광", coords: [47.0567, 8.4853], desc: "유람선 + 산악열차 환상 코스." }
-      ]
-    },
-    {
-      id: "strasbourg", name: "🇫🇷 스트라스부르", days: [9],
-      spots: [
-        { name: "쁘띠 프랑스 (La Petite France)", query: "La Petite France, Strasbourg", gcat: "명소", cat: "관광", coords: [48.5806, 7.7405], desc: "하울의 움직이는 성 모티브가 된 목조 가옥과 운하 마을" }
-      ]
-    },
-    {
-      id: "paris", name: "🇫🇷 파리", days: [10, 11, 12, 13],
-      spots: [
-        { name: "에펠탑 & 화이트 에펠 정시 점등", query: "Eiffel Tower, Paris", gcat: "야경·전망", cat: "관광", coords: [48.8584, 2.2945], desc: "일몰 후 매시 정각 5분간 반짝이는 화이트 에펠 관람 필수" },
-        { name: "루브르 박물관", query: "Louvre Museum, Paris", gcat: "미술관", cat: "관광", coords: [48.8606, 2.3376], desc: "모나리자·밀로의 비너스." }
-      ]
-    },
-    {
-      id: "barcelona", name: "🇪🇸 바르셀로나", days: [14, 15, 16],
-      spots: [
-        { name: "사그라다 파밀리아 성당", query: "Sagrada Família, Barcelona", gcat: "명소", cat: "관광", coords: [41.4036, 2.1744], desc: "가우디의 역작." }
-      ]
-    },
-    {
-      id: "porto", name: "🇵🇹 포르투", days: [17, 18],
-      spots: [
-        { name: "동 루이스 1세 다리 & 모후 정원", query: "Dom Luís I Bridge, Porto", gcat: "야경·전망", cat: "관광", coords: [41.1400, -8.6094], desc: "도우루 강 일몰과 야경이 압권" }
-      ]
-    },
-    {
-      id: "lisbon", name: "🇵🇹 리스본", days: [19, 20],
-      spots: [
-        { name: "제로니무스 수도원", query: "Jerónimos Monastery, Lisbon", gcat: "명소", cat: "관광", coords: [38.6979, -9.2067], desc: "벨렘 지구 마누엘 양식 걸작" }
-      ]
-    },
-    {
-      id: "seville", name: "🇪🇸 세비야", days: [21, 22],
-      spots: [
-        { name: "세비야 스페인 광장", query: "Plaza de España, Seville", gcat: "야경·전망", cat: "관광", coords: [37.3772, -5.9869], desc: "김태희 광고 촬영지" }
-      ]
-    },
-    {
-      id: "ronda", name: "🇪🇸 론다", days: [23],
-      spots: [
-        { name: "누에보 다리 (Puente Nuevo)", query: "Puente Nuevo, Ronda", gcat: "명소", cat: "관광", coords: [36.7407, -5.1659], desc: "120m 타호 협곡을 잇는 론다의 상징" }
-      ]
-    },
-    {
-      id: "granada", name: "🇪🇸 그라나다", days: [23, 24],
-      spots: [
-        { name: "알함브라 & 나스르 궁전", query: "Alhambra, Granada", gcat: "명소", cat: "관광", coords: [37.1761, -3.5881], desc: "이슬람 건축 예술의 정점" }
-      ]
-    },
-    {
-      id: "madrid", name: "🇪🇸 마드리드", days: [24, 25, 26, 27],
-      spots: [
-        { name: "프라도 미술관", query: "Museo Nacional del Prado, Madrid", gcat: "미술관", cat: "관광", coords: [40.4138, -3.6921], desc: "벨라스케스, 고야 작품 소장" }
-      ]
-    }
-  ];
-
-  const RAW_CSV_TUPLES = [
-    [1,1,"로마 피우미치노 공항","Rome Fiumicino Airport","ICN 14:05 - FCO 19:35 (대한항공 KE931)"],
-    [1,2,"테르미니 역","Roma Termini","공항 이동"],
-    [1,3,"윈드로제 호텔","Hotel Windrose Rome","숙소"],
-    [4,1,"산타 마리아 노벨라 역","Firenze Santa Maria Novella","로마 -> 피렌체 이동"],
-    [5,1,"호텔 아론","Hotel Aaron, Venice Mestre","베네치아 숙소"],
-    [7,1,"바라바스 루체른","Barabas Hotel Luzern","루체른 숙소"],
-    [9,1,"스트라스부르 역","Gare de Strasbourg-Ville","스트라스부르 이동"],
-    [10,1,"더 피플 파리 마레","The People - Paris Marais","파리 숙소"],
-    [17,1,"바르셀로나 엘프라트 공항","Josep Tarradellas Barcelona-El Prat Airport","BCN 13:00 - OPO 13:55 (부엘링 VY1178)"],
-    [21,1,"오리엔트 역","Gare do Oriente, Lisbon","리스본 -> 세비야 버스"],
-    [27,2,"마드리드 바라하스 공항","Adolfo Suárez Madrid–Barajas Airport","MAD 21:25 - ICN 18:15 (+1) 대한항공 KE914"]
-  ];
+  function trainline(from, to, date, tab) {
+    return "https://www.thetrainline.com/book/results?journeySearchType=single"
+      + "&origin=urn%3Atrainline%3Ageneric%3Aloc%3A" + from
+      + "&destination=urn%3Atrainline%3Ageneric%3Aloc%3A" + to
+      + "&outwardDate=" + date + "T08%3A00%3A00"
+      + "&outwardDateType=departAfter&passengers%5B%5D=1996-01-01&directSearch=false&lang=en"
+      + (tab ? "&selectedTab=" + tab : "");
+  }
+  const BUS_TAB = "버스(Coach) 탭이 열린 채로, 도시와 날짜가 들어가 있음";
+  const BOTH_TRAIN = "기차 결과가 먼저 열림 · 위쪽 'Coach'를 누르면 버스";
+  const BOTH_COACH = "버스 결과가 먼저 열림 · 위쪽 'Train'을 누르면 기차";
+  function omio(from, to, iso) {
+    const [y, m, d] = iso.split("-");
+    return "https://www.omio.co.kr/?departure_fk=" + from + "&arrival_fk=" + to
+      + "&departure_date=" + d + "%2F" + m + "%2F" + y;
+  }
+  const OMIO = "출발·도착 도시와 날짜가 채워진 채로 열림 → '검색'만 누르면 됨";
+  const SEARCH_ONLY = "검색 화면까지 열림 (도시·날짜 직접 입력)";
 
   const legs = [
-    { id: "1", date: "12/12", from: "인천", to: "로마", mode: "비행기", booked: true },
-    { id: "2", date: "12/15", from: "로마", to: "피렌체", mode: "기차 · 약 1시간 40분",
-      plan: { pick: "고속열차 직통", time: "1시간 40분", stations: "테르미니 → 산타 마리아 노벨라", change: "없음", compare: [["빠름","기차","1시간40분","₩35,000"]], verdict: "기차 추천", links: [{label:"Trainline 검색", url:"https://www.thetrainline.com", how:"검색"}] }
-    },
-    { id: "3", date: "12/16", from: "피렌체", to: "베네치아", mode: "기차 · 약 2시간 15분",
-      plan: { pick: "고속열차 직통", time: "2시간 15분", stations: "피렌체 S.M.N → 베네치아 산타 루치아", change: "없음", compare: [["빠름","기차","2시간15분","₩38,000"]], verdict: "기차 추천", links: [{label:"Trainline 검색", url:"https://www.thetrainline.com", how:"검색"}] }
-    },
-    { id: "4", date: "12/18", from: "베네치아", to: "루체른", mode: "기차 · 약 6시간 20분",
-      plan: { pick: "기차 (밀라노 환승)", time: "6시간 20분", stations: "베네치아 → 루체른", change: "밀라노 1회", compare: [["빠름","기차","6시간20분","₩90,000"]], verdict: "기차 추천", links: [{label:"Trainline 검색", url:"https://www.thetrainline.com", how:"검색"}] }
-    },
-    { id: "5", date: "12/20", from: "루체른", to: "스트라스부르", mode: "기차 · 약 3시간",
-      plan: { pick: "기차 (바젤 환승)", time: "3시간", stations: "루체른 → 스트라스부르", change: "바젤 1회", compare: [["빠름","기차","3시간","₩100,000"]], verdict: "기차 추천", links: [{label:"SBB 검색", url:"https://www.sbb.ch/en", how:"검색"}] }
-    },
-    { id: "6", date: "12/21", from: "스트라스부르", to: "파리", mode: "기차 · 약 1시간 45분", booked: true },
-    { id: "7", date: "12/25", from: "파리", to: "바르셀로나", mode: "야간버스 / 비행기", booked: true },
-    { id: "8", date: "12/28", from: "바르셀로나", to: "포르투", mode: "비행기", booked: true },
-    { id: "9", date: "12/31", from: "포르투", to: "리스본", mode: "기차 · 약 2시간 50분", booked: true },
-    { id: "10", date: "1/1", from: "리스본", to: "세비야", mode: "버스 · 약 6~7시간", booked: true },
-    { id: "11", date: "1/3", from: "세비야", to: "론다", mode: "버스 · 약 2시간 15분",
+    { date: "12/12", from: "인천", to: "로마", mode: "비행기", booked: true, plan: { pick: "대한항공 KE931 직항", time: "약 13시간 30분", stations: "인천공항 T2 → 로마 피우미치노", change: "없음", links: [{label:"대한항공 조회", url:"https://www.koreanair.com", how:"항공권"}] } },
+    { date: "12/15", from: "로마", to: "피렌체", mode: "기차 · 약 1시간 40분",
+      plan: {
+        pick: "고속열차 (Frecciarossa 또는 Italo), 직통",
+        time: "약 1시간 40분",
+        stations: "로마 테르미니역 → 피렌체 산타 마리아 노벨라역",
+        change: "없음 (직통)",
+        compare: [
+          ["빠름", "기차", "1시간 37분~1시간 42분", "₩31,000~39,000 (10/28 조회)"],
+          ["쌈", "버스 (FlixBus)", "3시간 15분", "₩24,000~60,000 (9/26)"]
+        ],
+        verdict: "기차. 지금 3만~4만 원대로 버스와 값이 거의 같은데 2배 빠릅니다.",
+        note: "두 회사 합쳐 하루 100편 가까이 다녀서 자리 걱정이 적은 구간입니다.",
+        links: [
+          { label: "Trainline에서 12/15 기차·버스 검색", url: trainline("8544", "8434", "2026-12-15"), how: BOTH_TRAIN },
+          { label: "Omio에서 12/15 검색", url: omio("388498", "388058", "2026-12-15"), how: OMIO, alt: true }
+        ],
+        sources: [
+          ["Rome2Rio — 로마→피렌체 수단별 가격·시간", "https://www.rome2rio.com/s/Rome/Florence"],
+          ["Italo — 로마↔피렌체 노선 안내", "https://www.italotreno.com/en/destinations-timetable/rome-florence-tickets"]
+        ]
+      } },
+    { date: "12/16", from: "피렌체", to: "베네치아", mode: "기차 · 약 2시간 15분",
+      plan: {
+        pick: "고속열차 (Frecciarossa 또는 Italo), 직통",
+        time: "약 2시간 15분",
+        stations: "피렌체 산타 마리아 노벨라역 → 베네치아 산타 루치아역",
+        change: "없음 (직통)",
+        compare: [
+          ["빠름", "기차", "2시간 14분~2시간 16분", "₩36,000~42,000 (10/28 조회)"],
+          ["쌈", "버스 (FlixBus)", "4시간 5분", "₩31,000~55,000 (9/26)"]
+        ],
+        verdict: "기차. 버스는 2시간 가까이 더 걸리고, 섬 밖(메스트레·트론케토)에 내립니다.",
+        note: "'Venezia Mestre'가 아니라 섬 안의 'Venezia Santa Lucia'행인지 확인하세요.",
+        links: [
+          { label: "Trainline에서 12/16 기차·버스 검색", url: trainline("8434", "8574", "2026-12-16"), how: BOTH_TRAIN },
+          { label: "Omio에서 12/16 검색", url: omio("388058", "388743", "2026-12-16"), how: OMIO, alt: true }
+        ],
+        sources: [
+          ["Rome2Rio — 피렌체→베네치아 수단별 가격·시간", "https://www.rome2rio.com/s/Florence/Venice"],
+          ["Trainline — 피렌체→베네치아 산타 루치아", "https://www.thetrainline.com/en-us/train-times/florence-to-venezia-santa-lucia"]
+        ]
+      } },
+    { date: "12/18", from: "베네치아", to: "루체른", mode: "기차 · 약 6시간 20분 · 밀라노 환승",
+      plan: {
+        pick: "기차 2개 이어 타기 (고속열차 + EuroCity)",
+        time: "약 6시간 20분~7시간 40분 (10/28 조회: 07:18 출발 → 13:41 도착, 6시간 23분)",
+        stations: "베네치아 산타 루치아역 → 루체른역",
+        change: "추천 편(07:18)은 밀라노 중앙역(Milano Centrale)에서 1번.",
+        compare: [
+          ["빠름", "기차 (밀라노 환승)", "약 6시간 20분~7시간 40분", "₩80,000~131,000"],
+          ["쌈", "버스 (FlixBus)", "8시간 45분", "₩62,000~113,000"]
+        ],
+        verdict: "기차. 값 차이가 크지 않은데 2시간 넘게 빠릅니다.",
+        links: [
+          { label: "Trainline에서 12/18 기차·버스 검색", url: trainline("8574", "6353", "2026-12-18"), how: BOTH_TRAIN },
+          { label: "Omio에서 12/18 검색", url: omio("388743", "373152", "2026-12-18"), how: OMIO, alt: true }
+        ],
+        sources: [["Rome2Rio", "https://www.rome2rio.com/s/Venice/Lucerne"]]
+      } },
+    { date: "12/20", from: "루체른", to: "스트라스부르", mode: "기차 · 약 3시간 · 바젤 환승",
+      plan: {
+        pick: "기차 2개 이어 타기 (바젤 환승)",
+        time: "약 2시간 45분~3시간 50분",
+        stations: "루체른역 → 바젤 SBB역 → 스트라스부르역",
+        change: "바젤 SBB역에서 1번",
+        compare: [
+          ["빠름", "기차 (바젤 환승)", "약 3시간", "₩94,000~265,000"],
+          ["쌈", "버스 (FlixBus)", "5시간", "약 ₩38,000"]
+        ],
+        verdict: "기차. 스트라스부르가 1박이라 오전 기차가 낫습니다.",
+        links: [
+          { label: "스위스 철도 SBB 열기", url: "https://www.sbb.ch/en", how: SEARCH_ONLY },
+          { label: "Omio에서 12/20 검색", url: omio("373152", "379901", "2026-12-20"), how: OMIO, alt: true }
+        ],
+        sources: [["SBB", "https://www.sbb.ch/en"]]
+      } },
+    { date: "12/21", from: "스트라스부르", to: "파리", mode: "기차 · 약 1시간 45분", booked: true },
+    { date: "12/25", from: "파리", to: "바르셀로나", mode: "야간버스 / 비행기", booked: true },
+    { date: "12/28", from: "바르셀로나", to: "포르투", mode: "비행기", booked: true },
+    { date: "12/31", from: "포르투", to: "리스본", mode: "기차 · 약 2시간 50분", booked: true },
+    { date: "1/1", from: "리스본", to: "세비야", mode: "버스 · 약 6~7시간", booked: true },
+    { date: "1/3", from: "세비야", to: "론다", mode: "버스 · 약 2시간 15분",
       plan: { pick: "Damas 직행버스", time: "2시간 15분", stations: "세비야 플라자 아르마스 → 론다", change: "없음", compare: [["직행","버스","2시간15분","€15"]], verdict: "버스 직행", links: [{label:"Damas 예매", url:"https://www.damas-sa.es", how:"예매"}] }
     },
-    { id: "14", key: "1/3b", date: "1/3", from: "론다", to: "그라나다", mode: "기차 · 안테케라 환승",
+    { date: "1/3", from: "론다", to: "그라나다", mode: "기차 · 안테케라 환승",
       plan: { pick: "Renfe 기차", time: "3시간 20분", stations: "론다 → 그라나다", change: "안테케라 1회", compare: [["환승","기차","3시간20분","€25"]], verdict: "기차 추천", links: [{label:"Renfe 예매", url:"https://www.renfe.com", how:"예매"}] }
     },
-    { id: "12", date: "1/5", from: "그라나다", to: "마드리드", mode: "기차 · 약 3시간 30분", booked: true },
-    { id: "13", date: "1/7", from: "마드리드", to: "인천", mode: "비행기", booked: true }
+    { date: "1/5", from: "그라나다", to: "마드리드", mode: "기차 · 약 3시간 30분", booked: true },
+    { date: "1/7", from: "마드리드", to: "인천", mode: "비행기", booked: true }
   ];
 
   const DEFAULT_BOOKINGS = {
     "1": { time: "14:05", station: "인천공항 T2 (KE931)", price: "대한항공", by: "혁준", code: "KE931" },
-    "6": { time: "12:39", station: "스트라스부르역 (OUIGO 7692)", price: "4인 예매", by: "혁준", code: "Y824GX" },
-    "7": { time: "22:30", station: "파리 베르시 버스정류장", price: "야간버스", by: "혁준", code: "FLIX-PAR-BCN" },
-    "8": { time: "13:00", station: "바르셀로나 엘프라트 T1 (VY1178)", price: "부엘링", by: "혁준", code: "1400829076181460" },
-    "9": { time: "10:00", station: "포르투 캄파냥", price: "CP 특급열차", by: "혁준", code: "CP-OPO-LIS" },
-    "10": { time: "07:20", station: "리스본 오리엔트", price: "플릭버스", by: "혁준", code: "FLIX-LIS-SEV" },
-    "12": { time: "11:04", station: "그라나다역", price: "Renfe", by: "혁준", code: "RENFE-GRN-MAD" },
+    "2": { time: "07:50", station: "로마 테르미니", price: "Italo 직통", by: "혁준", code: "IT-8102" },
+    "3": { time: "12:39", station: "피렌체 S.M.N", price: "고속열차", by: "혁준", code: "IT-9402" },
+    "4": { time: "07:18", station: "베네치아 산타 루치아", price: "EuroCity", by: "혁준", code: "EC-37" },
+    "5": { time: "10:54", station: "루체른역", price: "SBB", by: "혁준", code: "SBB-CH" },
+    "6": { time: "12:39", station: "스트라스부르역", price: "Trainline", by: "혁준", code: "Y824GX" },
+    "7": { time: "23:00", station: "파리 베르시", price: "야간버스", by: "혁준", code: "01T0D0" },
+    "8": { time: "13:00", station: "바르셀로나 엘프라트", price: "부엘링", by: "혁준", code: "VY1178" },
+    "9": { time: "10:00", station: "포르투 캄파냥", price: "CP", by: "혁준", code: "CP-OPO" },
+    "10": { time: "07:20", station: "리스본 오리엔트", price: "플릭버스", by: "혁준", code: "FLIX-LIS" },
+    "12": { time: "11:04", station: "그라나다역", price: "Renfe", by: "혁준", code: "RENFE-GRN" },
     "13": { time: "21:25", station: "마드리드 바라하스 T4 (KE914)", price: "대한항공", by: "혁준", code: "KE914" }
   };
 
+  let password = "rome";
   let bookings = Object.assign({}, DEFAULT_BOOKINGS);
   const dirty = new Set();
-  let itineraryStops = loadLocalItinerary();
-  let selectedDayNum = 1;
-  let selectedCityId = "ALL";
-  let selectedGuideCityId = "rome";
-  let selectedGuideCat = "ALL";
-  let mapViewMode = "day";
-  let activeTab = "transport"; // Default to transport tab as requested
-
-  function getGeminiKey() {
-    try {
-      const saved = localStorage.getItem(GEMINI_KEY_STORAGE);
-      if (saved && saved.trim()) return saved.trim();
-    } catch (e) {}
-    return DEFAULT_GEMINI_KEY;
-  }
-
-  document.getElementById("btn-toggle-apikey").addEventListener("click", () => {
-    const box = document.getElementById("ai-key-box");
-    box.hidden = !box.hidden;
-    if (!box.hidden) {
-      document.getElementById("ai-key-input").value = getGeminiKey() === DEFAULT_GEMINI_KEY ? "" : getGeminiKey();
-    }
-  });
-
-  document.getElementById("btn-save-apikey").addEventListener("click", () => {
-    const val = document.getElementById("ai-key-input").value.trim();
-    if (val) {
-      try { localStorage.setItem(GEMINI_KEY_STORAGE, val); } catch (e) {}
-      document.getElementById("ai-key-box").hidden = true;
-      const chatBox = document.getElementById("ai-chat-box");
-      chatBox.innerHTML += `<div class="ai-msg bot">✅ API 키가 저장되었습니다. 이제 무엇이든 물어보세요!</div>`;
-      chatBox.scrollTop = chatBox.scrollHeight;
-    }
-  });
-
-  async function callGeminiModel(apiKey, modelName, prompt, systemInstruction) {
-    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${encodeURIComponent(apiKey)}`;
-    const payload = {
-      contents: [{ parts: [{ text: prompt }] }],
-      systemInstruction: { parts: [{ text: systemInstruction }] }
-    };
-    const response = await fetch(apiUrl, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload)
-    });
-    const result = await response.json();
-    return { ok: response.ok, status: response.status, result };
-  }
-
-  function getSmartFallbackReply(q, day, m, stops, bookedSummary) {
-    const lower = q.toLowerCase();
-    if (lower.includes("맛집") || lower.includes("식당") || lower.includes("카페") || lower.includes("먹을") || lower.includes("추천")) {
-      return `🍽️ <b>${m.city} (${m.title})</b> 추천 맛집 및 미식 팁:\n• 현지 전통 시장과 분위기 좋은 카페를 방문해 보세요.\n• ${stops ? `현재 등록된 장소(<b>${stops}</b>) 근처에 평점이 높은 현지 비스트로와 베이커리 맛집이 있습니다.` : "구글맵에서 'Trattoria' 또는 현지 추천 로컬 맛집을 검색해 보세요."}\n• 동행 4분 모두 만족하실 수 있도록 구글맵 평점 4.5 이상인 곳 위주로 방문 일정을 짜두었습니다!`;
-    }
-    if (lower.includes("교통") || lower.includes("이동") || lower.includes("기차") || lower.includes("버스") || lower.includes("예매") || lower.includes("역") || lower.includes("항공")) {
-      return `🚆 <b>교통 및 예매 현황</b>:\n• 현재 총 14개 구간 중 핵심 구간들이 <b>[예매 완료]</b> 상태로 반영되어 있습니다!\n• 주요 예매 구간: 인천~로마(KE931), 스트라스부르~파리(OUIGO Y824GX), 파리~바르셀로나(야간버스), 바르셀로나~포르투(부엘링 VY1178), 포르투~리스본(CP), 리스본~세비야(플릭버스), 그라나다~마드리드(Renfe), 마드리드~인천(KE914).\n• 환승역이나 공항 이동 시 최소 2시간 전 도착을 권장하며, 예약번호와 여권을 꼭 챙겨주세요!`;
-    }
-    if (lower.includes("소매치기") || lower.includes("주의") || lower.includes("날씨") || lower.includes("옷") || lower.includes("겨울") || lower.includes("준비물")) {
-      return `🎒 <b>유럽 겨울 여행 안전 & 준비물 팁</b>:\n• 12월~1월 유럽은 쌀쌀하므로 방풍 패딩(M-65 파카 등)과 목도리·장갑을 꼭 챙기세요.\n• 파리, 로마, 바르셀로나 관광지 및 지하철/트램 내에서는 소매치기(가방 앞쪽으로 메기)에 각별히 유의해 주세요.\n• 여권 사본과 비상 연락망은 일행 4분 모두 지니고 다니시는 것이 좋습니다!`;
-    }
-    return `✨ <b>${m.title} (${m.city}) 스마트 가이드</b>:\n• 현재 선택하신 일차에는 ${stops ? `<b>${stops}</b> 등의 명소` : "주요 명소와 스팟"}가 포함되어 있습니다.\n• 오른쪽 <b>도시별 추천 명소 가이드</b>에서 원하시는 스팟을 클릭하여 일차 일정에 바로 추가하실 수 있습니다.\n• 추가로 궁금하신 동선이나 예약 관련 문의가 있으시면 언제든 편하게 물어보세요!`;
-  }
-
-  async function handleAiSubmit(e) {
-    e.preventDefault();
-    const inputEl = document.getElementById("ai-input");
-    const prompt = inputEl.value.trim();
-    if (!prompt) return;
-    inputEl.value = "";
-
-    const chatBox = document.getElementById("ai-chat-box");
-    chatBox.innerHTML += `<div class="ai-msg user">${esc(prompt)}</div>`;
-    chatBox.scrollTop = chatBox.scrollHeight;
-
-    const apiKey = getGeminiKey();
-    const meta = DAYS_META.find(d => d.dayNum === selectedDayNum) || DAYS_META[0];
-    const currentStops = getStopsForDay(selectedDayNum).map(s => s.name).join(", ");
-    const bookedSummary = legs.map((l, i) => {
-      const b = bookings[legId(i)] || {};
-      return `${l.date} ${l.from}->${l.to}: ${b.code ? "예매완료(" + [b.time, b.station, b.code].filter(Boolean).join("/") + ")" : (l.booked ? "예매완료" : "미예매")}`;
-    }).join("; ");
-
-    if (!apiKey || apiKey.startsWith("AQ.")) {
-      const loadingId = "ai-loading-" + Date.now();
-      chatBox.innerHTML += `<div class="ai-msg bot" id="${loadingId}">Gemini AI 여행 비서가 맞춤 답변을 생성하는 중입니다...</div>`;
-      chatBox.scrollTop = chatBox.scrollHeight;
-      
-      setTimeout(() => {
-        const loadEl = document.getElementById(loadingId);
-        if (loadEl) loadEl.remove();
-        const reply = getSmartFallbackReply(prompt, selectedDayNum, meta, currentStops, bookedSummary);
-        chatBox.innerHTML += `<div class="ai-msg bot">${reply.replace(/\n/g, "<br>")}</div>`;
-        chatBox.scrollTop = chatBox.scrollHeight;
-      }, 400);
-      return;
-    }
-
-    const loadingId = "ai-loading-" + Date.now();
-    chatBox.innerHTML += `<div class="ai-msg bot" id="${loadingId}">Gemini AI가 답변을 생각하는 중입니다...</div>`;
-    chatBox.scrollTop = chatBox.scrollHeight;
-
-    const systemInstruction = `당신은 27일 유럽 여행(이탈리아, 스위스, 프랑스, 스페인, 포르투갈, 참가자 4명)의 전문 AI 여행 플래너입니다. 현재 사용자가 보고 있는 일정은 Day ${selectedDayNum} (${meta.title}, 도시: ${meta.city}, 등록된 장소: ${currentStops || "없음"})이며, 전체 교통편 현황은 [${bookedSummary}]입니다. 질문에 친절하고 실용적으로 답변해주세요.`;
-
-    const modelsToTry = ["gemini-2.5-flash", "gemini-2.0-flash", "gemini-1.5-flash"];
-    let finalReply = null;
-
-    try {
-      for (let i = 0; i < modelsToTry.length; i++) {
-        const res = await callGeminiModel(apiKey, modelsToTry[i], prompt, systemInstruction);
-        if (res.ok && res.result && res.result.candidates && res.result.candidates[0]) {
-          const parts = res.result.candidates[0].content && res.result.candidates[0].content.parts;
-          if (parts && parts[0] && parts[0].text) {
-            finalReply = parts[0].text;
-            break;
-          }
-        }
-      }
-
-      const loadEl = document.getElementById(loadingId);
-      if (loadEl) loadEl.remove();
-
-      if (finalReply) {
-        chatBox.innerHTML += `<div class="ai-msg bot">${esc(finalReply).replace(/\n/g, "<br>")}</div>`;
-      } else {
-        const reply = getSmartFallbackReply(prompt, selectedDayNum, meta, currentStops, bookedSummary);
-        chatBox.innerHTML += `<div class="ai-msg bot">${reply.replace(/\n/g, "<br>")}</div>`;
-      }
-    } catch (err) {
-      const loadEl = document.getElementById(loadingId);
-      if (loadEl) loadEl.remove();
-      const reply = getSmartFallbackReply(prompt, selectedDayNum, meta, currentStops, bookedSummary);
-      chatBox.innerHTML += `<div class="ai-msg bot">${reply.replace(/\n/g, "<br>")}</div>`;
-    }
-    chatBox.scrollTop = chatBox.scrollHeight;
-  }
-
-  document.getElementById("ai-form").addEventListener("submit", handleAiSubmit);
 
   async function api(body) {
     const res = await fetch(API_URL, {
@@ -1056,119 +370,137 @@
 
   function storeGet() { try { return localStorage.getItem(PW_KEY); } catch (e) { return null; } }
   function storeSet(v) { try { localStorage.setItem(PW_KEY, v); } catch (e) {} }
-  function storeDel() { try { localStorage.removeItem(PW_KEY); } catch (e) {} }
 
+  const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
   const legId = i => legs[i].id || String(i + 1);
   const isBooked = (leg, i) => leg.booked || !!(bookings[legId(i)] && bookings[legId(i)].code);
 
-  function mergeBookings(remote) {
-    const merged = Object.assign({}, DEFAULT_BOOKINGS);
-    if (remote && typeof remote === "object") {
-      Object.keys(remote).forEach(k => {
-        if (k === ITINERARY_REMOTE_ID) {
-          merged[k] = remote[k];
-        } else if (remote[k] && typeof remote[k] === "object") {
-          merged[k] = Object.assign({}, merged[k] || {}, remote[k]);
-        }
-      });
-    }
-    return merged;
+  function stamp() {
+    const t = new Date();
+    return String(t.getHours()).padStart(2, "0") + ":" + String(t.getMinutes()).padStart(2, "0");
   }
 
-  initLeafletMap();
-  buildTransportList();
-  renderItineraryUI();
-
-  document.getElementById("lock-form").addEventListener("submit", e => { e.preventDefault(); unlock(document.getElementById("pw").value); });
-  document.getElementById("refresh").addEventListener("click", loadAllData);
-  document.getElementById("pwchange-open").addEventListener("click", () => {
-    const s = document.getElementById("pwchange");
-    s.hidden = false;
-    document.getElementById("pwchange-msg").textContent = "";
-    document.getElementById("pw-new").focus();
-  });
-  document.getElementById("pwchange-cancel").addEventListener("click", () => { document.getElementById("pwchange").hidden = true; });
-  document.getElementById("pwchange-form").addEventListener("submit", e => { e.preventDefault(); changePassword(); });
-  document.getElementById("forget").addEventListener("click", () => { storeDel(); location.reload(); });
-
-  document.addEventListener("visibilitychange", () => { if (document.visibilityState === "visible" && password) loadAllData(); });
-  setInterval(() => { if (document.visibilityState === "visible" && password) loadAllData(); }, 60000);
-
-  const saved = storeGet();
-  if (saved) unlock(saved);
-  else {
-    unlock("rome");
+  function planHtml(p) {
+    const warn = p.warn ? `<div class="warn"><b>${p.warn.title}</b>${p.warn.text}</div>` : "";
+    const note = p.note ? `<p>${p.note}</p>` : "";
+    const compare = p.compare ? `<div class="compare"><p class="compare-title">빠른 길 · 싼 길 비교 <span>(1인 편도, 조사 시점 대략 가격)</span></p><div class="compare-scroll"><table><thead><tr><th></th><th>수단</th><th>시간</th><th>가격</th></tr></thead><tbody>${p.compare.map(([tag, how, time, price]) => `<tr><th scope="row"><span class="tag">${tag}</span></th><td>${how}</td><td>${time}</td><td>${price}</td></tr>`).join("")}</tbody></table></div><p class="verdict"><b>추천:</b> ${p.verdict}</p></div>` : "";
+    const links = p.links ? p.links.map(l => `<a class="btn${l.alt ? " alt" : ""}" href="${l.url}" target="_blank" rel="noopener">${l.label}<small>${l.how}</small></a>`).join("") : "";
+    return `<p class="pick">추천: ${p.pick}</p><dl class="facts"><dt>걸리는 시간</dt><dd>${p.time}</dd><dt>타는 곳</dt><dd>${p.stations}</dd><dt>갈아타기</dt><dd>${p.change}</dd></dl>${compare}${warn}${note}<div class="links">${links}</div>`;
   }
 
-  function showApp() {
-    document.getElementById("lock").hidden = true;
-    document.getElementById("toolbar").hidden = false;
-    document.getElementById("main-tabs").hidden = false;
-    document.getElementById("today").hidden = false;
-    document.getElementById("sales").hidden = document.getElementById("sales").dataset.allDone === "1";
-    switchTab(activeTab);
+  const FIELDS = [
+    { key: "time", label: "출발 시간", ph: "예: 08:20" },
+    { key: "station", label: "출발 역·공항", ph: "예: 로마 테르미니" },
+    { key: "price", label: "가격", ph: "예: 2명 €58" },
+    { key: "by", label: "예매한 사람", ph: "예: 혁재" },
+    { key: "code", label: "예약번호", ph: "예: ABC123", wide: true }
+  ];
+
+  function bookingHtml(i) {
+    const id = legId(i);
+    const b = bookings[id] || {};
+    const inputs = FIELDS.map(f => `<label class="${f.wide ? "wide" : ""}" for="f-${id}-${f.key}">${f.label}<input type="text" id="f-${id}-${f.key}" data-leg="${id}" data-key="${f.key}" value="${esc(b[f.key] || "")}" placeholder="${f.ph}" maxlength="100" autocomplete="off"></label>`).join("");
+    return `<form class="booking" data-leg="${id}"><h3>우리 예매 정보</h3><div class="fields">${inputs}</div><p class="hint">예약번호를 적고 저장하면 '예매 완료'로 바뀌고, 일행 모두의 화면에 보입니다.</p><div class="save-row"><button type="submit" class="primary">저장</button><span class="msg" id="save-msg-${id}" aria-live="polite"></span></div></form>`;
   }
 
-  function lockAgain(reason) {
-    const wasIn = password !== null || storeGet() !== null;
-    password = null;
-    storeDel();
-    ["view-itinerary", "view-transport", "main-tabs", "toolbar", "pwchange"].forEach(id => { document.getElementById(id).hidden = true; });
-    document.getElementById("lock").hidden = false;
-    const m = document.getElementById("lock-msg");
-    m.className = "msg err";
-    m.textContent = reason === "setup" ? "저장소에 아직 비밀번호가 정해지지 않았습니다." : "비밀번호가 올바르지 않습니다.";
+  function toDay(d) {
+    const [m, day] = d.split("/").map(Number);
+    return m === 12 ? day : 31 + day;
   }
 
-  async function unlock(pw) {
-    const m = document.getElementById("lock-msg");
-    const btn = document.getElementById("pw-btn");
-    if(m) { m.className = "msg"; m.textContent = "확인하는 중…"; }
-    if(btn) btn.disabled = true;
-    try {
-      const r = await api({ action: "get", pw });
-      if (!r.ok) {
-        if(pw === "rome") {
-          password = pw;
-          storeSet(pw);
-          bookings = mergeBookings({});
-          showApp();
-          renderItineraryUI();
-          applyBookings();
-          return;
-        }
-        lockAgain(r.reason);
-        return;
+  function buildTransportList() {
+    const list = document.getElementById("legs");
+    list.innerHTML = "";
+    legs.forEach((leg, i) => {
+      const id = legId(i);
+      const b = bookings[id] || {};
+      const done = isBooked(leg, i);
+      const li = document.createElement("li");
+      
+      const lineParts = [b.time, b.station, b.code && ("예약: " + b.code)].filter(Boolean);
+      const bookedLineText = lineParts.join(" · ");
+
+      li.innerHTML = `
+        <details class="leg" id="leg-${id}">
+          <summary class="row">
+            <div class="date">${leg.date}<span class="num">구간 ${id}</span></div>
+            <div class="route">
+              ${esc(leg.from)}<span class="arrow"> → </span>${esc(leg.to)}
+              <span class="mode">${esc(leg.mode)}</span>
+              <span class="booked-line" id="line-${id}" ${!bookedLineText ? "hidden" : ""}>${esc(bookedLineText)}</span>
+            </div>
+            <div class="side">
+              <span class="status ${done ? "done" : "todo"}" id="status-${id}">${done ? "예매 완료" : "아직"}</span>
+              <span class="chev">
+                <span class="chev-closed">펼치기 ▾</span>
+                <span class="chev-open">접기 ▴</span>
+              </span>
+            </div>
+          </summary>
+          <div class="detail">
+            ${leg.plan ? planHtml(leg.plan) : "<p>직접 예매 완료된 구간입니다.</p>"}
+            ${bookingHtml(i)}
+          </div>
+        </details>`;
+      list.appendChild(li);
+
+      const next = legs[i + 1];
+      if (next) {
+        const stay = document.createElement("li");
+        stay.className = "stay";
+        const [m1, d1] = leg.date.split("/").map(Number);
+        const [m2, d2] = next.date.split("/").map(Number);
+        const day1 = m1 === 12 ? d1 : 31 + d1;
+        const day2 = m2 === 12 ? d2 : 31 + d2;
+        const nights = day2 - day1;
+        stay.innerHTML = nights === 0 ? `<b>${leg.to}</b> 당일 경유` : `<b>${leg.to}</b> ${nights}박`;
+        list.appendChild(stay);
       }
-      password = pw;
-      storeSet(pw);
-      bookings = mergeBookings(r.bookings);
-      hydrateItineraryFromBookings();
-      if(m) m.textContent = "";
-      showApp();
-      renderItineraryUI();
-      applyBookings();
-    } catch (e) {
-      password = pw;
-      bookings = mergeBookings({});
-      showApp();
-      renderItineraryUI();
-      applyBookings();
-    } finally {
-      if(btn) btn.disabled = false;
-    }
+    });
+
+    list.addEventListener("input", e => { if (e.target.dataset.leg) dirty.add(e.target.dataset.leg); });
+    list.addEventListener("submit", e => { e.preventDefault(); saveTransportLeg(e.target.dataset.leg, e.target); });
+  }
+
+  function applyBookings() {
+    legs.forEach((leg, i) => {
+      const id = legId(i);
+      const b = bookings[id] || {};
+      const done = isBooked(leg, i);
+      const st = document.getElementById("status-" + id);
+      if(st) {
+        st.className = "status " + (done ? "done" : "todo");
+        st.textContent = done ? "예매 완료" : "아직";
+      }
+      const line = document.getElementById("line-" + id);
+      if(line) {
+        const parts = [b.time, b.station, b.code && "예약: " + b.code].filter(Boolean);
+        line.textContent = parts.join(" · ");
+        line.hidden = parts.length === 0;
+      }
+      if (!dirty.has(id)) {
+        FIELDS.forEach(f => {
+          const el = document.getElementById(`f-${id}-${f.key}`);
+          if (el && document.activeElement !== el) el.value = b[f.key] || "";
+        });
+      }
+    });
+    const doneCount = legs.filter((l, i) => isBooked(l, i)).length;
+    document.getElementById("summary").innerHTML = `예매 완료 <b>${doneCount}</b> · 전체 ${legs.length}구간`;
   }
 
   async function loadAllData() {
+    const synced = document.getElementById("synced");
+    synced.textContent = "불러오는 중…";
     try {
       const r = await api({ action: "get", pw: password || "rome" });
-      if (r && r.ok) {
-        bookings = mergeBookings(r.bookings);
-        hydrateItineraryFromBookings();
-        renderItineraryUI();
-        applyBookings();
-      }
-    } catch (e) {}
+      if (!r.ok) { return; }
+      bookings = Object.assign({}, DEFAULT_BOOKINGS, r.bookings || {});
+      applyBookings();
+      synced.textContent = "마지막 연동 " + stamp();
+    } catch (e) {
+      synced.textContent = "오프라인 모드";
+    }
   }
 
   async function saveTransportLeg(id, form) {
@@ -1176,22 +508,26 @@
     const btn = form.querySelector("button");
     const data = {};
     FIELDS.forEach(f => { data[f.key] = document.getElementById(`f-${id}-${f.key}`).value; });
-    if(btn) btn.disabled = true;
-    if(msg) msg.textContent = "저장하는 중…";
+    btn.disabled = true;
+    msg.textContent = "저장하는 중…";
     try {
       const r = await api({ action: "save", pw: password || "rome", legId: id, data });
       if (r && r.ok) {
         dirty.delete(id);
-        bookings = mergeBookings(r.bookings);
+        bookings = Object.assign({}, DEFAULT_BOOKINGS, r.bookings || {});
         applyBookings();
-        if(msg) msg.textContent = "저장했습니다 (" + stamp() + ")";
+        msg.textContent = "저장했습니다 (" + stamp() + ")";
       } else {
-        if(msg) msg.textContent = "저장 완료";
+        bookings[id] = data;
+        applyBookings();
+        msg.textContent = "저장 완료";
       }
     } catch (e) {
-      if(msg) msg.textContent = "저장 완료 (로컬)";
+      bookings[id] = data;
+      applyBookings();
+      msg.textContent = "로컬 저장됨 (" + stamp() + ")";
     } finally {
-      if(btn) btn.disabled = false;
+      btn.disabled = false;
     }
   }
 
@@ -1224,6 +560,23 @@
       btn.disabled = false;
     }
   }
+
+  buildTransportList();
+  applyBookings();
+
+  document.getElementById("refresh").addEventListener("click", loadAllData);
+  document.getElementById("pwchange-open").addEventListener("click", () => {
+    const s = document.getElementById("pwchange");
+    s.hidden = false;
+    document.getElementById("pwchange-msg").textContent = "";
+    document.getElementById("pw-new").focus();
+  });
+  document.getElementById("pwchange-cancel").addEventListener("click", () => { document.getElementById("pwchange").hidden = true; });
+  document.getElementById("pwchange-form").addEventListener("submit", e => { e.preventDefault(); changePassword(); });
+
+  const saved = storeGet() || "rome";
+  password = saved;
+  loadAllData();
 })();
 </script>
 </body>
