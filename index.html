@@ -252,20 +252,24 @@
   const API_URL = "https://script.google.com/macros/s/AKfycbxnsNrXANrjEXfquUcYSaaXUqXzTFMljh2PvJv21WaBoVtUhvYBTI4uYTNJYX2xyE0j/exec";
   const PW_KEY = "europe-trip-pw";
 
+  // Trainline은 도시 이름만 넣으면 역을 못 찾는 경우가 있어(출발·도착이 엉뚱하게 채워지고 날짜도 무시됨),
+  // Trainline 노선 페이지에 적힌 도시 코드(URN)를 써서 출발지·도착지·날짜가 정확히 채워지게 함
+  const TL_CITY = {
+    lucerne: "urn:trainline:generic:loc:6353",
+    strasbourg: "urn:trainline:generic:loc:153",
+    seville: "urn:trainline:generic:loc:6683",
+    ronda: "urn:trainline:generic:loc:6507",
+    granada: "urn:trainline:generic:loc:6656",
+    madrid: "urn:trainline:generic:loc:6663"
+  };
   function trainline(from, to, date, tab) {
     return "https://www.thetrainline.com/book/results?journeySearchType=single"
-      + "&origin=" + encodeURIComponent(from)
-      + "&destination=" + encodeURIComponent(to)
+      + "&origin=" + encodeURIComponent(TL_CITY[from] || from)
+      + "&destination=" + encodeURIComponent(TL_CITY[to] || to)
       + "&outwardDate=" + date + "T08%3A00%3A00"
       + "&outwardDateType=departAfter&passengers%5B%5D=1996-01-01&directSearch=false&lang=en"
       + (tab ? "&selectedTab=" + tab : "");
   }
-  // 도시 이름만 넣는 deep link는 Trainline이 역을 못 찾아 엉뚱하게(예: 출발·도착 둘 다 Ronda) 채우는 경우가 있어서,
-  // 출발·도착이 이미 정해져 있는 노선 페이지로 연결 (날짜만 고르면 됨)
-  function trainlineRoute(fromSlug, toSlug, kind) {
-    return "https://www.thetrainline.com/en/" + (kind === "bus" ? "buses/" : "train-times/") + fromSlug + "-to-" + toSlug;
-  }
-  const ROUTE_PAGE = "출발·도착이 이미 채워진 노선 페이지 → 날짜만 고르고 검색";
   const BUS_TAB = "버스(Coach) 탭이 열린 채로, 도시와 날짜가 들어가 있음";
   const BOTH_TRAIN = "기차 결과가 먼저 열림 · 위쪽 'Coach'를 누르면 버스";
   const BOTH_COACH = "버스 결과가 먼저 열림 · 위쪽 'Train'을 누르면 기차";
@@ -347,8 +351,7 @@
         ],
         verdict: "기차 추천 (스트라스부르 1박 일정상 오전 기차가 유리)",
         links: [
-          { label: "Trainline 루체른→스트라스부르 (기차)", url: trainlineRoute("lucerne", "strasbourg"), how: ROUTE_PAGE },
-          { label: "Trainline 루체른→스트라스부르 (버스)", url: trainlineRoute("lucerne", "strasbourg", "bus"), how: ROUTE_PAGE, alt: true },
+          { label: "Trainline에서 12/20 기차·버스 검색", url: trainline("lucerne", "strasbourg", "2026-12-20"), how: BOTH_TRAIN },
           { label: "Omio에서 루체른→스트라스부르 검색", url: omio("lucerne", "strasbourg", "2026-12-20"), how: OMIO, alt: true }
         ],
         sources: [["Trainline", "https://www.thetrainline.com"]]
@@ -369,7 +372,7 @@
         ],
         verdict: "Damas 직행 버스 추천",
         links: [
-          { label: "Trainline 세비야→론다 (기차)", url: trainlineRoute("seville", "ronda"), how: ROUTE_PAGE },
+          { label: "Trainline에서 1/3 기차·버스 검색", url: trainline("seville", "ronda", "2027-01-03"), how: BOTH_TRAIN },
           { label: "Omio에서 세비야→론다 검색", url: omio("seville", "ronda", "2027-01-03"), how: OMIO, alt: true }
         ],
         sources: [["Trainline", "https://www.thetrainline.com"]]
@@ -385,7 +388,7 @@
         ],
         verdict: "Renfe 기차 추천",
         links: [
-          { label: "Trainline 론다→그라나다 (기차)", url: trainlineRoute("ronda", "granada"), how: ROUTE_PAGE },
+          { label: "Trainline에서 1/3 기차·버스 검색", url: trainline("ronda", "granada", "2027-01-03"), how: BOTH_TRAIN },
           { label: "Omio에서 론다→그라나다 검색", url: omio("ronda", "granada", "2027-01-03"), how: OMIO, alt: true }
         ],
         sources: [["Trainline", "https://www.thetrainline.com"]]
@@ -402,7 +405,7 @@
         ],
         verdict: "Renfe 고속열차 직통 추천 (공휴일 전날이라 조기 예매 필수)",
         links: [
-          { label: "Trainline에서 그라나다→마드리드 검색", url: trainline("granada", "madrid", "2027-01-05"), how: BOTH_TRAIN },
+          { label: "Trainline에서 1/5 기차·버스 검색", url: trainline("granada", "madrid", "2027-01-05"), how: BOTH_TRAIN },
           { label: "Omio에서 그라나다→마드리드 검색", url: omio("granada", "madrid", "2027-01-05"), how: OMIO, alt: true }
         ],
         sources: [["Trainline", "https://www.thetrainline.com"]]
