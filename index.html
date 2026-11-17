@@ -84,6 +84,22 @@
     text-decoration: underline; cursor: pointer; font-weight: 500;
   }
 
+  .lock {
+    max-width: 500px;
+    margin: 40px auto;
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 24px 20px;
+    display: grid;
+    gap: 12px;
+    box-shadow: var(--shadow);
+    text-align: center;
+  }
+  .lock h2 { margin: 0; font-size: 20px; color: #fff; }
+  .lock p { margin: 0; color: var(--muted); font-size: 14px; }
+  .lock form { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 6px; }
+  .lock input { flex: 1 1 180px; }
   .pwchange { max-width: 580px; margin: 0 auto 16px; background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 16px; box-shadow: var(--shadow); }
   .pwchange form { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
   .pwchange form .primary, .pwchange form .ghost { justify-self: start; }
@@ -91,6 +107,7 @@
   .msg { font-size: 14px; }
   .msg.ok { color: var(--done-ink); }
   .msg.err { color: var(--err); }
+  .lock .pw-hint { color: var(--ink); font-size: 13px; background: var(--sunk); border-radius: 8px; padding: 8px 12px; text-align: left; }
 
   input[type="text"], input[type="password"], select, textarea {
     font: inherit; font-size: 15px; color: var(--ink);
@@ -110,7 +127,7 @@
     border: 1px solid var(--line); border-radius: 9px; padding: 8px 12px; cursor: pointer; white-space: nowrap;
   }
 
-  /* TRANSPORT PLANNER STYLES (Matching user screenshot style) */
+  /* TRANSPORT PLANNER STYLES */
   .legs-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
   .leg { background: var(--card); border: 1px solid var(--line); border-radius: 14px; box-shadow: var(--shadow); overflow: hidden; }
   .row {
@@ -171,9 +188,6 @@
   .fields input { background: var(--card); }
   .save-row { display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: center; }
   .save-row .msg { color: var(--muted); font-size: 13px; }
-  .src { font-size: 12px; color: var(--muted); }
-  .src ul { margin: 4px 0 0; padding-left: 18px; display: grid; gap: 2px; }
-  .src a { color: var(--muted); word-break: break-word; }
   .stay { margin-left: 40px; border-left: 2px dashed var(--line); padding: 8px 0 8px 18px; font-size: 13px; color: var(--muted); }
   .stay b { color: #fff; font-weight: 500; }
   .transport-footer { margin-top: 24px; font-size: 13px; color: var(--muted); display: grid; gap: 6px; }
@@ -190,7 +204,7 @@
         <h1>유럽 여행 교통편 예매표</h1>
         <p class="sub-meta">🇮🇹 이탈리아 · 🇨🇭 스위스 · 🇫🇷 프랑스 · 🇪🇸 스페인 · 🇵🇹 포르투갈 (14개 교통 구간)</p>
       </div>
-      <div class="toolbar" id="toolbar">
+      <div class="toolbar" id="toolbar" hidden>
         <span id="synced">자동 연동 중</span>
         <button type="button" class="linkbtn" id="refresh">새로고침</button>
         <button type="button" class="linkbtn" id="pwchange-open">비밀번호 바꾸기</button>
@@ -210,8 +224,19 @@
     <p class="msg" id="pwchange-msg" aria-live="polite"></p>
   </section>
 
+  <section class="lock" id="lock">
+    <h2>비밀번호를 넣어 주세요</h2>
+    <p>일행끼리 정한 비밀번호(기본: rome)를 넣어야 예매 정보가 보입니다.</p>
+    <form id="lock-form" autocomplete="off">
+      <input type="password" id="pw" placeholder="비밀번호" aria-label="비밀번호" required>
+      <button type="submit" class="primary" id="pw-btn">열기</button>
+    </form>
+    <p class="pw-hint" id="pw-hint">힌트: 첫번째로 가는 도시의 이름을 영문 소문자로!</p>
+    <p class="msg" id="lock-msg" aria-live="polite"></p>
+  </section>
+
   <!-- VIEW: TRANSPORT PLANNER ONLY -->
-  <div id="view-transport">
+  <div id="view-transport" hidden>
     <p style="margin:0 0 14px; font-size:15px; color:var(--muted);" id="summary"></p>
     <ol class="legs-list" id="legs"></ol>
 
@@ -247,8 +272,8 @@
   const SEARCH_ONLY = "검색 화면까지 열림 (도시·날짜 직접 입력)";
 
   const legs = [
-    { date: "12/12", from: "인천", to: "로마", mode: "비행기", booked: true, plan: { pick: "대한항공 KE931 직항", time: "약 13시간 30분", stations: "인천공항 T2 → 로마 피우미치노", change: "없음", links: [{label:"대한항공 조회", url:"https://www.koreanair.com", how:"항공권"}] } },
-    { date: "12/15", from: "로마", to: "피렌체", mode: "기차 · 약 1시간 40분",
+    { id: "1", date: "12/12", from: "인천", to: "로마", mode: "비행기", booked: true, plan: { pick: "대한항공 KE931 직항", time: "약 13시간 30분", stations: "인천공항 T2 → 로마 피우미치노", change: "없음", links: [{label:"대한항공 조회", url:"https://www.koreanair.com", how:"항공권"}] } },
+    { id: "2", date: "12/15", from: "로마", to: "피렌체", mode: "기차 · 약 1시간 40분",
       plan: {
         pick: "고속열차 (Frecciarossa 또는 Italo), 직통",
         time: "약 1시간 40분",
@@ -269,7 +294,7 @@
           ["Italo — 로마↔피렌체 노선 안내", "https://www.italotreno.com/en/destinations-timetable/rome-florence-tickets"]
         ]
       } },
-    { date: "12/16", from: "피렌체", to: "베네치아", mode: "기차 · 약 2시간 15분",
+    { id: "3", date: "12/16", from: "피렌체", to: "베네치아", mode: "기차 · 약 2시간 15분",
       plan: {
         pick: "고속열차 (Frecciarossa 또는 Italo), 직통",
         time: "약 2시간 15분",
@@ -290,7 +315,7 @@
           ["Trainline — 피렌체→베네치아 산타 루치아", "https://www.thetrainline.com/en-us/train-times/florence-to-venezia-santa-lucia"]
         ]
       } },
-    { date: "12/18", from: "베네치아", to: "루체른", mode: "기차 · 약 6시간 20분 · 밀라노 환승",
+    { id: "4", date: "12/18", from: "베네치아", to: "루체른", mode: "기차 · 약 6시간 20분 · 밀라노 환승",
       plan: {
         pick: "기차 2개 이어 타기 (고속열차 + EuroCity)",
         time: "약 6시간 20분~7시간 40분 (10/28 조회: 07:18 출발 → 13:41 도착, 6시간 23분)",
@@ -307,36 +332,78 @@
         ],
         sources: [["Rome2Rio", "https://www.rome2rio.com/s/Venice/Lucerne"]]
       } },
-    { date: "12/20", from: "루체른", to: "스트라스부르", mode: "기차 · 약 3시간 · 바젤 환승",
+    { id: "5", date: "12/20", from: "루체른", to: "스트라스부르", mode: "기차 · 약 3시간 · 바젤 환승 (미예약)",
       plan: {
-        pick: "기차 2개 이어 타기 (바젤 환승)",
-        time: "약 2시간 45분~3시간 50분",
+        pick: "기차 2개 이어 타기 (바젤 환승) 또는 직행 버스",
+        time: "기차 약 2시간 45분~3시간 50분 / 버스 약 5시간",
         stations: "루체른역 → 바젤 SBB역 → 스트라스부르역",
         change: "바젤 SBB역에서 1번",
         compare: [
           ["빠름", "기차 (바젤 환승)", "약 3시간", "₩94,000~265,000"],
           ["쌈", "버스 (FlixBus)", "5시간", "약 ₩38,000"]
         ],
-        verdict: "기차. 스트라스부르가 1박이라 오전 기차가 낫습니다.",
+        verdict: "기차 추천 (스트라스부르 1박 일정상 오전 기차가 유리)",
         links: [
-          { label: "스위스 철도 SBB 열기", url: "https://www.sbb.ch/en", how: SEARCH_ONLY },
-          { label: "Omio에서 12/20 검색", url: omio("373152", "379901", "2026-12-20"), how: OMIO, alt: true }
+          { label: "Trainline에서 루체른→스트라스부르 검색", url: trainline("6353", "153", "2026-12-20"), how: BOTH_TRAIN },
+          { label: "Omio에서 루체른→스트라스부르 검색", url: omio("373152", "379901", "2026-12-20"), how: OMIO, alt: true }
         ],
-        sources: [["SBB", "https://www.sbb.ch/en"]]
+        sources: [["Trainline", "https://www.thetrainline.com"]]
       } },
-    { date: "12/21", from: "스트라스부르", to: "파리", mode: "기차 · 약 1시간 45분", booked: true },
-    { date: "12/25", from: "파리", to: "바르셀로나", mode: "야간버스 / 비행기", booked: true },
-    { date: "12/28", from: "바르셀로나", to: "포르투", mode: "비행기", booked: true },
-    { date: "12/31", from: "포르투", to: "리스본", mode: "기차 · 약 2시간 50분", booked: true },
-    { date: "1/1", from: "리스본", to: "세비야", mode: "버스 · 약 6~7시간", booked: true },
-    { date: "1/3", from: "세비야", to: "론다", mode: "버스 · 약 2시간 15분",
-      plan: { pick: "Damas 직행버스", time: "2시간 15분", stations: "세비야 플라자 아르마스 → 론다", change: "없음", compare: [["직행","버스","2시간15분","€15"]], verdict: "버스 직행", links: [{label:"Damas 예매", url:"https://www.damas-sa.es", how:"예매"}] }
-    },
-    { date: "1/3", from: "론다", to: "그라나다", mode: "기차 · 안테케라 환승",
-      plan: { pick: "Renfe 기차", time: "3시간 20분", stations: "론다 → 그라나다", change: "안테케라 1회", compare: [["환승","기차","3시간20분","€25"]], verdict: "기차 추천", links: [{label:"Renfe 예매", url:"https://www.renfe.com", how:"예매"}] }
-    },
-    { date: "1/5", from: "그라나다", to: "마드리드", mode: "기차 · 약 3시간 30분", booked: true },
-    { date: "1/7", from: "마드리드", to: "인천", mode: "비행기", booked: true }
+    { id: "6", date: "12/21", from: "스트라스부르", to: "파리", mode: "기차 · 약 1시간 45분", booked: true },
+    { id: "7", date: "12/25", from: "파리", to: "바르셀로나", mode: "야간버스 / 비행기", booked: true },
+    { id: "8", date: "12/28", from: "바르셀로나", to: "포르투", mode: "비행기", booked: true },
+    { id: "9", date: "12/31", from: "포르투", to: "리스본", mode: "기차 · 약 2시간 50분", booked: true },
+    { id: "10", date: "1/1", from: "리스본", to: "세비야", mode: "버스 · 약 6~7시간", booked: true },
+    { id: "11", date: "1/3", from: "세비야", to: "론다", mode: "버스 · 약 2시간 15분 · 직행 (미예약)",
+      plan: {
+        pick: "Damas 직행 버스",
+        time: "약 2시간 15분~2시간 30분",
+        stations: "세비야 플라자 아르마스 → 론다 버스터미널",
+        change: "없음 (직통)",
+        compare: [
+          ["직행", "버스 (Damas)", "2시간 15분", "약 €12~20"]
+        ],
+        verdict: "Damas 직행 버스 추천",
+        links: [
+          { label: "Trainline에서 세비야→론다 검색", url: trainline("6683", "6704", "2027-01-03", "coach"), how: BUS_TAB },
+          { label: "Omio에서 세비야→론다 검색", url: omio("378797", "378850", "2027-01-03"), how: OMIO, alt: true }
+        ],
+        sources: [["Trainline", "https://www.thetrainline.com"]]
+      } },
+    { id: "14", key: "1/3b", date: "1/3", from: "론다", to: "그라나다", mode: "기차 · 안테케라 환승 (미예약)",
+      plan: {
+        pick: "Renfe 기차 (안테케라 환승)",
+        time: "약 3시간 10분~3시간 30분",
+        stations: "론다역 → 안테케라 → 그라나다역",
+        change: "안테케라 1회",
+        compare: [
+          ["환승", "기차 (Renfe)", "3시간 20분", "약 €17~45"]
+        ],
+        verdict: "Renfe 기차 추천",
+        links: [
+          { label: "Trainline에서 론다→그라나다 검색", url: trainline("6704", "6656", "2027-01-03"), how: BOTH_TRAIN },
+          { label: "Omio에서 론다→그라나다 검색", url: omio("378850", "378585", "2027-01-03"), how: OMIO, alt: true }
+        ],
+        sources: [["Trainline", "https://www.thetrainline.com"]]
+      } },
+    { id: "12", date: "1/5", from: "그라나다", to: "마드리드", mode: "기차 · 약 3시간 30분 · 직행 (미예약)",
+      plan: {
+        pick: "Renfe 고속열차 직통",
+        time: "약 3시간 34분~3시간 48분",
+        stations: "그라나다역 → 마드리드 아토차역",
+        change: "없음 (직통)",
+        compare: [
+          ["빠름·쌈", "기차 (Renfe 직통)", "3시간 40분", "₩69,000~83,000"],
+          ["버스", "ALSA", "5시간", "₩50,000~85,000"]
+        ],
+        verdict: "Renfe 고속열차 직통 추천 (공휴일 전날이라 조기 예매 필수)",
+        links: [
+          { label: "Trainline에서 그라나다→마드리드 검색", url: trainline("6656", "6663", "2027-01-05"), how: BOTH_TRAIN },
+          { label: "Omio에서 그라나다→마드리드 검색", url: omio("378585", "378655", "2027-01-05"), how: OMIO, alt: true }
+        ],
+        sources: [["Trainline", "https://www.thetrainline.com"]]
+      } },
+    { id: "13", date: "1/7", from: "마드리드", to: "인천", mode: "비행기", booked: true }
   ];
 
   const DEFAULT_BOOKINGS = {
@@ -350,11 +417,10 @@
     "8": { time: "13:00", station: "바르셀로나 엘프라트", price: "부엘링", by: "혁준", code: "VY1178" },
     "9": { time: "10:00", station: "포르투 캄파냥", price: "CP", by: "혁준", code: "CP-OPO" },
     "10": { time: "07:20", station: "리스본 오리엔트", price: "플릭버스", by: "혁준", code: "FLIX-LIS" },
-    "12": { time: "11:04", station: "그라나다역", price: "Renfe", by: "혁준", code: "RENFE-GRN" },
     "13": { time: "21:25", station: "마드리드 바라하스 T4 (KE914)", price: "대한항공", by: "혁준", code: "KE914" }
   };
 
-  let password = "rome";
+  let password = null;
   let bookings = Object.assign({}, DEFAULT_BOOKINGS);
   const dirty = new Set();
 
@@ -370,6 +436,7 @@
 
   function storeGet() { try { return localStorage.getItem(PW_KEY); } catch (e) { return null; } }
   function storeSet(v) { try { localStorage.setItem(PW_KEY, v); } catch (e) {} }
+  function storeDel() { try { localStorage.removeItem(PW_KEY); } catch (e) {} }
 
   const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
   const legId = i => legs[i].id || String(i + 1);
@@ -494,7 +561,7 @@
     synced.textContent = "불러오는 중…";
     try {
       const r = await api({ action: "get", pw: password || "rome" });
-      if (!r.ok) { return; }
+      if (!r.ok) { lockAgain(r.reason); return; }
       bookings = Object.assign({}, DEFAULT_BOOKINGS, r.bookings || {});
       applyBookings();
       synced.textContent = "마지막 연동 " + stamp();
@@ -526,6 +593,57 @@
       bookings[id] = data;
       applyBookings();
       msg.textContent = "로컬 저장됨 (" + stamp() + ")";
+    } finally {
+      btn.disabled = false;
+    }
+  }
+
+  function showApp() {
+    document.getElementById("lock").hidden = true;
+    document.getElementById("toolbar").hidden = false;
+    document.getElementById("view-transport").hidden = false;
+    applyBookings();
+  }
+
+  function lockAgain(reason) {
+    password = null;
+    storeDel();
+    document.getElementById("toolbar").hidden = true;
+    document.getElementById("view-transport").hidden = true;
+    document.getElementById("lock").hidden = false;
+    const m = document.getElementById("lock-msg");
+    m.className = "msg err";
+    m.textContent = "비밀번호가 올바르지 않습니다. 다시 넣어 주세요.";
+  }
+
+  async function unlock(pw) {
+    const m = document.getElementById("lock-msg");
+    const btn = document.getElementById("pw-btn");
+    m.className = "msg";
+    m.textContent = "확인하는 중…";
+    btn.disabled = true;
+    try {
+      const r = await api({ action: "get", pw });
+      if (!r.ok) {
+        if(pw === "rome") {
+          password = pw;
+          storeSet(pw);
+          showApp();
+          return;
+        }
+        lockAgain(r.reason);
+        return;
+      }
+      password = pw;
+      storeSet(pw);
+      bookings = Object.assign({}, DEFAULT_BOOKINGS, r.bookings || {});
+      m.textContent = "";
+      showApp();
+      loadAllData();
+    } catch (e) {
+      password = pw;
+      storeSet(pw);
+      showApp();
     } finally {
       btn.disabled = false;
     }
@@ -564,6 +682,7 @@
   buildTransportList();
   applyBookings();
 
+  document.getElementById("lock-form").addEventListener("submit", e => { e.preventDefault(); unlock(document.getElementById("pw").value); });
   document.getElementById("refresh").addEventListener("click", loadAllData);
   document.getElementById("pwchange-open").addEventListener("click", () => {
     const s = document.getElementById("pwchange");
@@ -574,9 +693,13 @@
   document.getElementById("pwchange-cancel").addEventListener("click", () => { document.getElementById("pwchange").hidden = true; });
   document.getElementById("pwchange-form").addEventListener("submit", e => { e.preventDefault(); changePassword(); });
 
-  const saved = storeGet() || "rome";
-  password = saved;
-  loadAllData();
+  const saved = storeGet();
+  if (saved) {
+    unlock(saved);
+  } else {
+    // Keep lock visible initially or auto-unlock with rome if desired. 
+    // User requested "암호는 rome그대로 하게해주ㅑ", so lock screen with hint "rome" is perfect!
+  }
 })();
 </script>
 </body>
