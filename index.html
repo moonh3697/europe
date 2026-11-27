@@ -339,22 +339,17 @@
         ],
         sources: [["Rome2Rio", "https://www.rome2rio.com/s/Venice/Lucerne"]]
       } },
-    { id: "5", date: "12/20", from: "루체른", to: "스트라스부르", mode: "기차 · 약 3시간 · 바젤 환승 (미예약)",
+    { id: "5", date: "12/20", from: "루체른", to: "스트라스부르", mode: "버스 (FlixBus) · 새벽 04:30 출발 · 약 5시간", booked: true,
       plan: {
-        pick: "기차 2개 이어 타기 (바젤 환승) 또는 직행 버스",
-        time: "기차 약 2시간 45분~3시간 50분 / 버스 약 5시간",
-        stations: "루체른역 → 바젤 SBB역 → 스트라스부르역",
-        change: "바젤 SBB역에서 1번",
-        compare: [
-          ["빠름", "기차 (바젤 환승)", "약 3시간", "₩94,000~265,000"],
-          ["쌈", "버스 (FlixBus)", "5시간", "약 ₩38,000"]
-        ],
-        verdict: "기차 추천 (스트라스부르 1박 일정상 오전 기차가 유리)",
+        pick: "FlixBus 직행 (예매 완료 · 원식)",
+        time: "04:30 출발 · 약 5시간 (도착 시간은 예매 메일 확인)",
+        stations: "루체른 FlixBus 정류장 → 스트라스부르 FlixBus 정류장 (Place de l'Étoile)",
+        change: "없음 (직행)",
+        warn: { title: "새벽 출발 주의", text: "04:30 출발이라 전날 밤에 체크아웃·짐 정리를 끝내 두세요. 이 시간엔 루체른 대중교통이 거의 없으니 숙소에서 정류장까지 걸어가거나 택시를 미리 알아 두세요. 정확한 탑승 위치는 예매 메일·FlixBus 앱에서 확인." },
         links: [
-          { label: "Trainline에서 12/20 기차·버스 검색", url: trainline("lucerne", "strasbourg", "2026-12-20"), how: BOTH_TRAIN },
-          { label: "Omio에서 루체른→스트라스부르 검색", url: omio("lucerne", "strasbourg", "2026-12-20"), how: OMIO, alt: true }
+          { label: "FlixBus 홈페이지 (내 예약 보기)", url: "https://www.flixbus.com", how: "예약번호·이메일로 승차권·탑승 위치 확인" }
         ],
-        sources: [["Trainline", "https://www.thetrainline.com"]]
+        sources: [["FlixBus", "https://www.flixbus.com"]]
       } },
     { id: "6", date: "12/21", from: "스트라스부르", to: "파리", mode: "기차 · 약 1시간 45분", booked: true },
     { id: "7", date: "12/25", from: "파리", to: "바르셀로나", mode: "야간버스 / 비행기", booked: true },
@@ -418,6 +413,7 @@
     "2": { time: "07:50", station: "로마 테르미니", price: "Italo 직통", by: "혁준", code: "IT-8102" },
     "3": { time: "12:39", station: "피렌체 S.M.N", price: "고속열차", by: "혁준", code: "IT-9402" },
     "4": { time: "07:18", station: "베네치아 산타 루치아", price: "EuroCity", by: "혁준", code: "EC-37" },
+    "5": { time: "04:30", station: "루체른 FlixBus 정류장", price: "플릭버스", by: "원식", code: "" },
     "6": { time: "12:39", station: "스트라스부르역", price: "Trainline", by: "혁준", code: "Y824GX" },
     "7": { time: "23:00", station: "파리 베르시", price: "야간버스", by: "혁준", code: "01T0D0" },
     "8": { time: "13:00", station: "바르셀로나 엘프라트", price: "부엘링", by: "혁준", code: "VY1178" },
